@@ -1,0 +1,12 @@
+[
+   {
+      "directory" : "E:/ccs/project/first/Debug",
+      "command"   : "clang++ -D__MSPM0G3507__ -D__USE_SYSCONFIG__ -I\"E:/ccs/project/first/MSPM0G35507/BSP\" -I\"E:/ccs/project/first/MSPM0G35507/Application\" -I\"E:/ccs/project/first\" -I\"E:/ccs/project/first/Debug\" -I\"C:/TI/mspm0_sdk_2_10_00_04/source/third_party/CMSIS/Core/Include\" -I\"C:/TI/mspm0_sdk_2_10_00_04/source\" -I\"E:/ccs/project/first/MSPM0G35507/Middleware\" -I\"E:/ccs/project/first/MSPM0G35507/Driver\" -isystem\"E:/ccs/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/armv7em-ti-none-eabihf/c++/v1\" -isystem\"E:/ccs/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/c++/v1\" -isystem\"E:/ccs/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/lib/clang/18/include\" -isystem\"E:/ccs/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/c\" -xc",
+      "file"      : "E:/ccs/project/first/empty.c"
+   },
+   {
+      "directory" : "E:/ccs/project/first/Debug",
+      "command"   : "clang++ -D__MSPM0G3507__ -D__USE_SYSCONFIG__ -I\"E:/ccs/project/first/MSPM0G35507/BSP\" -I\"E:/ccs/project/first/MSPM0G35507/Application\" -I\"E:/ccs/project/first\" -I\"E:/ccs/project/first/Debug\" -I\"C:/TI/mspm0_sdk_2_10_00_04/source/third_party/CMSIS/Core/Include\" -I\"C:/TI/mspm0_sdk_2_10_00_04/source\" -I\"E:/ccs/project/first/MSPM0G35507/Middleware\" -I\"E:/ccs/project/first/MSPM0G35507/Driver\" -isystem\"E:/ccs/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/armv7em-ti-none-eabihf/c++/v1\" -isystem\"E:/ccs/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/c++/v1\" -isystem\"E:/ccs/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/lib/clang/18/include\" -isystem\"E:/ccs/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/c\" -xc",
+      "file"      : "E:/ccs/project/first/Debug/ti_msp_dl_config.c"
+   }
+]
