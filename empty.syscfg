@@ -67,12 +67,13 @@ PWM1.ccp1PinConfig.passedPeripheralType = scripting.forceWrite("Digital");
 SYSCTL.forceDefaultClkConfig = true;
 
 SYSTICK.periodEnable      = true;
-SYSTICK.interruptEnable   = true;
 SYSTICK.interruptPriority = "1";
-SYSTICK.period            = 32;
+SYSTICK.period            = 32000;
 
-UART1.$name                            = "step";
 UART1.targetBaudRate                   = 115200;
+UART1.$name                            = "debug";
+UART1.enabledInterrupts                = ["RX"];
+UART1.interruptPriority                = "2";
 UART1.peripheral.$assign               = "UART0";
 UART1.peripheral.rxPin.$assign         = "PA11";
 UART1.peripheral.txPin.$assign         = "PA10";

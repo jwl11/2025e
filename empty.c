@@ -33,16 +33,17 @@
 #include "ti_msp_dl_config.h"
 #include "mid_delay.h"
 #include "bsp_led.h"
-
+#include "app.h"
 
 int main(void)
 {
     SYSCFG_DL_init();
+    __enable_irq(); //打开所有中断
+
     //app_motor_test();
-    use_led_ON();
     while (1) {
-        delay_ms(1000);
-        use_led_TOGGLE();
+
+        app_delay_test();
 
 
     }

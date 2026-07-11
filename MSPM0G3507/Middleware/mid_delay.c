@@ -1,26 +1,20 @@
 #include "ti_msp_dl_config.h"
 
-volatile unsigned int delay_times = 0;
+/* 32 MHz CPU 时钟下，32 个周期 = 1 μs */
+#define CPU_CYCLES_PER_US  32
 
-void delay_us(unsigned int us)
+/* SysTick 配置为 1ms 周期，仅用于毫秒级延时 */
+void delay_ms(unsigned int ms)
 {
     DL_SYSTICK_enable();
-    delay_times = us;
-    while( delay_times != 0 );
+    while (ms--) {
+        while (!(SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk));
+    }
     DL_SYSTICK_disable();
 }
 
-void delay_ms(unsigned int ms)
+/* 微秒级延时直接用硬件周期计数，不依赖 SysTick 中断 */
+void delay_us(unsigned int us)
 {
-    delay_us(ms*1000);
+    DL_Common_delayCycles(us * CPU_CYCLES_PER_US);
 }
-
-//滴答定时器中断服务函数
-void SysTick_Handler(void)
-{
-    if( delay_times != 0 )
-    {
-        delay_times--;
-    }
-}
-

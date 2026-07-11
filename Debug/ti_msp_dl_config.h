@@ -97,22 +97,22 @@ extern "C" {
 
 
 
-/* Defines for step */
-#define step_INST                                                          UART0
-#define step_INST_FREQUENCY                                             32000000
-#define step_INST_IRQHandler                                    UART0_IRQHandler
-#define step_INST_INT_IRQN                                        UART0_INT_IRQn
-#define GPIO_step_RX_PORT                                                  GPIOA
-#define GPIO_step_TX_PORT                                                  GPIOA
-#define GPIO_step_RX_PIN                                          DL_GPIO_PIN_11
-#define GPIO_step_TX_PIN                                          DL_GPIO_PIN_10
-#define GPIO_step_IOMUX_RX                                       (IOMUX_PINCM22)
-#define GPIO_step_IOMUX_TX                                       (IOMUX_PINCM21)
-#define GPIO_step_IOMUX_RX_FUNC                        IOMUX_PINCM22_PF_UART0_RX
-#define GPIO_step_IOMUX_TX_FUNC                        IOMUX_PINCM21_PF_UART0_TX
-#define step_BAUD_RATE                                                  (115200)
-#define step_IBRD_32_MHZ_115200_BAUD                                        (17)
-#define step_FBRD_32_MHZ_115200_BAUD                                        (23)
+/* Defines for debug */
+#define debug_INST                                                         UART0
+#define debug_INST_FREQUENCY                                            32000000
+#define debug_INST_IRQHandler                                   UART0_IRQHandler
+#define debug_INST_INT_IRQN                                       UART0_INT_IRQn
+#define GPIO_debug_RX_PORT                                                 GPIOA
+#define GPIO_debug_TX_PORT                                                 GPIOA
+#define GPIO_debug_RX_PIN                                         DL_GPIO_PIN_11
+#define GPIO_debug_TX_PIN                                         DL_GPIO_PIN_10
+#define GPIO_debug_IOMUX_RX                                      (IOMUX_PINCM22)
+#define GPIO_debug_IOMUX_TX                                      (IOMUX_PINCM21)
+#define GPIO_debug_IOMUX_RX_FUNC                       IOMUX_PINCM22_PF_UART0_RX
+#define GPIO_debug_IOMUX_TX_FUNC                       IOMUX_PINCM21_PF_UART0_TX
+#define debug_BAUD_RATE                                                 (115200)
+#define debug_IBRD_32_MHZ_115200_BAUD                                       (17)
+#define debug_FBRD_32_MHZ_115200_BAUD                                       (23)
 
 
 
@@ -135,7 +135,7 @@ void SYSCFG_DL_initPower(void);
 void SYSCFG_DL_GPIO_init(void);
 void SYSCFG_DL_SYSCTL_init(void);
 void SYSCFG_DL_BLDC_init(void);
-void SYSCFG_DL_step_init(void);
+void SYSCFG_DL_debug_init(void);
 
 void SYSCFG_DL_SYSTICK_init(void);
 

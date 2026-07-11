@@ -53,7 +53,7 @@ SYSCONFIG_WEAK void SYSCFG_DL_init(void)
     /* Module-Specific Initializations*/
     SYSCFG_DL_SYSCTL_init();
     SYSCFG_DL_BLDC_init();
-    SYSCFG_DL_step_init();
+    SYSCFG_DL_debug_init();
     SYSCFG_DL_SYSTICK_init();
     /* Ensure backup structures have no valid state */
 	gBLDCBackup.backupRdy 	= false;
@@ -88,13 +88,13 @@ SYSCONFIG_WEAK void SYSCFG_DL_initPower(void)
     DL_GPIO_reset(GPIOA);
     DL_GPIO_reset(GPIOB);
     DL_TimerA_reset(BLDC_INST);
-    DL_UART_Main_reset(step_INST);
+    DL_UART_Main_reset(debug_INST);
 
 
     DL_GPIO_enablePower(GPIOA);
     DL_GPIO_enablePower(GPIOB);
     DL_TimerA_enablePower(BLDC_INST);
-    DL_UART_Main_enablePower(step_INST);
+    DL_UART_Main_enablePower(debug_INST);
 
     delay_cycles(POWER_STARTUP_DELAY);
 }
@@ -108,9 +108,9 @@ SYSCONFIG_WEAK void SYSCFG_DL_GPIO_init(void)
     DL_GPIO_enableOutput(GPIO_BLDC_C1_PORT, GPIO_BLDC_C1_PIN);
 
     DL_GPIO_initPeripheralOutputFunction(
-        GPIO_step_IOMUX_TX, GPIO_step_IOMUX_TX_FUNC);
+        GPIO_debug_IOMUX_TX, GPIO_debug_IOMUX_TX_FUNC);
     DL_GPIO_initPeripheralInputFunction(
-        GPIO_step_IOMUX_RX, GPIO_step_IOMUX_RX_FUNC);
+        GPIO_debug_IOMUX_RX, GPIO_debug_IOMUX_RX_FUNC);
 
     DL_GPIO_initDigitalOutput(use_led_PIN_22_IOMUX);
 
@@ -189,12 +189,12 @@ SYSCONFIG_WEAK void SYSCFG_DL_BLDC_init(void) {
 }
 
 
-static const DL_UART_Main_ClockConfig gstepClockConfig = {
+static const DL_UART_Main_ClockConfig gdebugClockConfig = {
     .clockSel    = DL_UART_MAIN_CLOCK_BUSCLK,
     .divideRatio = DL_UART_MAIN_CLOCK_DIVIDE_RATIO_1
 };
 
-static const DL_UART_Main_Config gstepConfig = {
+static const DL_UART_Main_Config gdebugConfig = {
     .mode        = DL_UART_MAIN_MODE_NORMAL,
     .direction   = DL_UART_MAIN_DIRECTION_TX_RX,
     .flowControl = DL_UART_MAIN_FLOW_CONTROL_NONE,
@@ -203,29 +203,33 @@ static const DL_UART_Main_Config gstepConfig = {
     .stopBits    = DL_UART_MAIN_STOP_BITS_ONE
 };
 
-SYSCONFIG_WEAK void SYSCFG_DL_step_init(void)
+SYSCONFIG_WEAK void SYSCFG_DL_debug_init(void)
 {
-    DL_UART_Main_setClockConfig(step_INST, (DL_UART_Main_ClockConfig *) &gstepClockConfig);
+    DL_UART_Main_setClockConfig(debug_INST, (DL_UART_Main_ClockConfig *) &gdebugClockConfig);
 
-    DL_UART_Main_init(step_INST, (DL_UART_Main_Config *) &gstepConfig);
+    DL_UART_Main_init(debug_INST, (DL_UART_Main_Config *) &gdebugConfig);
     /*
      * Configure baud rate by setting oversampling and baud rate divisors.
      *  Target baud rate: 115200
      *  Actual baud rate: 115211.52
      */
-    DL_UART_Main_setOversampling(step_INST, DL_UART_OVERSAMPLING_RATE_16X);
-    DL_UART_Main_setBaudRateDivisor(step_INST, step_IBRD_32_MHZ_115200_BAUD, step_FBRD_32_MHZ_115200_BAUD);
+    DL_UART_Main_setOversampling(debug_INST, DL_UART_OVERSAMPLING_RATE_16X);
+    DL_UART_Main_setBaudRateDivisor(debug_INST, debug_IBRD_32_MHZ_115200_BAUD, debug_FBRD_32_MHZ_115200_BAUD);
 
 
+    /* Configure Interrupts */
+    DL_UART_Main_enableInterrupt(debug_INST,
+                                 DL_UART_MAIN_INTERRUPT_RX);
+    /* Setting the Interrupt Priority */
+    NVIC_SetPriority(debug_INST_INT_IRQN, 2);
 
-    DL_UART_Main_enable(step_INST);
+
+    DL_UART_Main_enable(debug_INST);
 }
 
 SYSCONFIG_WEAK void SYSCFG_DL_SYSTICK_init(void)
 {
-    /* Initialize the period to 1.00 μs */
-    DL_SYSTICK_init(32);
-    DL_SYSTICK_enableInterrupt();
-    NVIC_SetPriority(SysTick_IRQn, 1);
+    /* Initialize the period to 1.00 ms */
+    DL_SYSTICK_init(32000);
 }
 
