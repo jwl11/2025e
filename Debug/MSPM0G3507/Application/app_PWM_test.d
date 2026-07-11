@@ -1,7 +1,7 @@
 # FIXED
 
-MSPM0G3507/Driver/drv_tim.o: ../MSPM0G3507/Driver/drv_tim.c \
- ../MSPM0G3507/Driver/drv_tim.h \
+MSPM0G3507/Application/app_PWM_test.o: \
+ ../MSPM0G3507/Application/app_PWM_test.c \
  ti_msp_dl_config.h \
  C:/TI/mspm0_sdk_2_10_00_04/source/ti/devices/msp/msp.h \
  C:/TI/mspm0_sdk_2_10_00_04/source/ti/devices/DeviceFamily.h \
@@ -84,8 +84,8 @@ MSPM0G3507/Driver/drv_tim.o: ../MSPM0G3507/Driver/drv_tim.c \
  C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_vref.h \
  C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_wwdt.h \
  C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_interrupt.h \
- C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_systick.h
-../MSPM0G3507/Driver/drv_tim.h:
+ C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_systick.h \
+ E:/ccs/project/first/MSPM0G3507/Driver/drv_tim.h
 ti_msp_dl_config.h:
 C:/TI/mspm0_sdk_2_10_00_04/source/ti/devices/msp/msp.h:
 C:/TI/mspm0_sdk_2_10_00_04/source/ti/devices/DeviceFamily.h:
@@ -169,3 +169,4 @@ C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_vref.h:
 C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_wwdt.h:
 C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_interrupt.h:
 C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_systick.h:
+E:/ccs/project/first/MSPM0G3507/Driver/drv_tim.h:

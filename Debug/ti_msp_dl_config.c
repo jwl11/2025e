@@ -106,6 +106,8 @@ SYSCONFIG_WEAK void SYSCFG_DL_GPIO_init(void)
     DL_GPIO_enableOutput(GPIO_BLDC_C0_PORT, GPIO_BLDC_C0_PIN);
     DL_GPIO_initPeripheralOutputFunction(GPIO_BLDC_C1_IOMUX,GPIO_BLDC_C1_IOMUX_FUNC);
     DL_GPIO_enableOutput(GPIO_BLDC_C1_PORT, GPIO_BLDC_C1_PIN);
+    DL_GPIO_initPeripheralOutputFunction(GPIO_BLDC_C2_IOMUX,GPIO_BLDC_C2_IOMUX_FUNC);
+    DL_GPIO_enableOutput(GPIO_BLDC_C2_PORT, GPIO_BLDC_C2_PIN);
 
     DL_GPIO_initPeripheralOutputFunction(
         GPIO_debug_IOMUX_TX, GPIO_debug_IOMUX_TX_FUNC);
@@ -149,7 +151,7 @@ static const DL_TimerA_ClockConfig gBLDCClockConfig = {
 
 static const DL_TimerA_PWMConfig gBLDCConfig = {
     .pwmMode = DL_TIMER_PWM_MODE_EDGE_ALIGN,
-    .period = 1000,
+    .period = 1066,
     .isTimerWithFourCC = true,
     .startTimer = DL_TIMER_STOP,
 };
@@ -170,20 +172,27 @@ SYSCONFIG_WEAK void SYSCFG_DL_BLDC_init(void) {
 		DL_TIMERA_CAPTURE_COMPARE_0_INDEX);
 
     DL_TimerA_setCaptCompUpdateMethod(BLDC_INST, DL_TIMER_CC_UPDATE_METHOD_IMMEDIATE, DL_TIMERA_CAPTURE_COMPARE_0_INDEX);
-    DL_TimerA_setCaptureCompareValue(BLDC_INST, 1000, DL_TIMER_CC_0_INDEX);
+    DL_TimerA_setCaptureCompareValue(BLDC_INST, 1066, DL_TIMER_CC_0_INDEX);
 
     DL_TimerA_setCaptureCompareOutCtl(BLDC_INST, DL_TIMER_CC_OCTL_INIT_VAL_LOW,
 		DL_TIMER_CC_OCTL_INV_OUT_DISABLED, DL_TIMER_CC_OCTL_SRC_FUNCVAL,
 		DL_TIMERA_CAPTURE_COMPARE_1_INDEX);
 
     DL_TimerA_setCaptCompUpdateMethod(BLDC_INST, DL_TIMER_CC_UPDATE_METHOD_IMMEDIATE, DL_TIMERA_CAPTURE_COMPARE_1_INDEX);
-    DL_TimerA_setCaptureCompareValue(BLDC_INST, 1000, DL_TIMER_CC_1_INDEX);
+    DL_TimerA_setCaptureCompareValue(BLDC_INST, 1066, DL_TIMER_CC_1_INDEX);
+
+    DL_TimerA_setCaptureCompareOutCtl(BLDC_INST, DL_TIMER_CC_OCTL_INIT_VAL_LOW,
+		DL_TIMER_CC_OCTL_INV_OUT_DISABLED, DL_TIMER_CC_OCTL_SRC_FUNCVAL,
+		DL_TIMERA_CAPTURE_COMPARE_2_INDEX);
+
+    DL_TimerA_setCaptCompUpdateMethod(BLDC_INST, DL_TIMER_CC_UPDATE_METHOD_IMMEDIATE, DL_TIMERA_CAPTURE_COMPARE_2_INDEX);
+    DL_TimerA_setCaptureCompareValue(BLDC_INST, 1066, DL_TIMER_CC_2_INDEX);
 
     DL_TimerA_enableClock(BLDC_INST);
 
 
     
-    DL_TimerA_setCCPDirection(BLDC_INST , DL_TIMER_CC0_OUTPUT | DL_TIMER_CC1_OUTPUT );
+    DL_TimerA_setCCPDirection(BLDC_INST , DL_TIMER_CC0_OUTPUT | DL_TIMER_CC1_OUTPUT | DL_TIMER_CC2_OUTPUT );
 
 
 }

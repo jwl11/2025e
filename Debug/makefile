@@ -14,6 +14,7 @@ ORDERED_OBJS += \
 "./ti_msp_dl_config.o" \
 "./startup_mspm0g350x_ticlang.o" \
 "./MSPM0G3507/Application/app.o" \
+"./MSPM0G3507/Application/app_PWM_test.o" \
 "./MSPM0G3507/Application/app_debug_test.o" \
 "./MSPM0G3507/Application/app_delay_test.o" \
 "./MSPM0G3507/Application/app_motor.o" \
@@ -154,8 +155,8 @@ first.out: $(OBJS) $(GEN_CMDS)
 # Other Targets
 clean:
 	-$(RM) $(GEN_MISC_FILES__QUOTED)$(GEN_FILES__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "empty.o" "ti_msp_dl_config.o" "startup_mspm0g350x_ticlang.o" "MSPM0G3507\Application\app.o" "MSPM0G3507\Application\app_debug_test.o" "MSPM0G3507\Application\app_delay_test.o" "MSPM0G3507\Application\app_motor.o" "MSPM0G3507\BSP\bsp_led.o" "MSPM0G3507\BSP\bsp_motor.o" "MSPM0G3507\Driver\drv_tim.o" "MSPM0G3507\Driver\drv_uart.o" "MSPM0G3507\Middleware\mid_delay.o" "MSPM0G3507\Middleware\mid_pid.o" 
-	-$(RM) "empty.d" "ti_msp_dl_config.d" "startup_mspm0g350x_ticlang.d" "MSPM0G3507\Application\app.d" "MSPM0G3507\Application\app_debug_test.d" "MSPM0G3507\Application\app_delay_test.d" "MSPM0G3507\Application\app_motor.d" "MSPM0G3507\BSP\bsp_led.d" "MSPM0G3507\BSP\bsp_motor.d" "MSPM0G3507\Driver\drv_tim.d" "MSPM0G3507\Driver\drv_uart.d" "MSPM0G3507\Middleware\mid_delay.d" "MSPM0G3507\Middleware\mid_pid.d" 
+	-$(RM) "empty.o" "ti_msp_dl_config.o" "startup_mspm0g350x_ticlang.o" "MSPM0G3507\Application\app.o" "MSPM0G3507\Application\app_PWM_test.o" "MSPM0G3507\Application\app_debug_test.o" "MSPM0G3507\Application\app_delay_test.o" "MSPM0G3507\Application\app_motor.o" "MSPM0G3507\BSP\bsp_led.o" "MSPM0G3507\BSP\bsp_motor.o" "MSPM0G3507\Driver\drv_tim.o" "MSPM0G3507\Driver\drv_uart.o" "MSPM0G3507\Middleware\mid_delay.o" "MSPM0G3507\Middleware\mid_pid.o" 
+	-$(RM) "empty.d" "ti_msp_dl_config.d" "startup_mspm0g350x_ticlang.d" "MSPM0G3507\Application\app.d" "MSPM0G3507\Application\app_PWM_test.d" "MSPM0G3507\Application\app_debug_test.d" "MSPM0G3507\Application\app_delay_test.d" "MSPM0G3507\Application\app_motor.d" "MSPM0G3507\BSP\bsp_led.d" "MSPM0G3507\BSP\bsp_motor.d" "MSPM0G3507\Driver\drv_tim.d" "MSPM0G3507\Driver\drv_uart.d" "MSPM0G3507\Middleware\mid_delay.d" "MSPM0G3507\Middleware\mid_pid.d" 
 	-@echo ' '
 
 .PHONY: all clean dependents

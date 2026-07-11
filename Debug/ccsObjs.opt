@@ -2,6 +2,7 @@
 "./ti_msp_dl_config.o"
 "./startup_mspm0g350x_ticlang.o"
 "./MSPM0G3507/Application/app.o"
+"./MSPM0G3507/Application/app_PWM_test.o"
 "./MSPM0G3507/Application/app_debug_test.o"
 "./MSPM0G3507/Application/app_delay_test.o"
 "./MSPM0G3507/Application/app_motor.o"

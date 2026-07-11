@@ -40,11 +40,11 @@ int main(void)
     SYSCFG_DL_init();
     __enable_irq(); //打开所有中断
 
-    //app_motor_test();
     while (1) {
 
         //app_delay_test();
-        app_debug_test();
+        //app_debug_test();
+        app_pwm_test();
 
     }
 }
