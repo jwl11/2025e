@@ -1,16 +1,17 @@
 #include "drv_uart.h"
 #include <stdio.h>
-#include <stdarg.h>
-
-#define DRV_UART_PRINTF_BUF_SIZE 256
 
 /**
- * @brief  发送单个字符（阻塞）
- * @param  c 要发送的字符
+ * @brief  重定向 printf 底层输出到 UART
+ *
+ *         标准库 printf 最终会调用 fputc 输出每个字符，
+ *         重写此函数即可让 printf 直接通过串口打印，
+ *         无需任何包装函数。
  */
-void drv_uart_send_char(char c)
+int fputc(int ch, FILE *f)
 {
-    DL_UART_Main_transmitDataBlocking(debug_INST, (uint8_t)c);
+    DL_UART_Main_transmitDataBlocking(debug_INST, (uint8_t)ch);
+    return ch;
 }
 
 /**
@@ -24,21 +25,4 @@ void drv_uart_send_string(char *str)
         DL_UART_Main_transmitDataBlocking(debug_INST, (uint8_t)(*str));
         str++;
     }
-}
-
-/**
- * @brief  格式化打印（printf风格，阻塞）
- * @param  fmt 格式化字符串
- * @param  ... 可变参数
- */
-void drv_uart_printf(const char *fmt, ...)
-{
-    char buf[DRV_UART_PRINTF_BUF_SIZE];
-    va_list args;
-
-    va_start(args, fmt);
-    vsnprintf(buf, sizeof(buf), fmt, args);
-    va_end(args);
-
-    drv_uart_send_string(buf);
 }
