@@ -1,0 +1,10 @@
+id: nuedc_rect_ai
+name: NUEDC rectangle AI
+version: 1.0.0
+author: Codex
+desc: MaixCAM2 AI rectangle detector for NUEDC target
+files:
+  - model
+  - app.yaml
+  - main.py
+
