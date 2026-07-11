@@ -4,7 +4,7 @@
 
 SHELL = cmd.exe
 
-CG_TOOL_ROOT := E:/ccs/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS
+CG_TOOL_ROOT := D:/TI2.0/CCS/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS
 
 GEN_OPTS__FLAG := @"./device.opt" 
 GEN_CMDS__FLAG := -Wl,-l"./device_linker.cmd" 
@@ -13,6 +13,12 @@ ORDERED_OBJS += \
 "./empty.o" \
 "./ti_msp_dl_config.o" \
 "./startup_mspm0g350x_ticlang.o" \
+"./MSPM0G3507/Application/app.o" \
+"./MSPM0G3507/Application/app_motor.o" \
+"./MSPM0G3507/BSP/bsp_motor.o" \
+"./MSPM0G3507/Driver/drv_tim.o" \
+"./MSPM0G3507/Driver/drv_uart.o" \
+"./MSPM0G3507/Middleware/mid_pid.o" \
 $(GEN_CMDS__FLAG) \
 -Wl,-ldevice.cmd.genlibs \
 -Wl,-llibc.a \
@@ -25,7 +31,15 @@ RMDIR := RMDIR /S/Q
 # All of the sources participating in the build are defined here
 -include sources.mk
 -include subdir_vars.mk
+-include MSPM0G3507/Application/subdir_vars.mk
+-include MSPM0G3507/BSP/subdir_vars.mk
+-include MSPM0G3507/Driver/subdir_vars.mk
+-include MSPM0G3507/Middleware/subdir_vars.mk
 -include subdir_rules.mk
+-include MSPM0G3507/Application/subdir_rules.mk
+-include MSPM0G3507/BSP/subdir_rules.mk
+-include MSPM0G3507/Driver/subdir_rules.mk
+-include MSPM0G3507/Middleware/subdir_rules.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
@@ -129,15 +143,15 @@ all: $(OBJS) $(GEN_CMDS)
 # Tool invocations
 first.out: $(OBJS) $(GEN_CMDS)
 	@echo 'Arm Linker - building target: "$@"'
-	"E:/ccs/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/bin/tiarmclang.exe" @"device.opt"  -march=thumbv6m -mcpu=cortex-m0plus -mfloat-abi=soft -mlittle-endian -mthumb -O2 -gdwarf-3 -Wall -Wl,-m"first.map" -Wl,-i"C:/TI/mspm0_sdk_2_10_00_04/source" -Wl,-i"E:/ccs/project/first" -Wl,-i"E:/ccs/project/first/Debug/syscfg" -Wl,-i"E:/ccs/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/lib" -Wl,--diag_wrap=off -Wl,--display_error_number -Wl,--warn_sections -Wl,--xml_link_info="first_linkInfo.xml" -Wl,--rom_model -o "first.out" $(ORDERED_OBJS)
+	"D:/TI2.0/CCS/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/bin/tiarmclang.exe" @"device.opt"  -march=thumbv6m -mcpu=cortex-m0plus -mfloat-abi=soft -mlittle-endian -mthumb -O0 -gdwarf-3 -Wall -Wl,-m"first.map" -Wl,-i"C:/TI/mspm0_sdk_2_10_00_04/source" -Wl,-i"D:/2025e/2025e" -Wl,-i"D:/2025e/2025e/Debug/syscfg" -Wl,-i"D:/TI2.0/CCS/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/lib" -Wl,--diag_wrap=off -Wl,--display_error_number -Wl,--warn_sections -Wl,--xml_link_info="first_linkInfo.xml" -Wl,--rom_model -o "first.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: "$@"'
 	@echo ' '
 
 # Other Targets
 clean:
 	-$(RM) $(GEN_MISC_FILES__QUOTED)$(GEN_FILES__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "empty.o" "ti_msp_dl_config.o" "startup_mspm0g350x_ticlang.o" 
-	-$(RM) "empty.d" "ti_msp_dl_config.d" "startup_mspm0g350x_ticlang.d" 
+	-$(RM) "empty.o" "ti_msp_dl_config.o" "startup_mspm0g350x_ticlang.o" "MSPM0G3507\Application\app.o" "MSPM0G3507\Application\app_motor.o" "MSPM0G3507\BSP\bsp_motor.o" "MSPM0G3507\Driver\drv_tim.o" "MSPM0G3507\Driver\drv_uart.o" "MSPM0G3507\Middleware\mid_pid.o" 
+	-$(RM) "empty.d" "ti_msp_dl_config.d" "startup_mspm0g350x_ticlang.d" "MSPM0G3507\Application\app.d" "MSPM0G3507\Application\app_motor.d" "MSPM0G3507\BSP\bsp_motor.d" "MSPM0G3507\Driver\drv_tim.d" "MSPM0G3507\Driver\drv_uart.d" "MSPM0G3507\Middleware\mid_pid.d" 
 	-@echo ' '
 
 .PHONY: all clean dependents

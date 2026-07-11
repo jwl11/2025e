@@ -119,4 +119,8 @@ GEN_OPTS__QUOTED :=
 # Every subdirectory with source files must be described here
 SUBDIRS := \
 . \
+MSPM0G3507/Application \
+MSPM0G3507/BSP \
+MSPM0G3507/Driver \
+MSPM0G3507/Middleware \
 
