@@ -7,7 +7,13 @@
                 "C:/TI/mspm0_sdk_2_10_00_04/source/third_party/CMSIS/Core/Include",
                 "C:/TI/ti_cgt_arm_llvm_4.0.2.LTS/include",
                 "${workspaceFolder}",
-                "${workspaceFolder}/Debug"
+                "${workspaceFolder}/Debug",
+                "${workspaceFolder}/MSPM0G3507/Middleware",
+                "${workspaceFolder}/MSPM0G3507/Driver",
+                "${workspaceFolder}/MSPM0G3507/Application",
+                "${workspaceFolder}/MSPM0G3507/BSP",
+                "${workspaceFolder}/MSPM0G3507/Middleware"
+
             ],
             "defines": [
                 "__MSPM0G3507__"
