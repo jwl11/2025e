@@ -118,6 +118,16 @@ extern "C" {
 
 
 
+/* Port definition for Pin Group use_led */
+#define use_led_PORT                                                     (GPIOB)
+
+/* Defines for PIN_22: GPIOB.22 with pinCMx 50 on package pin 21 */
+#define use_led_PIN_22_PIN                                      (DL_GPIO_PIN_22)
+#define use_led_PIN_22_IOMUX                                     (IOMUX_PINCM50)
+
+
+
+
 /* clang-format on */
 
 void SYSCFG_DL_init(void);
@@ -126,6 +136,8 @@ void SYSCFG_DL_GPIO_init(void);
 void SYSCFG_DL_SYSCTL_init(void);
 void SYSCFG_DL_BLDC_init(void);
 void SYSCFG_DL_step_init(void);
+
+void SYSCFG_DL_SYSTICK_init(void);
 
 bool SYSCFG_DL_saveConfiguration(void);
 bool SYSCFG_DL_restoreConfiguration(void);

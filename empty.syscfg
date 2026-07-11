@@ -9,11 +9,14 @@
 /**
  * Import the modules used in this configuration.
  */
-const PWM    = scripting.addModule("/ti/driverlib/PWM", {}, false);
-const PWM1   = PWM.addInstance();
-const SYSCTL = scripting.addModule("/ti/driverlib/SYSCTL");
-const UART   = scripting.addModule("/ti/driverlib/UART", {}, false);
-const UART1  = UART.addInstance();
+const GPIO    = scripting.addModule("/ti/driverlib/GPIO", {}, false);
+const GPIO1   = GPIO.addInstance();
+const PWM     = scripting.addModule("/ti/driverlib/PWM", {}, false);
+const PWM1    = PWM.addInstance();
+const SYSCTL  = scripting.addModule("/ti/driverlib/SYSCTL");
+const SYSTICK = scripting.addModule("/ti/driverlib/SYSTICK");
+const UART    = scripting.addModule("/ti/driverlib/UART", {}, false);
+const UART1   = UART.addInstance();
 
 /**
  * Write custom configuration values to the imported modules.
@@ -37,6 +40,13 @@ const pinFunction4     = system.clockTree["HFXT"];
 pinFunction4.enable    = true;
 pinFunction4.inputFreq = 40;
 
+GPIO1.$name                         = "use_led";
+GPIO1.port                          = "PORTB";
+GPIO1.associatedPins[0].$name       = "PIN_22";
+GPIO1.associatedPins[0].pin.$assign = "PB22";
+
+const Board = scripting.addModule("/ti/driverlib/Board", {}, false);
+
 PWM1.$name                              = "BLDC";
 PWM1.peripheral.$assign                 = "TIMA0";
 PWM1.peripheral.ccp0Pin.$assign         = "PA0";
@@ -54,9 +64,12 @@ PWM1.ccp1PinConfig.hideOutputInversion  = scripting.forceWrite(false);
 PWM1.ccp1PinConfig.onlyInternalResistor = scripting.forceWrite(false);
 PWM1.ccp1PinConfig.passedPeripheralType = scripting.forceWrite("Digital");
 
-const Board = scripting.addModule("/ti/driverlib/Board", {}, false);
-
 SYSCTL.forceDefaultClkConfig = true;
+
+SYSTICK.periodEnable      = true;
+SYSTICK.interruptEnable   = true;
+SYSTICK.interruptPriority = "1";
+SYSTICK.period            = 32;
 
 UART1.$name                            = "step";
 UART1.targetBaudRate                   = 115200;

@@ -54,6 +54,7 @@ SYSCONFIG_WEAK void SYSCFG_DL_init(void)
     SYSCFG_DL_SYSCTL_init();
     SYSCFG_DL_BLDC_init();
     SYSCFG_DL_step_init();
+    SYSCFG_DL_SYSTICK_init();
     /* Ensure backup structures have no valid state */
 	gBLDCBackup.backupRdy 	= false;
 
@@ -89,10 +90,12 @@ SYSCONFIG_WEAK void SYSCFG_DL_initPower(void)
     DL_TimerA_reset(BLDC_INST);
     DL_UART_Main_reset(step_INST);
 
+
     DL_GPIO_enablePower(GPIOA);
     DL_GPIO_enablePower(GPIOB);
     DL_TimerA_enablePower(BLDC_INST);
     DL_UART_Main_enablePower(step_INST);
+
     delay_cycles(POWER_STARTUP_DELAY);
 }
 
@@ -108,6 +111,11 @@ SYSCONFIG_WEAK void SYSCFG_DL_GPIO_init(void)
         GPIO_step_IOMUX_TX, GPIO_step_IOMUX_TX_FUNC);
     DL_GPIO_initPeripheralInputFunction(
         GPIO_step_IOMUX_RX, GPIO_step_IOMUX_RX_FUNC);
+
+    DL_GPIO_initDigitalOutput(use_led_PIN_22_IOMUX);
+
+    DL_GPIO_clearPins(use_led_PORT, use_led_PIN_22_PIN);
+    DL_GPIO_enableOutput(use_led_PORT, use_led_PIN_22_PIN);
 
 }
 
@@ -211,5 +219,13 @@ SYSCONFIG_WEAK void SYSCFG_DL_step_init(void)
 
 
     DL_UART_Main_enable(step_INST);
+}
+
+SYSCONFIG_WEAK void SYSCFG_DL_SYSTICK_init(void)
+{
+    /* Initialize the period to 1.00 μs */
+    DL_SYSTICK_init(32);
+    DL_SYSTICK_enableInterrupt();
+    NVIC_SetPriority(SysTick_IRQn, 1);
 }
 

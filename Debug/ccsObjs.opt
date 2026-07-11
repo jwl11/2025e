@@ -3,9 +3,11 @@
 "./startup_mspm0g350x_ticlang.o"
 "./MSPM0G3507/Application/app.o"
 "./MSPM0G3507/Application/app_motor.o"
+"./MSPM0G3507/BSP/bsp_led.o"
 "./MSPM0G3507/BSP/bsp_motor.o"
 "./MSPM0G3507/Driver/drv_tim.o"
 "./MSPM0G3507/Driver/drv_uart.o"
+"./MSPM0G3507/Middleware/mid_delay.o"
 "./MSPM0G3507/Middleware/mid_pid.o"
 -l"./device_linker.cmd"
 -ldevice.cmd.genlibs

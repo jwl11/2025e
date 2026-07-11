@@ -36,14 +36,14 @@
                                 <option id="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.compilerID.INCLUDE_PATH.940258672" superClass="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.compilerID.INCLUDE_PATH" valueType="includePath">
                                     <listOptionValue value="${COM_TI_MSPM0_SDK_INCLUDE_PATH}"/>
                                     <listOptionValue value="${SYSCONFIG_TOOL_INCLUDE_PATH}"/>
-                                    <listOptionValue value="${PROJECT_ROOT}/MSPM0G35507/BSP"/>
-                                    <listOptionValue value="${PROJECT_ROOT}/MSPM0G35507/Application"/>
+                                    <listOptionValue value="${PROJECT_ROOT}/MSPM0G3507/BSP"/>
+                                    <listOptionValue value="${PROJECT_ROOT}/MSPM0G3507/Application"/>
                                     <listOptionValue value="${PROJECT_ROOT}"/>
                                     <listOptionValue value="${PROJECT_ROOT}/${ConfigName}"/>
                                     <listOptionValue value="${COM_TI_MSPM0_SDK_INSTALL_DIR}/source/third_party/CMSIS/Core/Include"/>
                                     <listOptionValue value="${COM_TI_MSPM0_SDK_INSTALL_DIR}/source"/>
-                                    <listOptionValue value="${PROJECT_ROOT}/MSPM0G35507/Middleware"/>
-                                    <listOptionValue value="${PROJECT_ROOT}/MSPM0G35507/Driver"/>
+                                    <listOptionValue value="${PROJECT_ROOT}/MSPM0G3507/Middleware"/>
+                                    <listOptionValue value="${PROJECT_ROOT}/MSPM0G3507/Driver"/>
                                 </option>
                                 <option id="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.compilerID.DEFINE.1009349761" superClass="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.compilerID.DEFINE" valueType="definedSymbols">
                                     <listOptionValue value="${COM_TI_MSPM0_SDK_SYMBOLS}"/>
