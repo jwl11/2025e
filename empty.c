@@ -35,7 +35,7 @@
 int main(void)
 {
     SYSCFG_DL_init();
-
+    //app_motor_test();
     while (1) {
 
         

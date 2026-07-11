@@ -39,3 +39,8 @@ MSPM0 LaunchPad, please visit the [LP-MSPM0G3507 User's Guide](https://www.ti.co
 ## Example Usage
 
 Compile, load and run the example.
+
+app app_motor.c 
+mid 算法，pid 电机梯形加速。。。。
+bsp 电机，oled 陀螺仪 //模块并且和库有关的函数
+drv 放外设，tim uart iic gpio //片上外设
