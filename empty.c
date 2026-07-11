@@ -43,8 +43,8 @@ int main(void)
     //app_motor_test();
     while (1) {
 
-        app_delay_test();
-
+        //app_delay_test();
+        app_debug_test();
 
     }
 }

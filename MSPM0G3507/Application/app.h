@@ -5,6 +5,7 @@
 #include "ti_msp_dl_config.h"
 
 void app_delay_test(void);
+void app_debug_test(void);
 
 
 
