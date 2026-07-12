@@ -61,4 +61,10 @@ float as5600_get_angle_multiturn(void);
 float as5600_get_velocity(void);
 float as5600_get_speed(void);
 
+/**
+ * @brief  设置传感器旋转方向（匹配电机 DIR 参数）
+ * @param  dir  +1 或 -1，乘到速度输出上
+ */
+void as5600_set_direction(int dir);
+
 #endif /* __BSP_AS5600_H */

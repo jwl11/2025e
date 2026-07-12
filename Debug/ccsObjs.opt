@@ -2,6 +2,7 @@
 "./ti_msp_dl_config.o"
 "./startup_mspm0g350x_ticlang.o"
 "./MSPM0G3507/Application/app.o"
+"./MSPM0G3507/Application/app_BLCD_test.o"
 "./MSPM0G3507/Application/app_PWM_test.o"
 "./MSPM0G3507/Application/app_as5600_test.o"
 "./MSPM0G3507/Application/app_debug_test.o"
@@ -14,6 +15,7 @@
 "./MSPM0G3507/Driver/drv_tim.o"
 "./MSPM0G3507/Driver/drv_uart.o"
 "./MSPM0G3507/Middleware/mid_delay.o"
+"./MSPM0G3507/Middleware/mid_foc.o"
 "./MSPM0G3507/Middleware/mid_pid.o"
 -l"./device_linker.cmd"
 -ldevice.cmd.genlibs

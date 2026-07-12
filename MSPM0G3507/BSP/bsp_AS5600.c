@@ -2,6 +2,13 @@
 #include "drv_IIC.h"
 #include "mid_delay.h"
 
+static int g_as5600_dir = 1;   /* Direction: +1 or -1, applied to velocity */
+
+void as5600_set_direction(int dir)
+{
+    g_as5600_dir = dir;
+}
+
 /* ================================================================
  *  底层 — I2C 寄存器读写
  * ================================================================ */
@@ -26,7 +33,8 @@ uint16_t as5600_read_raw_angle(void)
 {
     uint8_t buf[2];
     drv_iic_read(AS5600_I2C_ADDR, AS5600_REG_RAW_ANGLE_H, buf, 2);
-    return ((uint16_t)(buf[0] & 0x0F) << 8) | buf[1];
+    /* RAW_ANGLE: buf[0] = angle[11:4], buf[1][7:4] = angle[3:0] */
+    return ((uint16_t)buf[0] << 8) | buf[1];
 }
 
 /* ================================================================
@@ -76,32 +84,40 @@ float as5600_get_angle_multiturn(void)
 
 float as5600_get_velocity(void)
 {
-    static float    last_angle = 0.0f;
-    static uint32_t last_us    = 0;
-    static bool     first      = true;
+    static int32_t  last_raw = 0;
+    static uint32_t last_us  = 0;
+    static bool     first    = true;
 
-    float    angle = as5600_get_angle_multiturn();
-    uint32_t now   = get_system_us();
+    int32_t  raw = (int32_t)as5600_read_raw_angle();
+    uint32_t now = get_system_us();
 
     if (first) {
-        last_angle = angle;
-        last_us    = now;
-        first      = false;
+        last_raw = raw;
+        last_us  = now;
+        first    = false;
         return 0.0f;
     }
 
     int32_t dt_us = (int32_t)(now - last_us);
     if (dt_us < 10) {
-        return 0.0f;   /* 时间太短，防止噪声 */
+        return 0.0f;
+    }
+
+    /* d_raw with 12-bit unwrap: if |delta| > 2048, shorter path crosses 0/4096 */
+    int32_t d_raw = raw - last_raw;
+    if (d_raw > 2048) {
+        d_raw -= 4096;
+    } else if (d_raw < -2048) {
+        d_raw += 4096;
     }
 
     float dt_s = (float)dt_us / 1000000.0f;
-    float vel  = (angle - last_angle) / dt_s;
+    float vel  = (float)d_raw * AS5600_TWO_PI / (float)AS5600_RESOLUTION / dt_s;
 
-    last_angle = angle;
-    last_us    = now;
+    last_raw = raw;
+    last_us  = now;
 
-    return vel;
+    return vel * (float)g_as5600_dir;
 }
 
 float as5600_get_speed(void)
