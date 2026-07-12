@@ -1,63 +1,33 @@
 #include "app.h"
-#include "mid_foc.h"
-#include "bsp_AS5600.h"
+#include "bsp_BLCD.h"
 #include "bsp_led.h"
-#include "drv_uart.h"
 #include "mid_delay.h"
 
-/*
- *  P1 = 校准
- *  P2 = 开环 2s，启动电机 + 收敛速度滤波器
- *  P3 = 闭环 5s，目标 5 rad/s
- */
-
+/* ================================================================
+ *  app_BLCD_test — 速度环驱动无刷电机（无串口打印）
+ *
+ *  调用顺序: bsp_bldc_init → kick → bsp_bldc_set_speed → stop
+ *  kick 解决静摩擦，100ms 3V 扭矩脉冲让电机先动起来再切闭环。
+ * ================================================================ */
 void app_BLCD_test(void)
 {
-    drv_uart_send_string("\r\n=== FOC Closed-Loop Test ===\r\n");
+    /* ---- 1. 初始化（PWM + 编码器零角度校准，约 3s）---- */
+    bsp_bldc_init(12.0f, 7, -1);
 
-    /* ---- P1 ---- */
-    drv_uart_send_string("[P1] Calibrate\r\n");
-    foc_init(12.6f);
-    for (int i = 0; i < 3; i++) { use_led_ON(); delay_ms(150); use_led_OFF(); delay_ms(150); }
-    foc_as5600_init(7, -1);   /* DIR=-1: 电机实际转向为负 */
-    drv_uart_send_string("     Done\r\n");
-
-    /* ---- P2: 开环 2 秒 ---- */
-    drv_uart_send_string("[P2] Open-loop spin 2s\r\n");
+    /* ---- 2. 启动 kick（100ms 恒定扭矩，克服静摩擦）---- */
     {
-        uint32_t t0 = get_system_us();
-        for (uint16_t i = 0; i < 2000; i++) {
-            uint32_t t1   = get_system_us();
-            float    dt_s = (float)(t1 - t0) / 1000000.0f;
-            t0 = t1;
-            foc_openloop_spin(4.0f, 50.0f, dt_s);
-            use_led_TOGGLE();
+        extern void foc_set_torque(float Uq, float angle_el);
+        extern float foc_electrical_angle(void);
+        for (int i = 0; i < 100; i++) {
+            foc_set_torque(3.0f, foc_electrical_angle());
             delay_ms(1);
         }
     }
-    drv_uart_send_string("     Ready\r\n");
 
-    /* ---- P3: 闭环 5 rad/s ---- */
-    drv_uart_send_string("[P3] Closed-loop target=5rad/s\r\n");
-    {
-        uint32_t t0 = get_system_us(), last_print = t0;
-        for (uint16_t i = 0; i < 5000; i++) {
-            foc_set_speed(5.0f);
-
-            uint32_t t1 = get_system_us();
-            if (t1 - last_print >= 300000UL) {
-                last_print = t1;
-                float spd = as5600_get_speed();
-                drv_uart_send_string("  SPD=");
-                drv_uart_print_signed((long)(spd * 100.0f));
-                drv_uart_send_string(" crad/s\r\n");
-            }
-            use_led_TOGGLE();
-            delay_ms(1);
-        }
+    /* ---- 3. 速度闭环 5 rad/s ---- */
+    while (1) {
+        bsp_bldc_set_speed(10.0f);
+        use_led_TOGGLE();
+        delay_ms(1);
     }
-    foc_stop();
-
-    drv_uart_send_string("=== Done ===\r\n");
-    while (1) { use_led_TOGGLE(); delay_ms(500); }
 }

@@ -9,6 +9,7 @@
 "./MSPM0G3507/Application/app_delay_test.o"
 "./MSPM0G3507/Application/app_motor.o"
 "./MSPM0G3507/BSP/bsp_AS5600.o"
+"./MSPM0G3507/BSP/bsp_BLCD.o"
 "./MSPM0G3507/BSP/bsp_led.o"
 "./MSPM0G3507/BSP/bsp_motor.o"
 "./MSPM0G3507/Driver/drv_IIC.o"
