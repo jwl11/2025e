@@ -8,6 +8,7 @@ SHELL = cmd.exe
 C_SRCS += \
 ../MSPM0G3507/Application/app.c \
 ../MSPM0G3507/Application/app_PWM_test.c \
+../MSPM0G3507/Application/app_as5600_test.c \
 ../MSPM0G3507/Application/app_debug_test.c \
 ../MSPM0G3507/Application/app_delay_test.c \
 ../MSPM0G3507/Application/app_motor.c 
@@ -15,6 +16,7 @@ C_SRCS += \
 C_DEPS += \
 ./MSPM0G3507/Application/app.d \
 ./MSPM0G3507/Application/app_PWM_test.d \
+./MSPM0G3507/Application/app_as5600_test.d \
 ./MSPM0G3507/Application/app_debug_test.d \
 ./MSPM0G3507/Application/app_delay_test.d \
 ./MSPM0G3507/Application/app_motor.d 
@@ -22,6 +24,7 @@ C_DEPS += \
 OBJS += \
 ./MSPM0G3507/Application/app.o \
 ./MSPM0G3507/Application/app_PWM_test.o \
+./MSPM0G3507/Application/app_as5600_test.o \
 ./MSPM0G3507/Application/app_debug_test.o \
 ./MSPM0G3507/Application/app_delay_test.o \
 ./MSPM0G3507/Application/app_motor.o 
@@ -29,6 +32,7 @@ OBJS += \
 OBJS__QUOTED += \
 "MSPM0G3507\Application\app.o" \
 "MSPM0G3507\Application\app_PWM_test.o" \
+"MSPM0G3507\Application\app_as5600_test.o" \
 "MSPM0G3507\Application\app_debug_test.o" \
 "MSPM0G3507\Application\app_delay_test.o" \
 "MSPM0G3507\Application\app_motor.o" 
@@ -36,6 +40,7 @@ OBJS__QUOTED += \
 C_DEPS__QUOTED += \
 "MSPM0G3507\Application\app.d" \
 "MSPM0G3507\Application\app_PWM_test.d" \
+"MSPM0G3507\Application\app_as5600_test.d" \
 "MSPM0G3507\Application\app_debug_test.d" \
 "MSPM0G3507\Application\app_delay_test.d" \
 "MSPM0G3507\Application\app_motor.d" 
@@ -43,6 +48,7 @@ C_DEPS__QUOTED += \
 C_SRCS__QUOTED += \
 "../MSPM0G3507/Application/app.c" \
 "../MSPM0G3507/Application/app_PWM_test.c" \
+"../MSPM0G3507/Application/app_as5600_test.c" \
 "../MSPM0G3507/Application/app_debug_test.c" \
 "../MSPM0G3507/Application/app_delay_test.c" \
 "../MSPM0G3507/Application/app_motor.c" 

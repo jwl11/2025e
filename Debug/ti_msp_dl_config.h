@@ -103,6 +103,22 @@ extern "C" {
 
 
 
+
+/* Defines for as5600 */
+#define as5600_INST                                                         I2C1
+#define as5600_INST_IRQHandler                                   I2C1_IRQHandler
+#define as5600_INST_INT_IRQN                                       I2C1_INT_IRQn
+#define as5600_BUS_SPEED_HZ                                               400000
+#define GPIO_as5600_SDA_PORT                                               GPIOA
+#define GPIO_as5600_SDA_PIN                                       DL_GPIO_PIN_18
+#define GPIO_as5600_IOMUX_SDA                                    (IOMUX_PINCM40)
+#define GPIO_as5600_IOMUX_SDA_FUNC                     IOMUX_PINCM40_PF_I2C1_SDA
+#define GPIO_as5600_SCL_PORT                                               GPIOA
+#define GPIO_as5600_SCL_PIN                                       DL_GPIO_PIN_17
+#define GPIO_as5600_IOMUX_SCL                                    (IOMUX_PINCM39)
+#define GPIO_as5600_IOMUX_SCL_FUNC                     IOMUX_PINCM39_PF_I2C1_SCL
+
+
 /* Defines for debug */
 #define debug_INST                                                         UART0
 #define debug_INST_FREQUENCY                                            32000000
@@ -141,6 +157,7 @@ void SYSCFG_DL_initPower(void);
 void SYSCFG_DL_GPIO_init(void);
 void SYSCFG_DL_SYSCTL_init(void);
 void SYSCFG_DL_BLDC_init(void);
+void SYSCFG_DL_as5600_init(void);
 void SYSCFG_DL_debug_init(void);
 
 void SYSCFG_DL_SYSTICK_init(void);
