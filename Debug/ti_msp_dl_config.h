@@ -101,6 +101,24 @@ extern "C" {
 #define GPIO_BLDC_C2_IOMUX_FUNC                      IOMUX_PINCM29_PF_TIMA0_CCP2
 #define GPIO_BLDC_C2_IDX                                     DL_TIMER_CC_2_INDEX
 
+/* Defines for MG310_PWM */
+#define MG310_PWM_INST                                                     TIMA1
+#define MG310_PWM_INST_IRQHandler                               TIMA1_IRQHandler
+#define MG310_PWM_INST_INT_IRQN                                 (TIMA1_INT_IRQn)
+#define MG310_PWM_INST_CLK_FREQ                                         32000000
+/* GPIO defines for channel 0 */
+#define GPIO_MG310_PWM_C0_PORT                                             GPIOA
+#define GPIO_MG310_PWM_C0_PIN                                     DL_GPIO_PIN_15
+#define GPIO_MG310_PWM_C0_IOMUX                                  (IOMUX_PINCM37)
+#define GPIO_MG310_PWM_C0_IOMUX_FUNC                 IOMUX_PINCM37_PF_TIMA1_CCP0
+#define GPIO_MG310_PWM_C0_IDX                                DL_TIMER_CC_0_INDEX
+/* GPIO defines for channel 1 */
+#define GPIO_MG310_PWM_C1_PORT                                             GPIOA
+#define GPIO_MG310_PWM_C1_PIN                                     DL_GPIO_PIN_16
+#define GPIO_MG310_PWM_C1_IOMUX                                  (IOMUX_PINCM38)
+#define GPIO_MG310_PWM_C1_IOMUX_FUNC                 IOMUX_PINCM38_PF_TIMA1_CCP1
+#define GPIO_MG310_PWM_C1_IDX                                DL_TIMER_CC_1_INDEX
+
 
 
 
@@ -146,6 +164,22 @@ extern "C" {
 /* Defines for PIN_22: GPIOB.22 with pinCMx 50 on package pin 21 */
 #define use_led_PIN_22_PIN                                      (DL_GPIO_PIN_22)
 #define use_led_PIN_22_IOMUX                                     (IOMUX_PINCM50)
+/* Defines for AIN1: GPIOA.13 with pinCMx 35 on package pin 6 */
+#define MG310_AIN1_PORT                                                  (GPIOA)
+#define MG310_AIN1_PIN                                          (DL_GPIO_PIN_13)
+#define MG310_AIN1_IOMUX                                         (IOMUX_PINCM35)
+/* Defines for AIN2: GPIOA.12 with pinCMx 34 on package pin 5 */
+#define MG310_AIN2_PORT                                                  (GPIOA)
+#define MG310_AIN2_PIN                                          (DL_GPIO_PIN_12)
+#define MG310_AIN2_IOMUX                                         (IOMUX_PINCM34)
+/* Defines for BIN1: GPIOB.14 with pinCMx 31 on package pin 2 */
+#define MG310_BIN1_PORT                                                  (GPIOB)
+#define MG310_BIN1_PIN                                          (DL_GPIO_PIN_14)
+#define MG310_BIN1_IOMUX                                         (IOMUX_PINCM31)
+/* Defines for BIN2: GPIOB.13 with pinCMx 30 on package pin 1 */
+#define MG310_BIN2_PORT                                                  (GPIOB)
+#define MG310_BIN2_PIN                                          (DL_GPIO_PIN_13)
+#define MG310_BIN2_IOMUX                                         (IOMUX_PINCM30)
 
 
 
@@ -157,6 +191,7 @@ void SYSCFG_DL_initPower(void);
 void SYSCFG_DL_GPIO_init(void);
 void SYSCFG_DL_SYSCTL_init(void);
 void SYSCFG_DL_BLDC_init(void);
+void SYSCFG_DL_MG310_PWM_init(void);
 void SYSCFG_DL_as5600_init(void);
 void SYSCFG_DL_debug_init(void);
 

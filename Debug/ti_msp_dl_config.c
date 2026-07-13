@@ -41,6 +41,7 @@
 #include "ti_msp_dl_config.h"
 
 DL_TimerA_backupConfig gBLDCBackup;
+DL_TimerA_backupConfig gMG310_PWMBackup;
 
 /*
  *  ======== SYSCFG_DL_init ========
@@ -53,11 +54,13 @@ SYSCONFIG_WEAK void SYSCFG_DL_init(void)
     /* Module-Specific Initializations*/
     SYSCFG_DL_SYSCTL_init();
     SYSCFG_DL_BLDC_init();
+    SYSCFG_DL_MG310_PWM_init();
     SYSCFG_DL_as5600_init();
     SYSCFG_DL_debug_init();
     SYSCFG_DL_SYSTICK_init();
     /* Ensure backup structures have no valid state */
 	gBLDCBackup.backupRdy 	= false;
+	gMG310_PWMBackup.backupRdy 	= false;
 
 
 }
@@ -70,6 +73,7 @@ SYSCONFIG_WEAK bool SYSCFG_DL_saveConfiguration(void)
     bool retStatus = true;
 
 	retStatus &= DL_TimerA_saveConfiguration(BLDC_INST, &gBLDCBackup);
+	retStatus &= DL_TimerA_saveConfiguration(MG310_PWM_INST, &gMG310_PWMBackup);
 
     return retStatus;
 }
@@ -80,6 +84,7 @@ SYSCONFIG_WEAK bool SYSCFG_DL_restoreConfiguration(void)
     bool retStatus = true;
 
 	retStatus &= DL_TimerA_restoreConfiguration(BLDC_INST, &gBLDCBackup, false);
+	retStatus &= DL_TimerA_restoreConfiguration(MG310_PWM_INST, &gMG310_PWMBackup, false);
 
     return retStatus;
 }
@@ -89,6 +94,7 @@ SYSCONFIG_WEAK void SYSCFG_DL_initPower(void)
     DL_GPIO_reset(GPIOA);
     DL_GPIO_reset(GPIOB);
     DL_TimerA_reset(BLDC_INST);
+    DL_TimerA_reset(MG310_PWM_INST);
     DL_I2C_reset(as5600_INST);
     DL_UART_Main_reset(debug_INST);
 
@@ -96,6 +102,7 @@ SYSCONFIG_WEAK void SYSCFG_DL_initPower(void)
     DL_GPIO_enablePower(GPIOA);
     DL_GPIO_enablePower(GPIOB);
     DL_TimerA_enablePower(BLDC_INST);
+    DL_TimerA_enablePower(MG310_PWM_INST);
     DL_I2C_enablePower(as5600_INST);
     DL_UART_Main_enablePower(debug_INST);
 
@@ -111,6 +118,10 @@ SYSCONFIG_WEAK void SYSCFG_DL_GPIO_init(void)
     DL_GPIO_enableOutput(GPIO_BLDC_C1_PORT, GPIO_BLDC_C1_PIN);
     DL_GPIO_initPeripheralOutputFunction(GPIO_BLDC_C2_IOMUX,GPIO_BLDC_C2_IOMUX_FUNC);
     DL_GPIO_enableOutput(GPIO_BLDC_C2_PORT, GPIO_BLDC_C2_PIN);
+    DL_GPIO_initPeripheralOutputFunction(GPIO_MG310_PWM_C0_IOMUX,GPIO_MG310_PWM_C0_IOMUX_FUNC);
+    DL_GPIO_enableOutput(GPIO_MG310_PWM_C0_PORT, GPIO_MG310_PWM_C0_PIN);
+    DL_GPIO_initPeripheralOutputFunction(GPIO_MG310_PWM_C1_IOMUX,GPIO_MG310_PWM_C1_IOMUX_FUNC);
+    DL_GPIO_enableOutput(GPIO_MG310_PWM_C1_PORT, GPIO_MG310_PWM_C1_PIN);
 
     DL_GPIO_initPeripheralInputFunctionFeatures(GPIO_as5600_IOMUX_SDA,
         GPIO_as5600_IOMUX_SDA_FUNC, DL_GPIO_INVERSION_DISABLE,
@@ -130,8 +141,24 @@ SYSCONFIG_WEAK void SYSCFG_DL_GPIO_init(void)
 
     DL_GPIO_initDigitalOutput(use_led_PIN_22_IOMUX);
 
-    DL_GPIO_clearPins(use_led_PORT, use_led_PIN_22_PIN);
-    DL_GPIO_enableOutput(use_led_PORT, use_led_PIN_22_PIN);
+    DL_GPIO_initDigitalOutput(MG310_AIN1_IOMUX);
+
+    DL_GPIO_initDigitalOutput(MG310_AIN2_IOMUX);
+
+    DL_GPIO_initDigitalOutput(MG310_BIN1_IOMUX);
+
+    DL_GPIO_initDigitalOutput(MG310_BIN2_IOMUX);
+
+    DL_GPIO_clearPins(GPIOA, MG310_AIN1_PIN |
+		MG310_AIN2_PIN);
+    DL_GPIO_enableOutput(GPIOA, MG310_AIN1_PIN |
+		MG310_AIN2_PIN);
+    DL_GPIO_clearPins(GPIOB, use_led_PIN_22_PIN |
+		MG310_BIN1_PIN |
+		MG310_BIN2_PIN);
+    DL_GPIO_enableOutput(GPIOB, use_led_PIN_22_PIN |
+		MG310_BIN1_PIN |
+		MG310_BIN2_PIN);
 
 }
 
@@ -207,6 +234,57 @@ SYSCONFIG_WEAK void SYSCFG_DL_BLDC_init(void) {
 
     
     DL_TimerA_setCCPDirection(BLDC_INST , DL_TIMER_CC0_OUTPUT | DL_TIMER_CC1_OUTPUT | DL_TIMER_CC2_OUTPUT );
+
+
+}
+/*
+ * Timer clock configuration to be sourced by  / 1 (32000000 Hz)
+ * timerClkFreq = (timerClkSrc / (timerClkDivRatio * (timerClkPrescale + 1)))
+ *   32000000 Hz = 32000000 Hz / (1 * (0 + 1))
+ */
+static const DL_TimerA_ClockConfig gMG310_PWMClockConfig = {
+    .clockSel = DL_TIMER_CLOCK_BUSCLK,
+    .divideRatio = DL_TIMER_CLOCK_DIVIDE_1,
+    .prescale = 0U
+};
+
+static const DL_TimerA_PWMConfig gMG310_PWMConfig = {
+    .pwmMode = DL_TIMER_PWM_MODE_EDGE_ALIGN_UP,
+    .period = 3200,
+    .isTimerWithFourCC = false,
+    .startTimer = DL_TIMER_STOP,
+};
+
+SYSCONFIG_WEAK void SYSCFG_DL_MG310_PWM_init(void) {
+
+    DL_TimerA_setClockConfig(
+        MG310_PWM_INST, (DL_TimerA_ClockConfig *) &gMG310_PWMClockConfig);
+
+    DL_TimerA_initPWMMode(
+        MG310_PWM_INST, (DL_TimerA_PWMConfig *) &gMG310_PWMConfig);
+
+    // Set Counter control to the smallest CC index being used
+    DL_TimerA_setCounterControl(MG310_PWM_INST,DL_TIMER_CZC_CCCTL0_ZCOND,DL_TIMER_CAC_CCCTL0_ACOND,DL_TIMER_CLC_CCCTL0_LCOND);
+
+    DL_TimerA_setCaptureCompareOutCtl(MG310_PWM_INST, DL_TIMER_CC_OCTL_INIT_VAL_LOW,
+		DL_TIMER_CC_OCTL_INV_OUT_DISABLED, DL_TIMER_CC_OCTL_SRC_FUNCVAL,
+		DL_TIMERA_CAPTURE_COMPARE_0_INDEX);
+
+    DL_TimerA_setCaptCompUpdateMethod(MG310_PWM_INST, DL_TIMER_CC_UPDATE_METHOD_IMMEDIATE, DL_TIMERA_CAPTURE_COMPARE_0_INDEX);
+    DL_TimerA_setCaptureCompareValue(MG310_PWM_INST, 0, DL_TIMER_CC_0_INDEX);
+
+    DL_TimerA_setCaptureCompareOutCtl(MG310_PWM_INST, DL_TIMER_CC_OCTL_INIT_VAL_LOW,
+		DL_TIMER_CC_OCTL_INV_OUT_DISABLED, DL_TIMER_CC_OCTL_SRC_FUNCVAL,
+		DL_TIMERA_CAPTURE_COMPARE_1_INDEX);
+
+    DL_TimerA_setCaptCompUpdateMethod(MG310_PWM_INST, DL_TIMER_CC_UPDATE_METHOD_IMMEDIATE, DL_TIMERA_CAPTURE_COMPARE_1_INDEX);
+    DL_TimerA_setCaptureCompareValue(MG310_PWM_INST, 0, DL_TIMER_CC_1_INDEX);
+
+    DL_TimerA_enableClock(MG310_PWM_INST);
+
+
+    
+    DL_TimerA_setCCPDirection(MG310_PWM_INST , DL_TIMER_CC0_OUTPUT | DL_TIMER_CC1_OUTPUT );
 
 
 }
