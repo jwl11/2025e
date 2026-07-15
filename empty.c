@@ -42,7 +42,7 @@ int main(void)
 
     //app_pwm_test();
 
-    //app_BLCD_test();
+    app_BLCD_test();
     //app_as5600_test();
     //app_MG310_test();
     

@@ -14,7 +14,7 @@ int   DIR = 1;      /* Direction: +1 = forward, -1 = reverse */
 /* ================================================================
  *  Global variables
  * ================================================================ */
-float voltage_limit        = 10.0f;   /* Output clamp                 */
+float voltage_limit        = 6.0f;   /* Output clamp                 */
 float voltage_power_supply = 12.6f;   /* DC bus voltage               */
 float zero_electric_angle  = 0.0f;    /* Filled by calibration        */
 float Ua = 0, Ub = 0, Uc = 0;

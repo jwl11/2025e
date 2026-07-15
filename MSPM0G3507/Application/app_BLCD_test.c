@@ -19,14 +19,14 @@ void app_BLCD_test(void)
         extern void foc_set_torque(float Uq, float angle_el);
         extern float foc_electrical_angle(void);
         for (int i = 0; i < 100; i++) {
-            foc_set_torque(3.0f, foc_electrical_angle());
+            foc_set_torque(1.5f, foc_electrical_angle());
             delay_ms(1);
         }
     }
 
     /* ---- 3. 速度闭环 5 rad/s ---- */
     while (1) {
-        bsp_bldc_set_speed(10.0f);
+        bsp_bldc_set_speed(5.0f);
         use_led_TOGGLE();
         delay_ms(1);
     }
