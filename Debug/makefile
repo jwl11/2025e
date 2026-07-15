@@ -4,7 +4,7 @@
 
 SHELL = cmd.exe
 
-CG_TOOL_ROOT := E:/ccs/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS
+CG_TOOL_ROOT := D:/TI2.0/CCS/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS
 
 GEN_OPTS__FLAG := @"./device.opt" 
 GEN_CMDS__FLAG := -Wl,-l"./device_linker.cmd" 
@@ -20,10 +20,12 @@ ORDERED_OBJS += \
 "./MSPM0G3507/Application/app_as5600_test.o" \
 "./MSPM0G3507/Application/app_debug_test.o" \
 "./MSPM0G3507/Application/app_delay_test.o" \
+"./MSPM0G3507/Application/app_fishpath_test.o" \
 "./MSPM0G3507/Application/app_motor.o" \
 "./MSPM0G3507/BSP/bsp_AS5600.o" \
 "./MSPM0G3507/BSP/bsp_BLCD.o" \
 "./MSPM0G3507/BSP/bsp_encoder.o" \
+"./MSPM0G3507/BSP/bsp_fishpath.o" \
 "./MSPM0G3507/BSP/bsp_led.o" \
 "./MSPM0G3507/BSP/bsp_motor.o" \
 "./MSPM0G3507/Driver/drv_IIC.o" \
@@ -32,6 +34,7 @@ ORDERED_OBJS += \
 "./MSPM0G3507/Middleware/mid_delay.o" \
 "./MSPM0G3507/Middleware/mid_foc.o" \
 "./MSPM0G3507/Middleware/mid_pid.o" \
+"./MSPM0G3507/Middleware/mid_xunji.o" \
 $(GEN_CMDS__FLAG) \
 -Wl,-ldevice.cmd.genlibs \
 -Wl,-llibc.a \
@@ -156,15 +159,15 @@ all: $(OBJS) $(GEN_CMDS)
 # Tool invocations
 first.out: $(OBJS) $(GEN_CMDS)
 	@echo 'Arm Linker - building target: "$@"'
-	"E:/ccs/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/bin/tiarmclang.exe" @"device.opt"  -march=thumbv6m -mcpu=cortex-m0plus -mfloat-abi=soft -mlittle-endian -mthumb -O0 -gdwarf-3 -Wall -Wl,-m"first.map" -Wl,-i"C:/TI/mspm0_sdk_2_10_00_04/source" -Wl,-i"E:/ccs/project/first" -Wl,-i"E:/ccs/project/first/Debug/syscfg" -Wl,-i"E:/ccs/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/lib" -Wl,--diag_wrap=off -Wl,--display_error_number -Wl,--warn_sections -Wl,--xml_link_info="first_linkInfo.xml" -Wl,--rom_model -o "first.out" $(ORDERED_OBJS)
+	"D:/TI2.0/CCS/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/bin/tiarmclang.exe" @"device.opt"  -march=thumbv6m -mcpu=cortex-m0plus -mfloat-abi=soft -mlittle-endian -mthumb -O0 -gdwarf-3 -Wall -Wl,-m"first.map" -Wl,-i"C:/TI/mspm0_sdk_2_10_00_04/source" -Wl,-i"D:/2025e/2025e" -Wl,-i"D:/2025e/2025e/Debug/syscfg" -Wl,-i"D:/TI2.0/CCS/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/lib" -Wl,--diag_wrap=off -Wl,--display_error_number -Wl,--warn_sections -Wl,--xml_link_info="first_linkInfo.xml" -Wl,--rom_model -o "first.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: "$@"'
 	@echo ' '
 
 # Other Targets
 clean:
 	-$(RM) $(GEN_MISC_FILES__QUOTED)$(GEN_FILES__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "empty.o" "ti_msp_dl_config.o" "startup_mspm0g350x_ticlang.o" "MSPM0G3507\Application\app.o" "MSPM0G3507\Application\app_BLCD_test.o" "MSPM0G3507\Application\app_MG310_test.o" "MSPM0G3507\Application\app_PWM_test.o" "MSPM0G3507\Application\app_as5600_test.o" "MSPM0G3507\Application\app_debug_test.o" "MSPM0G3507\Application\app_delay_test.o" "MSPM0G3507\Application\app_motor.o" "MSPM0G3507\BSP\bsp_AS5600.o" "MSPM0G3507\BSP\bsp_BLCD.o" "MSPM0G3507\BSP\bsp_encoder.o" "MSPM0G3507\BSP\bsp_led.o" "MSPM0G3507\BSP\bsp_motor.o" "MSPM0G3507\Driver\drv_IIC.o" "MSPM0G3507\Driver\drv_tim.o" "MSPM0G3507\Driver\drv_uart.o" "MSPM0G3507\Middleware\mid_delay.o" "MSPM0G3507\Middleware\mid_foc.o" "MSPM0G3507\Middleware\mid_pid.o" 
-	-$(RM) "empty.d" "ti_msp_dl_config.d" "startup_mspm0g350x_ticlang.d" "MSPM0G3507\Application\app.d" "MSPM0G3507\Application\app_BLCD_test.d" "MSPM0G3507\Application\app_MG310_test.d" "MSPM0G3507\Application\app_PWM_test.d" "MSPM0G3507\Application\app_as5600_test.d" "MSPM0G3507\Application\app_debug_test.d" "MSPM0G3507\Application\app_delay_test.d" "MSPM0G3507\Application\app_motor.d" "MSPM0G3507\BSP\bsp_AS5600.d" "MSPM0G3507\BSP\bsp_BLCD.d" "MSPM0G3507\BSP\bsp_encoder.d" "MSPM0G3507\BSP\bsp_led.d" "MSPM0G3507\BSP\bsp_motor.d" "MSPM0G3507\Driver\drv_IIC.d" "MSPM0G3507\Driver\drv_tim.d" "MSPM0G3507\Driver\drv_uart.d" "MSPM0G3507\Middleware\mid_delay.d" "MSPM0G3507\Middleware\mid_foc.d" "MSPM0G3507\Middleware\mid_pid.d" 
+	-$(RM) "empty.o" "ti_msp_dl_config.o" "startup_mspm0g350x_ticlang.o" "MSPM0G3507\Application\app.o" "MSPM0G3507\Application\app_BLCD_test.o" "MSPM0G3507\Application\app_MG310_test.o" "MSPM0G3507\Application\app_PWM_test.o" "MSPM0G3507\Application\app_as5600_test.o" "MSPM0G3507\Application\app_debug_test.o" "MSPM0G3507\Application\app_delay_test.o" "MSPM0G3507\Application\app_fishpath_test.o" "MSPM0G3507\Application\app_motor.o" "MSPM0G3507\BSP\bsp_AS5600.o" "MSPM0G3507\BSP\bsp_BLCD.o" "MSPM0G3507\BSP\bsp_encoder.o" "MSPM0G3507\BSP\bsp_fishpath.o" "MSPM0G3507\BSP\bsp_led.o" "MSPM0G3507\BSP\bsp_motor.o" "MSPM0G3507\Driver\drv_IIC.o" "MSPM0G3507\Driver\drv_tim.o" "MSPM0G3507\Driver\drv_uart.o" "MSPM0G3507\Middleware\mid_delay.o" "MSPM0G3507\Middleware\mid_foc.o" "MSPM0G3507\Middleware\mid_pid.o" "MSPM0G3507\Middleware\mid_xunji.o" 
+	-$(RM) "empty.d" "ti_msp_dl_config.d" "startup_mspm0g350x_ticlang.d" "MSPM0G3507\Application\app.d" "MSPM0G3507\Application\app_BLCD_test.d" "MSPM0G3507\Application\app_MG310_test.d" "MSPM0G3507\Application\app_PWM_test.d" "MSPM0G3507\Application\app_as5600_test.d" "MSPM0G3507\Application\app_debug_test.d" "MSPM0G3507\Application\app_delay_test.d" "MSPM0G3507\Application\app_fishpath_test.d" "MSPM0G3507\Application\app_motor.d" "MSPM0G3507\BSP\bsp_AS5600.d" "MSPM0G3507\BSP\bsp_BLCD.d" "MSPM0G3507\BSP\bsp_encoder.d" "MSPM0G3507\BSP\bsp_fishpath.d" "MSPM0G3507\BSP\bsp_led.d" "MSPM0G3507\BSP\bsp_motor.d" "MSPM0G3507\Driver\drv_IIC.d" "MSPM0G3507\Driver\drv_tim.d" "MSPM0G3507\Driver\drv_uart.d" "MSPM0G3507\Middleware\mid_delay.d" "MSPM0G3507\Middleware\mid_foc.d" "MSPM0G3507\Middleware\mid_pid.d" "MSPM0G3507\Middleware\mid_xunji.d" 
 	-@echo ' '
 
 .PHONY: all clean dependents

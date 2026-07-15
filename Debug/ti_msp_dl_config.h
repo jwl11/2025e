@@ -153,6 +153,22 @@ extern "C" {
 #define debug_BAUD_RATE                                                 (115200)
 #define debug_IBRD_32_MHZ_115200_BAUD                                       (17)
 #define debug_FBRD_32_MHZ_115200_BAUD                                       (23)
+/* Defines for fishpath */
+#define fishpath_INST                                                      UART1
+#define fishpath_INST_FREQUENCY                                         32000000
+#define fishpath_INST_IRQHandler                                UART1_IRQHandler
+#define fishpath_INST_INT_IRQN                                    UART1_INT_IRQn
+#define GPIO_fishpath_RX_PORT                                              GPIOA
+#define GPIO_fishpath_TX_PORT                                              GPIOA
+#define GPIO_fishpath_RX_PIN                                       DL_GPIO_PIN_9
+#define GPIO_fishpath_TX_PIN                                       DL_GPIO_PIN_8
+#define GPIO_fishpath_IOMUX_RX                                   (IOMUX_PINCM20)
+#define GPIO_fishpath_IOMUX_TX                                   (IOMUX_PINCM19)
+#define GPIO_fishpath_IOMUX_RX_FUNC                    IOMUX_PINCM20_PF_UART1_RX
+#define GPIO_fishpath_IOMUX_TX_FUNC                    IOMUX_PINCM19_PF_UART1_TX
+#define fishpath_BAUD_RATE                                              (115200)
+#define fishpath_IBRD_32_MHZ_115200_BAUD                                    (17)
+#define fishpath_FBRD_32_MHZ_115200_BAUD                                    (23)
 
 
 
@@ -194,6 +210,7 @@ void SYSCFG_DL_BLDC_init(void);
 void SYSCFG_DL_MG310_PWM_init(void);
 void SYSCFG_DL_as5600_init(void);
 void SYSCFG_DL_debug_init(void);
+void SYSCFG_DL_fishpath_init(void);
 
 void SYSCFG_DL_SYSTICK_init(void);
 

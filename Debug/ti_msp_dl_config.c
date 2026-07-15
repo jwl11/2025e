@@ -57,6 +57,7 @@ SYSCONFIG_WEAK void SYSCFG_DL_init(void)
     SYSCFG_DL_MG310_PWM_init();
     SYSCFG_DL_as5600_init();
     SYSCFG_DL_debug_init();
+    SYSCFG_DL_fishpath_init();
     SYSCFG_DL_SYSTICK_init();
     /* Ensure backup structures have no valid state */
 	gBLDCBackup.backupRdy 	= false;
@@ -97,6 +98,7 @@ SYSCONFIG_WEAK void SYSCFG_DL_initPower(void)
     DL_TimerA_reset(MG310_PWM_INST);
     DL_I2C_reset(as5600_INST);
     DL_UART_Main_reset(debug_INST);
+    DL_UART_Main_reset(fishpath_INST);
 
 
     DL_GPIO_enablePower(GPIOA);
@@ -105,6 +107,7 @@ SYSCONFIG_WEAK void SYSCFG_DL_initPower(void)
     DL_TimerA_enablePower(MG310_PWM_INST);
     DL_I2C_enablePower(as5600_INST);
     DL_UART_Main_enablePower(debug_INST);
+    DL_UART_Main_enablePower(fishpath_INST);
 
     delay_cycles(POWER_STARTUP_DELAY);
 }
@@ -138,6 +141,10 @@ SYSCONFIG_WEAK void SYSCFG_DL_GPIO_init(void)
         GPIO_debug_IOMUX_TX, GPIO_debug_IOMUX_TX_FUNC);
     DL_GPIO_initPeripheralInputFunction(
         GPIO_debug_IOMUX_RX, GPIO_debug_IOMUX_RX_FUNC);
+    DL_GPIO_initPeripheralOutputFunction(
+        GPIO_fishpath_IOMUX_TX, GPIO_fishpath_IOMUX_TX_FUNC);
+    DL_GPIO_initPeripheralInputFunction(
+        GPIO_fishpath_IOMUX_RX, GPIO_fishpath_IOMUX_RX_FUNC);
 
     DL_GPIO_initDigitalOutput(use_led_PIN_22_IOMUX);
 
@@ -354,6 +361,37 @@ SYSCONFIG_WEAK void SYSCFG_DL_debug_init(void)
 
 
     DL_UART_Main_enable(debug_INST);
+}
+static const DL_UART_Main_ClockConfig gfishpathClockConfig = {
+    .clockSel    = DL_UART_MAIN_CLOCK_BUSCLK,
+    .divideRatio = DL_UART_MAIN_CLOCK_DIVIDE_RATIO_1
+};
+
+static const DL_UART_Main_Config gfishpathConfig = {
+    .mode        = DL_UART_MAIN_MODE_NORMAL,
+    .direction   = DL_UART_MAIN_DIRECTION_TX_RX,
+    .flowControl = DL_UART_MAIN_FLOW_CONTROL_NONE,
+    .parity      = DL_UART_MAIN_PARITY_NONE,
+    .wordLength  = DL_UART_MAIN_WORD_LENGTH_8_BITS,
+    .stopBits    = DL_UART_MAIN_STOP_BITS_ONE
+};
+
+SYSCONFIG_WEAK void SYSCFG_DL_fishpath_init(void)
+{
+    DL_UART_Main_setClockConfig(fishpath_INST, (DL_UART_Main_ClockConfig *) &gfishpathClockConfig);
+
+    DL_UART_Main_init(fishpath_INST, (DL_UART_Main_Config *) &gfishpathConfig);
+    /*
+     * Configure baud rate by setting oversampling and baud rate divisors.
+     *  Target baud rate: 115200
+     *  Actual baud rate: 115211.52
+     */
+    DL_UART_Main_setOversampling(fishpath_INST, DL_UART_OVERSAMPLING_RATE_16X);
+    DL_UART_Main_setBaudRateDivisor(fishpath_INST, fishpath_IBRD_32_MHZ_115200_BAUD, fishpath_FBRD_32_MHZ_115200_BAUD);
+
+
+
+    DL_UART_Main_enable(fishpath_INST);
 }
 
 SYSCONFIG_WEAK void SYSCFG_DL_SYSTICK_init(void)

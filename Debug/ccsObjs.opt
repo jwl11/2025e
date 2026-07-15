@@ -8,10 +8,12 @@
 "./MSPM0G3507/Application/app_as5600_test.o"
 "./MSPM0G3507/Application/app_debug_test.o"
 "./MSPM0G3507/Application/app_delay_test.o"
+"./MSPM0G3507/Application/app_fishpath_test.o"
 "./MSPM0G3507/Application/app_motor.o"
 "./MSPM0G3507/BSP/bsp_AS5600.o"
 "./MSPM0G3507/BSP/bsp_BLCD.o"
 "./MSPM0G3507/BSP/bsp_encoder.o"
+"./MSPM0G3507/BSP/bsp_fishpath.o"
 "./MSPM0G3507/BSP/bsp_led.o"
 "./MSPM0G3507/BSP/bsp_motor.o"
 "./MSPM0G3507/Driver/drv_IIC.o"
@@ -20,6 +22,7 @@
 "./MSPM0G3507/Middleware/mid_delay.o"
 "./MSPM0G3507/Middleware/mid_foc.o"
 "./MSPM0G3507/Middleware/mid_pid.o"
+"./MSPM0G3507/Middleware/mid_xunji.o"
 -l"./device_linker.cmd"
 -ldevice.cmd.genlibs
 -llibc.a
