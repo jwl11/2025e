@@ -10,6 +10,8 @@ void app_pwm_test(void);
 void app_as5600_test(void);
 void app_BLCD_test(void);
 void app_MG310_test(void);
+void app_fishpath_test(void);
+void app_fishpath_motor_test(void);
 
 
 #endif // __APP_H
