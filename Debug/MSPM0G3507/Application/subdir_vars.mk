@@ -11,6 +11,7 @@ C_SRCS += \
 ../MSPM0G3507/Application/app_MG310_test.c \
 ../MSPM0G3507/Application/app_PWM_test.c \
 ../MSPM0G3507/Application/app_as5600_test.c \
+../MSPM0G3507/Application/app_button_test.c \
 ../MSPM0G3507/Application/app_debug_test.c \
 ../MSPM0G3507/Application/app_delay_test.c \
 ../MSPM0G3507/Application/app_fishpath_test.c \
@@ -22,6 +23,7 @@ C_DEPS += \
 ./MSPM0G3507/Application/app_MG310_test.d \
 ./MSPM0G3507/Application/app_PWM_test.d \
 ./MSPM0G3507/Application/app_as5600_test.d \
+./MSPM0G3507/Application/app_button_test.d \
 ./MSPM0G3507/Application/app_debug_test.d \
 ./MSPM0G3507/Application/app_delay_test.d \
 ./MSPM0G3507/Application/app_fishpath_test.d \
@@ -33,6 +35,7 @@ OBJS += \
 ./MSPM0G3507/Application/app_MG310_test.o \
 ./MSPM0G3507/Application/app_PWM_test.o \
 ./MSPM0G3507/Application/app_as5600_test.o \
+./MSPM0G3507/Application/app_button_test.o \
 ./MSPM0G3507/Application/app_debug_test.o \
 ./MSPM0G3507/Application/app_delay_test.o \
 ./MSPM0G3507/Application/app_fishpath_test.o \
@@ -44,6 +47,7 @@ OBJS__QUOTED += \
 "MSPM0G3507\Application\app_MG310_test.o" \
 "MSPM0G3507\Application\app_PWM_test.o" \
 "MSPM0G3507\Application\app_as5600_test.o" \
+"MSPM0G3507\Application\app_button_test.o" \
 "MSPM0G3507\Application\app_debug_test.o" \
 "MSPM0G3507\Application\app_delay_test.o" \
 "MSPM0G3507\Application\app_fishpath_test.o" \
@@ -55,6 +59,7 @@ C_DEPS__QUOTED += \
 "MSPM0G3507\Application\app_MG310_test.d" \
 "MSPM0G3507\Application\app_PWM_test.d" \
 "MSPM0G3507\Application\app_as5600_test.d" \
+"MSPM0G3507\Application\app_button_test.d" \
 "MSPM0G3507\Application\app_debug_test.d" \
 "MSPM0G3507\Application\app_delay_test.d" \
 "MSPM0G3507\Application\app_fishpath_test.d" \
@@ -66,6 +71,7 @@ C_SRCS__QUOTED += \
 "../MSPM0G3507/Application/app_MG310_test.c" \
 "../MSPM0G3507/Application/app_PWM_test.c" \
 "../MSPM0G3507/Application/app_as5600_test.c" \
+"../MSPM0G3507/Application/app_button_test.c" \
 "../MSPM0G3507/Application/app_debug_test.c" \
 "../MSPM0G3507/Application/app_delay_test.c" \
 "../MSPM0G3507/Application/app_fishpath_test.c" \

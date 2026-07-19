@@ -34,7 +34,6 @@
 #include "mid_delay.h"
 #include "bsp_led.h"
 #include "app.h"
-#include "bsp_OLED.h"
 
 int main(void)
 {
@@ -47,8 +46,7 @@ int main(void)
     //app_as5600_test();
     //app_MG310_test();
     //app_fishpath_test();
-    OLED_Init();
-    OLED_ShowString(1,1,"HELLO!");
+    app_button_test();
 
     while (1) {
         

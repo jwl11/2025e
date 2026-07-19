@@ -180,6 +180,12 @@ extern "C" {
 /* Defines for PIN_22: GPIOB.22 with pinCMx 50 on package pin 21 */
 #define use_led_PIN_22_PIN                                      (DL_GPIO_PIN_22)
 #define use_led_PIN_22_IOMUX                                     (IOMUX_PINCM50)
+/* Port definition for Pin Group KEY */
+#define KEY_PORT                                                         (GPIOB)
+
+/* Defines for KEY1: GPIOB.15 with pinCMx 32 on package pin 3 */
+#define KEY_KEY1_PIN                                            (DL_GPIO_PIN_15)
+#define KEY_KEY1_IOMUX                                           (IOMUX_PINCM32)
 /* Defines for AIN1: GPIOA.13 with pinCMx 35 on package pin 6 */
 #define MG310_AIN1_PORT                                                  (GPIOA)
 #define MG310_AIN1_PIN                                          (DL_GPIO_PIN_13)
