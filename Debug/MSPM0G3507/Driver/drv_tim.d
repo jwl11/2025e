@@ -1,8 +1,7 @@
 # FIXED
 
 MSPM0G3507/Driver/drv_tim.o: ../MSPM0G3507/Driver/drv_tim.c \
- ../MSPM0G3507/Driver/drv_tim.h \
- ti_msp_dl_config.h \
+ ../MSPM0G3507/Driver/drv_tim.h ti_msp_dl_config.h \
  C:/TI/mspm0_sdk_2_10_00_04/source/ti/devices/msp/msp.h \
  C:/TI/mspm0_sdk_2_10_00_04/source/ti/devices/DeviceFamily.h \
  C:/TI/mspm0_sdk_2_10_00_04/source/ti/devices/msp/m0p/mspm0g350x.h \
