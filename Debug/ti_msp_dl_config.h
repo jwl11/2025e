@@ -196,6 +196,15 @@ extern "C" {
 #define MG310_BIN2_PORT                                                  (GPIOB)
 #define MG310_BIN2_PIN                                          (DL_GPIO_PIN_13)
 #define MG310_BIN2_IOMUX                                         (IOMUX_PINCM30)
+/* Port definition for Pin Group OLED */
+#define OLED_PORT                                                        (GPIOB)
+
+/* Defines for OLED_SCL: GPIOB.9 with pinCMx 26 on package pin 61 */
+#define OLED_OLED_SCL_PIN                                        (DL_GPIO_PIN_9)
+#define OLED_OLED_SCL_IOMUX                                      (IOMUX_PINCM26)
+/* Defines for OLED_SDA: GPIOB.8 with pinCMx 25 on package pin 60 */
+#define OLED_OLED_SDA_PIN                                        (DL_GPIO_PIN_8)
+#define OLED_OLED_SDA_IOMUX                                      (IOMUX_PINCM25)
 
 
 

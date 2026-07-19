@@ -12,6 +12,7 @@
 "./MSPM0G3507/Application/app_motor.o"
 "./MSPM0G3507/BSP/bsp_AS5600.o"
 "./MSPM0G3507/BSP/bsp_BLCD.o"
+"./MSPM0G3507/BSP/bsp_OLED.o"
 "./MSPM0G3507/BSP/bsp_encoder.o"
 "./MSPM0G3507/BSP/bsp_fishpath.o"
 "./MSPM0G3507/BSP/bsp_led.o"

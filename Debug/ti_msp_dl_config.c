@@ -156,6 +156,10 @@ SYSCONFIG_WEAK void SYSCFG_DL_GPIO_init(void)
 
     DL_GPIO_initDigitalOutput(MG310_BIN2_IOMUX);
 
+    DL_GPIO_initDigitalOutput(OLED_OLED_SCL_IOMUX);
+
+    DL_GPIO_initDigitalOutput(OLED_OLED_SDA_IOMUX);
+
     DL_GPIO_clearPins(GPIOA, MG310_AIN1_PIN |
 		MG310_AIN2_PIN);
     DL_GPIO_enableOutput(GPIOA, MG310_AIN1_PIN |
@@ -163,9 +167,13 @@ SYSCONFIG_WEAK void SYSCFG_DL_GPIO_init(void)
     DL_GPIO_clearPins(GPIOB, use_led_PIN_22_PIN |
 		MG310_BIN1_PIN |
 		MG310_BIN2_PIN);
+    DL_GPIO_setPins(GPIOB, OLED_OLED_SCL_PIN |
+		OLED_OLED_SDA_PIN);
     DL_GPIO_enableOutput(GPIOB, use_led_PIN_22_PIN |
 		MG310_BIN1_PIN |
-		MG310_BIN2_PIN);
+		MG310_BIN2_PIN |
+		OLED_OLED_SCL_PIN |
+		OLED_OLED_SDA_PIN);
 
 }
 
