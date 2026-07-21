@@ -45,8 +45,8 @@ int main(void)
     //app_BLCD_test();
     //app_as5600_test();
     //app_MG310_test();
-    //app_fishpath_test();
-    app_button_test();
+    app_fishpath_test();
+    //app_button_test();
 
     while (1) {
         

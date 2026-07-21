@@ -90,6 +90,8 @@ MSPM0G3507/Application/app_fishpath_test.o: \
  D:/2025e/2025e/MSPM0G3507/Middleware/mid_pid.h \
  D:/2025e/2025e/MSPM0G3507/BSP/bsp_encoder.h \
  D:/2025e/2025e/MSPM0G3507/BSP/bsp_led.h \
+ D:/2025e/2025e/MSPM0G3507/BSP/bsp_button.h \
+ D:/2025e/2025e/MSPM0G3507/BSP/bsp_OLED.h \
  D:/2025e/2025e/MSPM0G3507/Driver/drv_uart.h \
  D:/2025e/2025e/MSPM0G3507/Middleware/mid_delay.h
 ti_msp_dl_config.h:
@@ -180,5 +182,7 @@ D:/2025e/2025e/MSPM0G3507/Middleware/mid_xunji.h:
 D:/2025e/2025e/MSPM0G3507/Middleware/mid_pid.h:
 D:/2025e/2025e/MSPM0G3507/BSP/bsp_encoder.h:
 D:/2025e/2025e/MSPM0G3507/BSP/bsp_led.h:
+D:/2025e/2025e/MSPM0G3507/BSP/bsp_button.h:
+D:/2025e/2025e/MSPM0G3507/BSP/bsp_OLED.h:
 D:/2025e/2025e/MSPM0G3507/Driver/drv_uart.h:
 D:/2025e/2025e/MSPM0G3507/Middleware/mid_delay.h:

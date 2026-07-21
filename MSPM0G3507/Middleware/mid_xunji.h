@@ -52,6 +52,15 @@ void xunji_update(void);
  */
 void xunji_set_base_speed(uint32_t speed);
 
+/** 重置直角转弯状态，应在每次小车启动前调用。 */
+void xunji_reset_tracking(void);
+
+/**
+ * @brief 读取并清除“已完成一个左转直角”事件。
+ * @return 1=新完成一个转角，0=无新事件。
+ */
+uint8_t xunji_take_corner_event(void);
+
 /* ---- 查询接口 (调试 / 上层 BSP 使用) ---- */
 
 int32_t xunji_get_left_duty(void);

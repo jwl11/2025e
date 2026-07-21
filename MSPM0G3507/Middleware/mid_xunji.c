@@ -12,7 +12,7 @@
  * 数据协议 (UART1):
  *   循迹模块连续发送 ASCII '0' (0x30) / '1' (0x31),
  *   每帧 12 字节对应 12 路传感器状态。
- *   帧同步策略: 累计 12 个有效字节即视为一帧。
+ *   自动兼容连续 12 位数据流和以 CR/LF 结束的分帧数据。
  *
  * 差速公式:
  *   left  = base_speed + pid_output
@@ -28,22 +28,48 @@ PID_Controller g_pid_xunji = {0};
 #define XUNJI_SMALL_CURVE_ERROR_MAX  1500
 #define XUNJI_SMALL_CURVE_SPEED      20U
 #define XUNJI_SHARP_CURVE_SPEED      15U
+#define XUNJI_CORNER_LEFT_DUTY       30
+#define XUNJI_CORNER_SEARCH_DUTY     18
+#define XUNJI_CORNER_CENTER_MAX      1000
+#define XUNJI_CORNER_ACTIVE_MIN      4U   /* 约 4 路同时有效视为弯角宽线 */
+#define XUNJI_CORNER_MARK_CYCLES     3U   /* 连续确认 15ms */
+#define XUNJI_CORNER_MIN_TURN_CYCLES 12U  /* 至少左转 60ms 后才允许退出 */
+#define XUNJI_LOST_CONFIRM_CYCLES    3U
+#define XUNJI_CORNER_CONFIRM_CYCLES  4U
+#define XUNJI_CORNER_TIMEOUT_CYCLES  300U
 
 /*
  * Tracking center offset in sensor-weight units (1000 per channel).
  * A positive value moves the target toward the higher sensor index.
  */
-#define XUNJI_CENTER_OFFSET          1000
+#define XUNJI_CENTER_OFFSET          0
 
 /* ---- 内部状态 ---- */
-static uint8_t  sensor_raw[XUNJI_SENSOR_COUNT];   /* '0'=白, '1'=黑 */
+static uint8_t  sensor_raw[XUNJI_SENSOR_COUNT];   /* PID 使用的完整帧快照 */
+static uint8_t  sensor_pending[XUNJI_SENSOR_COUNT]; /* UART 正在接收的临时帧 */
 static uint32_t base_speed;                        /* 基础速度 0~100 */
 static int32_t  left_duty;                         /* 左轮占空比 */
 static int32_t  right_duty;                        /* 右轮占空比 */
 static int32_t  error_raw;                         /* 加权偏差 (-5500~+5500) */
 static int32_t  position_raw;                      /* 加权位置 (0~11000) */
 static uint8_t  sensor_online;                     /* 是否有线 */
-static uint8_t  byte_index;                        /* 帧内字节序号 0~11 */
+static uint8_t  active_sensor_count;               /* 当前帧有效传感器数量 */
+static uint8_t  frame_index;                       /* 临时帧内有效数据数 */
+static uint8_t  frame_invalid;                     /* 超长帧或格式错误标志 */
+static uint8_t  delimiter_seen;                    /* 1=发送端使用 CR/LF 分帧 */
+
+typedef enum {
+    XUNJI_TRACK_FOLLOW = 0,
+    XUNJI_TRACK_CORNER_LEFT,
+} XunjiTrackState;
+
+static XunjiTrackState tracking_state;
+static uint8_t  has_seen_line;
+static uint8_t  lost_line_count;
+static uint8_t  corner_mark_count;
+static uint8_t  corner_center_count;
+static uint16_t corner_turn_cycles;
+static uint8_t  corner_event;
 
 /**
  * @brief  传感器权值查找表
@@ -74,12 +100,16 @@ void xunji_init(float Kp, float Ki, float Kd, uint32_t speed)
     error_raw    = 0;
     position_raw = 0;
     sensor_online = 0;
-    byte_index   = 0;
+    frame_index  = 0;
+    frame_invalid = 0;
+    delimiter_seen = 0;
+    xunji_reset_tracking();
 
     /* 清空传感器数组 */
     uint8_t i;
     for (i = 0; i < XUNJI_SENSOR_COUNT; i++) {
         sensor_raw[i] = 0;
+        sensor_pending[i] = 0;
     }
 
     /* 清空 UART1 缓冲区 */
@@ -89,17 +119,14 @@ void xunji_init(float Kp, float Ki, float Kd, uint32_t speed)
 /**
  * @brief  从 UART1 环形缓冲区解析传感器数据
  *
- *         每次从缓冲区读取一个字节:
- *           '0' (0x30) → sensor = 0 (白)
- *           '1' (0x31) → sensor = 1 (黑)
- *           '\r' / '\n' → 帧分隔符, 重置字节序号
- *           其他字节 → 忽略, 不改变序号
- *
- *         连续 12 个有效数据字节填满一帧后自动覆盖旧帧。
+ *         '0'/'1' 先写入临时帧。收到 '\r' 或 '\n' 时，
+ *         只有恰好 12 个数据且未超长才提交到 sensor_raw。
+ *         PID 始终使用上一个完整帧，不会读到新旧混合的半帧。
  */
 static void xunji_parse_uart(void)
 {
     int16_t byte;
+    uint8_t i;
 
     while (drv_uart1_available() > 0) {
         byte = drv_uart1_read();
@@ -107,18 +134,56 @@ static void xunji_parse_uart(void)
 
         switch (byte) {
         case '0':                         /* 白线 (或反射率低) */
-            sensor_raw[byte_index] = 0;
-            byte_index = (byte_index + 1) % XUNJI_SENSOR_COUNT;
+            if ((frame_index < XUNJI_SENSOR_COUNT) &&
+                (frame_invalid == 0U)) {
+                sensor_pending[frame_index++] = 0U;
+            } else {
+                frame_invalid = 1U;
+            }
+
+            /* 无分隔符模式：收满 12 位后立即原子提交。 */
+            if ((delimiter_seen == 0U) &&
+                (frame_index == XUNJI_SENSOR_COUNT) &&
+                (frame_invalid == 0U)) {
+                for (i = 0U; i < XUNJI_SENSOR_COUNT; i++) {
+                    sensor_raw[i] = sensor_pending[i];
+                }
+                frame_index = 0U;
+            }
             break;
 
         case '1':                         /* 黑线 (或反射率高) */
-            sensor_raw[byte_index] = 1;
-            byte_index = (byte_index + 1) % XUNJI_SENSOR_COUNT;
+            if ((frame_index < XUNJI_SENSOR_COUNT) &&
+                (frame_invalid == 0U)) {
+                sensor_pending[frame_index++] = 1U;
+            } else {
+                frame_invalid = 1U;
+            }
+
+            /* 无分隔符模式：收满 12 位后立即原子提交。 */
+            if ((delimiter_seen == 0U) &&
+                (frame_index == XUNJI_SENSOR_COUNT) &&
+                (frame_invalid == 0U)) {
+                for (i = 0U; i < XUNJI_SENSOR_COUNT; i++) {
+                    sensor_raw[i] = sensor_pending[i];
+                }
+                frame_index = 0U;
+            }
             break;
 
         case '\r':                        /* 帧分隔 — 回车 */
         case '\n':                        /* 帧分隔 — 换行 */
-            byte_index = 0;
+            delimiter_seen = 1U;
+            if ((frame_index == XUNJI_SENSOR_COUNT) &&
+                (frame_invalid == 0U)) {
+                for (i = 0U; i < XUNJI_SENSOR_COUNT; i++) {
+                    sensor_raw[i] = sensor_pending[i];
+                }
+            }
+
+            /* 无论本帧是否有效，分隔符都是下一帧的同步点。 */
+            frame_index = 0U;
+            frame_invalid = 0U;
             break;
 
         default:                          /* 无效字节, 忽略 */
@@ -153,10 +218,12 @@ static void xunji_calc_error(void)
     }
 
     if (active_count > 0) {
+        active_sensor_count = (uint8_t)active_count;
         position_raw   = weighted_sum / active_count;
         error_raw      = position_raw - XUNJI_CENTER_OFFSET;
         sensor_online  = 1;
     } else {
+        active_sensor_count = 0U;
         position_raw   = 0;
         error_raw      = 0;
         sensor_online  = 0;
@@ -180,8 +247,84 @@ void xunji_update(void)
     /* ---- 第2步: 加权误差计算 ---- */
     xunji_calc_error();
 
-    /* ---- 第3步: PID 控制 (误差归一化到 [-1, 1]) ---- */
-    if (sensor_online) {
+    abs_error = (error_raw < 0) ? -error_raw : error_raw;
+
+    /* 固定逆时针路线：丢线后主动左转，重新稳定捕获中线后恢复 PID。 */
+    if (tracking_state == XUNJI_TRACK_CORNER_LEFT) {
+        if (corner_turn_cycles < XUNJI_CORNER_TIMEOUT_CYCLES) {
+            corner_turn_cycles++;
+            left_duty  = 0;
+            right_duty = XUNJI_CORNER_LEFT_DUTY;
+        } else {
+            /* 超时后低速继续搜索，避免停车后再也无法改变传感器位置。 */
+            left_duty  = 0;
+            right_duty = XUNJI_CORNER_SEARCH_DUTY;
+        }
+
+        if ((corner_turn_cycles >= XUNJI_CORNER_MIN_TURN_CYCLES) &&
+            (active_sensor_count < XUNJI_CORNER_ACTIVE_MIN) &&
+            sensor_online &&
+            (abs_error <= XUNJI_CORNER_CENTER_MAX)) {
+            corner_center_count++;
+            if (corner_center_count >= XUNJI_CORNER_CONFIRM_CYCLES) {
+                tracking_state = XUNJI_TRACK_FOLLOW;
+                corner_center_count = 0U;
+                corner_turn_cycles = 0U;
+                left_duty  = (int32_t)base_speed;
+                right_duty = (int32_t)base_speed;
+            }
+        } else {
+            corner_center_count = 0U;
+        }
+    } else if (!sensor_online) {
+        if (has_seen_line != 0U) {
+            if (lost_line_count < XUNJI_LOST_CONFIRM_CYCLES) {
+                lost_line_count++;
+            }
+
+            if (lost_line_count >= XUNJI_LOST_CONFIRM_CYCLES) {
+                tracking_state = XUNJI_TRACK_CORNER_LEFT;
+                lost_line_count = 0U;
+                corner_center_count = 0U;
+                corner_turn_cycles = 1U;
+                left_duty  = 0;
+                right_duty = XUNJI_CORNER_LEFT_DUTY;
+            }
+        } else {
+            left_duty  = 0;
+            right_duty = 0;
+        }
+    } else {
+        has_seen_line = 1U;
+        lost_line_count = 0U;
+
+        /*
+         * 正常直线通常只有 2~3 路有效；弯角处约 4 路或更多同时有效。
+         * 只有连续 3 个控制周期满足宽线条件才确认，避免单帧噪声计数。
+         */
+        if (active_sensor_count >= XUNJI_CORNER_ACTIVE_MIN) {
+            if (corner_mark_count < XUNJI_CORNER_MARK_CYCLES) {
+                corner_mark_count++;
+            }
+
+            if (corner_mark_count >= XUNJI_CORNER_MARK_CYCLES) {
+                tracking_state = XUNJI_TRACK_CORNER_LEFT;
+                corner_mark_count = 0U;
+                corner_center_count = 0U;
+                corner_turn_cycles = 1U;
+                corner_event = 1U;
+                left_duty  = 0;
+                right_duty = XUNJI_CORNER_LEFT_DUTY;
+            }
+        } else {
+            corner_mark_count = 0U;
+        }
+
+        if (tracking_state == XUNJI_TRACK_CORNER_LEFT) {
+            /* 已由宽线判定接管输出，本周期不再执行 PID。 */
+        } else {
+
+        /* ---- 第3步: PID 控制 (误差归一化到 [-1, 1]) ---- */
         /* 归一化: error_raw ∈ [-5500, +5500] → [-1.0, +1.0] */
         error_norm = (float)error_raw / 5500.0f;
         pid_out    = pid_update(&g_pid_xunji, error_norm);
@@ -198,7 +341,6 @@ void xunji_update(void)
          * the line moves farther from the sensor center.  Each curve
          * speed is capped by base_speed, so this logic never accelerates.
          */
-        abs_error = (error_raw < 0) ? -error_raw : error_raw;
         adaptive_speed = base_speed;
 
         if (abs_error > XUNJI_SMALL_CURVE_ERROR_MAX) {
@@ -213,9 +355,7 @@ void xunji_update(void)
 
         left_duty  = (int32_t)adaptive_speed + diff;
         right_duty = (int32_t)adaptive_speed - diff;
-    } else {
-        /* 丢线: 保持上次输出, 或可设为直行 */
-        /* left_duty / right_duty 保持不变 */
+        }
     }
 
     /* ---- 第4步: 限幅 0~100 ---- */
@@ -232,6 +372,26 @@ void xunji_set_base_speed(uint32_t speed)
 {
     if (speed > 100) speed = 100;
     base_speed = speed;
+}
+
+void xunji_reset_tracking(void)
+{
+    tracking_state = XUNJI_TRACK_FOLLOW;
+    has_seen_line = 0U;
+    lost_line_count = 0U;
+    corner_mark_count = 0U;
+    corner_center_count = 0U;
+    corner_turn_cycles = 0U;
+    corner_event = 0U;
+    left_duty = 0;
+    right_duty = 0;
+}
+
+uint8_t xunji_take_corner_event(void)
+{
+    uint8_t event = corner_event;
+    corner_event = 0U;
+    return event;
 }
 
 /* ---- 查询接口 ---- */

@@ -91,11 +91,11 @@ void drv_uart_print_hex(uint8_t num)
  * (Cortex-M0+ aligned 8-bit 访问为原子操作)。
  * ================================================================ */
 
-#define UART1_RX_BUF_SIZE   64
+#define UART1_RX_BUF_SIZE   1024U
 
 static volatile uint8_t uart1_rx_buf[UART1_RX_BUF_SIZE];
-static volatile uint8_t uart1_rx_head = 0;
-static volatile uint8_t uart1_rx_tail = 0;
+static volatile uint16_t uart1_rx_head = 0;
+static volatile uint16_t uart1_rx_tail = 0;
 
 /**
  * @brief  初始化 UART1 中断接收
@@ -114,7 +114,7 @@ void drv_uart1_init(void)
 /**
  * @brief  获取环形缓冲区中待读取字节数
  */
-uint8_t drv_uart1_available(void)
+uint16_t drv_uart1_available(void)
 {
     return (uart1_rx_head - uart1_rx_tail) & (UART1_RX_BUF_SIZE - 1);
 }
@@ -156,7 +156,7 @@ void UART1_IRQHandler(void)
 
     if (status & DL_UART_MAIN_IIDX_RX) {
         uint8_t data = DL_UART_Main_receiveData(fishpath_INST);
-        uint8_t next  = (uart1_rx_head + 1) & (UART1_RX_BUF_SIZE - 1);
+        uint16_t next = (uart1_rx_head + 1U) & (UART1_RX_BUF_SIZE - 1U);
 
         if (next != uart1_rx_tail) {
             uart1_rx_buf[uart1_rx_head] = data;

@@ -17,7 +17,7 @@ void drv_uart_print_hex(uint8_t num);
  * ================================================================ */
 
 void    drv_uart1_init(void);
-uint8_t drv_uart1_available(void);
+uint16_t drv_uart1_available(void);
 int16_t drv_uart1_read(void);       /* returns byte 0~255, or -1 if empty */
 void    drv_uart1_flush(void);
 
