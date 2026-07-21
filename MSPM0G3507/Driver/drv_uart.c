@@ -165,3 +165,33 @@ void UART1_IRQHandler(void)
         /* else: buffer full, drop byte (keep existing data intact) */
     }
 }
+
+/* ================================================================
+ * UART3 (F32C) - 二自由度云台阻塞发送
+ *
+ * UART3 已由 SYSCFG_DL_f32c_init() 按 115200-8N1 初始化并使能，
+ * 此处只封装使用 f32c_INST 的底层发送操作。
+ * ================================================================ */
+
+void drv_f32c_uart_init(void)
+{
+    /* UART3 已在 SYSCFG_DL_init() 中完成初始化，无需再次等待或复位。 */
+}
+
+void drv_f32c_uart_write(const uint8_t *data, uint8_t length)
+{
+    uint8_t i;
+
+    if (data == 0) {
+        return;
+    }
+
+    for (i = 0U; i < length; i++) {
+        DL_UART_Main_transmitDataBlocking(f32c_INST, data[i]);
+    }
+
+    /*
+     * 不在此处无限等待 UART BUSY 清零。阻塞发送已经保证所有字节
+     * 写入 FIFO，上层的帧间隔会等待最后一个字节发送完成。
+     */
+}

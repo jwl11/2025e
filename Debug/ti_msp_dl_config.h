@@ -169,6 +169,22 @@ extern "C" {
 #define fishpath_BAUD_RATE                                              (115200)
 #define fishpath_IBRD_32_MHZ_115200_BAUD                                    (17)
 #define fishpath_FBRD_32_MHZ_115200_BAUD                                    (23)
+/* Defines for f32c */
+#define f32c_INST                                                          UART3
+#define f32c_INST_FREQUENCY                                             32000000
+#define f32c_INST_IRQHandler                                    UART3_IRQHandler
+#define f32c_INST_INT_IRQN                                        UART3_INT_IRQn
+#define GPIO_f32c_RX_PORT                                                  GPIOB
+#define GPIO_f32c_TX_PORT                                                  GPIOB
+#define GPIO_f32c_RX_PIN                                           DL_GPIO_PIN_3
+#define GPIO_f32c_TX_PIN                                           DL_GPIO_PIN_2
+#define GPIO_f32c_IOMUX_RX                                       (IOMUX_PINCM16)
+#define GPIO_f32c_IOMUX_TX                                       (IOMUX_PINCM15)
+#define GPIO_f32c_IOMUX_RX_FUNC                        IOMUX_PINCM16_PF_UART3_RX
+#define GPIO_f32c_IOMUX_TX_FUNC                        IOMUX_PINCM15_PF_UART3_TX
+#define f32c_BAUD_RATE                                                  (115200)
+#define f32c_IBRD_32_MHZ_115200_BAUD                                        (17)
+#define f32c_FBRD_32_MHZ_115200_BAUD                                        (23)
 
 
 
@@ -226,6 +242,7 @@ void SYSCFG_DL_MG310_PWM_init(void);
 void SYSCFG_DL_as5600_init(void);
 void SYSCFG_DL_debug_init(void);
 void SYSCFG_DL_fishpath_init(void);
+void SYSCFG_DL_f32c_init(void);
 
 void SYSCFG_DL_SYSTICK_init(void);
 

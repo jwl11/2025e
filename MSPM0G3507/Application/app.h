@@ -13,6 +13,7 @@ void app_MG310_test(void);
 void app_fishpath_test(void);
 void app_fishpath_motor_test(void);
 void app_button_test(void);
+void app_f32c_gimbal_test(void);
 
 
 #endif // __APP_H

@@ -14,6 +14,7 @@ C_SRCS += \
 ../MSPM0G3507/Application/app_button_test.c \
 ../MSPM0G3507/Application/app_debug_test.c \
 ../MSPM0G3507/Application/app_delay_test.c \
+../MSPM0G3507/Application/app_f32c_gimbal_test.c \
 ../MSPM0G3507/Application/app_fishpath_test.c \
 ../MSPM0G3507/Application/app_motor.c 
 
@@ -26,6 +27,7 @@ C_DEPS += \
 ./MSPM0G3507/Application/app_button_test.d \
 ./MSPM0G3507/Application/app_debug_test.d \
 ./MSPM0G3507/Application/app_delay_test.d \
+./MSPM0G3507/Application/app_f32c_gimbal_test.d \
 ./MSPM0G3507/Application/app_fishpath_test.d \
 ./MSPM0G3507/Application/app_motor.d 
 
@@ -38,6 +40,7 @@ OBJS += \
 ./MSPM0G3507/Application/app_button_test.o \
 ./MSPM0G3507/Application/app_debug_test.o \
 ./MSPM0G3507/Application/app_delay_test.o \
+./MSPM0G3507/Application/app_f32c_gimbal_test.o \
 ./MSPM0G3507/Application/app_fishpath_test.o \
 ./MSPM0G3507/Application/app_motor.o 
 
@@ -50,6 +53,7 @@ OBJS__QUOTED += \
 "MSPM0G3507\Application\app_button_test.o" \
 "MSPM0G3507\Application\app_debug_test.o" \
 "MSPM0G3507\Application\app_delay_test.o" \
+"MSPM0G3507\Application\app_f32c_gimbal_test.o" \
 "MSPM0G3507\Application\app_fishpath_test.o" \
 "MSPM0G3507\Application\app_motor.o" 
 
@@ -62,6 +66,7 @@ C_DEPS__QUOTED += \
 "MSPM0G3507\Application\app_button_test.d" \
 "MSPM0G3507\Application\app_debug_test.d" \
 "MSPM0G3507\Application\app_delay_test.d" \
+"MSPM0G3507\Application\app_f32c_gimbal_test.d" \
 "MSPM0G3507\Application\app_fishpath_test.d" \
 "MSPM0G3507\Application\app_motor.d" 
 
@@ -74,6 +79,7 @@ C_SRCS__QUOTED += \
 "../MSPM0G3507/Application/app_button_test.c" \
 "../MSPM0G3507/Application/app_debug_test.c" \
 "../MSPM0G3507/Application/app_delay_test.c" \
+"../MSPM0G3507/Application/app_f32c_gimbal_test.c" \
 "../MSPM0G3507/Application/app_fishpath_test.c" \
 "../MSPM0G3507/Application/app_motor.c" 
 
