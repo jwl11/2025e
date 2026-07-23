@@ -1,22 +1,45 @@
 #include "drv_uart.h"
 #include <stdio.h>
 
+#define UART0_TX_RETRY_LIMIT  100000U
+
+static bool uart0_write_byte(uint8_t data)
+{
+    uint32_t retry;
+
+    for (retry = 0U; retry < UART0_TX_RETRY_LIMIT; retry++) {
+        if (DL_UART_Main_transmitDataCheck(debug_INST, data)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void drv_uart0_init(void)
+{
+    DL_UART_Main_enable(debug_INST);
+}
+
 /**
  * @brief  重定向 printf 底层输出到 UART
  */
 int fputc(int ch, FILE *f)
 {
-    DL_UART_Main_transmitDataBlocking(debug_INST, (uint8_t)ch);
+    (void)f;
+    (void)uart0_write_byte((uint8_t)ch);
     return ch;
 }
 /**
  * @brief  发送字符串（阻塞）
  */
-void drv_uart_send_string(char *str)
+void drv_uart_send_string(const char *str)
 {
     while (*str != '\0')
     {
-        DL_UART_Main_transmitDataBlocking(debug_INST, (uint8_t)(*str));
+        if (!uart0_write_byte((uint8_t)(*str))) {
+            return;
+        }
         str++;
     }
 }

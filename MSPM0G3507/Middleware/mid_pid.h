@@ -42,6 +42,13 @@ void pid_init_all(void);
  */
 float pid_update(PID_Controller *pid, float error);
 
+/**
+ * @brief Incremental PI used by the DC-motor speed loop.
+ *
+ * output[k] = output[k-1] + Kp*(e[k]-e[k-1]) + Ki*e[k]
+ */
+float pid_update_incremental_pi(PID_Controller *pid, float error);
+
 /* ---- Convenience wrappers for FOC integration ---- */
 
 static inline float angle_control(float error) {

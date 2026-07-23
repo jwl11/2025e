@@ -47,7 +47,9 @@ int main(void)
     //app_MG310_test();
     //app_fishpath_test();
     //app_button_test();
-    app_f32c_gimbal_test();
+    //app_f32c_gimbal_test();
+    //app_motor_ctrl_test();
+    app_motor_position_test();
 
     while (1) {
         

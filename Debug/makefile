@@ -24,6 +24,7 @@ ORDERED_OBJS += \
 "./MSPM0G3507/Application/app_f32c_gimbal_test.o" \
 "./MSPM0G3507/Application/app_fishpath_test.o" \
 "./MSPM0G3507/Application/app_motor.o" \
+"./MSPM0G3507/Application/app_motor_ctrl_test.o" \
 "./MSPM0G3507/BSP/bsp_AS5600.o" \
 "./MSPM0G3507/BSP/bsp_BLCD.o" \
 "./MSPM0G3507/BSP/bsp_OLED.o" \
@@ -33,7 +34,9 @@ ORDERED_OBJS += \
 "./MSPM0G3507/BSP/bsp_fishpath.o" \
 "./MSPM0G3507/BSP/bsp_led.o" \
 "./MSPM0G3507/BSP/bsp_motor.o" \
+"./MSPM0G3507/BSP/bsp_motor_ctrl.o" \
 "./MSPM0G3507/Driver/drv_IIC.o" \
+"./MSPM0G3507/Driver/drv_encoder.o" \
 "./MSPM0G3507/Driver/drv_tim.o" \
 "./MSPM0G3507/Driver/drv_uart.o" \
 "./MSPM0G3507/Middleware/mid_delay.o" \
@@ -171,8 +174,10 @@ first.out: $(OBJS) $(GEN_CMDS)
 # Other Targets
 clean:
 	-$(RM) $(GEN_MISC_FILES__QUOTED)$(GEN_FILES__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "empty.o" "ti_msp_dl_config.o" "startup_mspm0g350x_ticlang.o" "MSPM0G3507\Application\app.o" "MSPM0G3507\Application\app_BLCD_test.o" "MSPM0G3507\Application\app_MG310_test.o" "MSPM0G3507\Application\app_PWM_test.o" "MSPM0G3507\Application\app_as5600_test.o" "MSPM0G3507\Application\app_button_test.o" "MSPM0G3507\Application\app_debug_test.o" "MSPM0G3507\Application\app_delay_test.o" "MSPM0G3507\Application\app_f32c_gimbal_test.o" "MSPM0G3507\Application\app_fishpath_test.o" "MSPM0G3507\Application\app_motor.o" "MSPM0G3507\BSP\bsp_AS5600.o" "MSPM0G3507\BSP\bsp_BLCD.o" "MSPM0G3507\BSP\bsp_OLED.o" "MSPM0G3507\BSP\bsp_button.o" "MSPM0G3507\BSP\bsp_encoder.o" "MSPM0G3507\BSP\bsp_f32c_gimbal.o" "MSPM0G3507\BSP\bsp_fishpath.o" "MSPM0G3507\BSP\bsp_led.o" "MSPM0G3507\BSP\bsp_motor.o" "MSPM0G3507\Driver\drv_IIC.o" "MSPM0G3507\Driver\drv_tim.o" "MSPM0G3507\Driver\drv_uart.o" "MSPM0G3507\Middleware\mid_delay.o" "MSPM0G3507\Middleware\mid_foc.o" "MSPM0G3507\Middleware\mid_pid.o" "MSPM0G3507\Middleware\mid_xunji.o" 
-	-$(RM) "empty.d" "ti_msp_dl_config.d" "startup_mspm0g350x_ticlang.d" "MSPM0G3507\Application\app.d" "MSPM0G3507\Application\app_BLCD_test.d" "MSPM0G3507\Application\app_MG310_test.d" "MSPM0G3507\Application\app_PWM_test.d" "MSPM0G3507\Application\app_as5600_test.d" "MSPM0G3507\Application\app_button_test.d" "MSPM0G3507\Application\app_debug_test.d" "MSPM0G3507\Application\app_delay_test.d" "MSPM0G3507\Application\app_f32c_gimbal_test.d" "MSPM0G3507\Application\app_fishpath_test.d" "MSPM0G3507\Application\app_motor.d" "MSPM0G3507\BSP\bsp_AS5600.d" "MSPM0G3507\BSP\bsp_BLCD.d" "MSPM0G3507\BSP\bsp_OLED.d" "MSPM0G3507\BSP\bsp_button.d" "MSPM0G3507\BSP\bsp_encoder.d" "MSPM0G3507\BSP\bsp_f32c_gimbal.d" "MSPM0G3507\BSP\bsp_fishpath.d" "MSPM0G3507\BSP\bsp_led.d" "MSPM0G3507\BSP\bsp_motor.d" "MSPM0G3507\Driver\drv_IIC.d" "MSPM0G3507\Driver\drv_tim.d" "MSPM0G3507\Driver\drv_uart.d" "MSPM0G3507\Middleware\mid_delay.d" "MSPM0G3507\Middleware\mid_foc.d" "MSPM0G3507\Middleware\mid_pid.d" "MSPM0G3507\Middleware\mid_xunji.d" 
+	-$(RM) "empty.o" "ti_msp_dl_config.o" "startup_mspm0g350x_ticlang.o" "MSPM0G3507\Application\app.o" "MSPM0G3507\Application\app_BLCD_test.o" "MSPM0G3507\Application\app_MG310_test.o" "MSPM0G3507\Application\app_PWM_test.o" "MSPM0G3507\Application\app_as5600_test.o" "MSPM0G3507\Application\app_button_test.o" "MSPM0G3507\Application\app_debug_test.o" "MSPM0G3507\Application\app_delay_test.o" "MSPM0G3507\Application\app_f32c_gimbal_test.o" "MSPM0G3507\Application\app_fishpath_test.o" "MSPM0G3507\Application\app_motor.o" "MSPM0G3507\Application\app_motor_ctrl_test.o" "MSPM0G3507\BSP\bsp_AS5600.o" "MSPM0G3507\BSP\bsp_BLCD.o" "MSPM0G3507\BSP\bsp_OLED.o" "MSPM0G3507\BSP\bsp_button.o" "MSPM0G3507\BSP\bsp_encoder.o" "MSPM0G3507\BSP\bsp_f32c_gimbal.o" "MSPM0G3507\BSP\bsp_fishpath.o" "MSPM0G3507\BSP\bsp_led.o" "MSPM0G3507\BSP\bsp_motor.o" "MSPM0G3507\BSP\bsp_motor_ctrl.o" "MSPM0G3507\Driver\drv_IIC.o" "MSPM0G3507\Driver\drv_encoder.o" "MSPM0G3507\Driver\drv_tim.o" "MSPM0G3507\Driver\drv_uart.o" "MSPM0G3507\Middleware\mid_delay.o" 
+	-$(RM) "MSPM0G3507\Middleware\mid_foc.o" "MSPM0G3507\Middleware\mid_pid.o" "MSPM0G3507\Middleware\mid_xunji.o" 
+	-$(RM) "empty.d" "ti_msp_dl_config.d" "startup_mspm0g350x_ticlang.d" "MSPM0G3507\Application\app.d" "MSPM0G3507\Application\app_BLCD_test.d" "MSPM0G3507\Application\app_MG310_test.d" "MSPM0G3507\Application\app_PWM_test.d" "MSPM0G3507\Application\app_as5600_test.d" "MSPM0G3507\Application\app_button_test.d" "MSPM0G3507\Application\app_debug_test.d" "MSPM0G3507\Application\app_delay_test.d" "MSPM0G3507\Application\app_f32c_gimbal_test.d" "MSPM0G3507\Application\app_fishpath_test.d" "MSPM0G3507\Application\app_motor.d" "MSPM0G3507\Application\app_motor_ctrl_test.d" "MSPM0G3507\BSP\bsp_AS5600.d" "MSPM0G3507\BSP\bsp_BLCD.d" "MSPM0G3507\BSP\bsp_OLED.d" "MSPM0G3507\BSP\bsp_button.d" "MSPM0G3507\BSP\bsp_encoder.d" "MSPM0G3507\BSP\bsp_f32c_gimbal.d" "MSPM0G3507\BSP\bsp_fishpath.d" "MSPM0G3507\BSP\bsp_led.d" "MSPM0G3507\BSP\bsp_motor.d" "MSPM0G3507\BSP\bsp_motor_ctrl.d" "MSPM0G3507\Driver\drv_IIC.d" "MSPM0G3507\Driver\drv_encoder.d" "MSPM0G3507\Driver\drv_tim.d" "MSPM0G3507\Driver\drv_uart.d" "MSPM0G3507\Middleware\mid_delay.d" 
+	-$(RM) "MSPM0G3507\Middleware\mid_foc.d" "MSPM0G3507\Middleware\mid_pid.d" "MSPM0G3507\Middleware\mid_xunji.d" 
 	-@echo ' '
 
 .PHONY: all clean dependents

@@ -100,13 +100,13 @@ void mg310_motorInit(MG310_Motor motor)
     mg310_setDirectionPins(motor, MG310_DIR_STOP);
 
     /* PWM 占空比设为 0 (CC=0 → 持续低电平) */
-    DL_TimerA_setCaptureCompareValue(MG310_PWM_INST, 0, cfg->pwmCh);
+    DL_TimerG_setCaptureCompareValue(MG310_PWM_INST, 0, cfg->pwmCh);
 
     /*
      * TIM1 已由 SysConfig 配置为自动启动 (DL_TIMER_START),
      * 此处再确保一次计数器在运行。
      */
-    DL_Timer_startCounter(MG310_PWM_INST);
+    DL_TimerG_startCounter(MG310_PWM_INST);
 }
 
 /**
@@ -136,7 +136,7 @@ void mg310_motorSetSpeed(MG310_Motor motor, uint32_t duty)
      */
     cmp_val = (duty * MG310_PWM_PERIOD_MAX) / 100;
 
-    DL_TimerA_setCaptureCompareValue(MG310_PWM_INST, cmp_val, cfg->pwmCh);
+    DL_TimerG_setCaptureCompareValue(MG310_PWM_INST, cmp_val, cfg->pwmCh);
 }
 
 /**

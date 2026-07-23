@@ -121,6 +121,14 @@ extern "C" {
 
 
 
+/* Defines for MOTOR_MG310 */
+#define MOTOR_MG310_INST                                                 (TIMA1)
+#define MOTOR_MG310_INST_IRQHandler                             TIMA1_IRQHandler
+#define MOTOR_MG310_INST_INT_IRQN                               (TIMA1_INT_IRQn)
+#define MOTOR_MG310_INST_LOAD_VALUE                                     (15999U)
+
+
+
 
 /* Defines for as5600 */
 #define as5600_INST                                                         I2C1
@@ -218,6 +226,22 @@ extern "C" {
 #define MG310_BIN2_PORT                                                  (GPIOB)
 #define MG310_BIN2_PIN                                          (DL_GPIO_PIN_24)
 #define MG310_BIN2_IOMUX                                         (IOMUX_PINCM52)
+/* Defines for E1A: GPIOB.13 with pinCMx 30 on package pin 1 */
+#define MG310_E1A_PORT                                                   (GPIOB)
+#define MG310_E1A_PIN                                           (DL_GPIO_PIN_13)
+#define MG310_E1A_IOMUX                                          (IOMUX_PINCM30)
+/* Defines for E1B: GPIOA.26 with pinCMx 59 on package pin 30 */
+#define MG310_E1B_PORT                                                   (GPIOA)
+#define MG310_E1B_PIN                                           (DL_GPIO_PIN_26)
+#define MG310_E1B_IOMUX                                          (IOMUX_PINCM59)
+/* Defines for E2A: GPIOB.10 with pinCMx 27 on package pin 62 */
+#define MG310_E2A_PORT                                                   (GPIOB)
+#define MG310_E2A_PIN                                           (DL_GPIO_PIN_10)
+#define MG310_E2A_IOMUX                                          (IOMUX_PINCM27)
+/* Defines for E2B: GPIOB.11 with pinCMx 28 on package pin 63 */
+#define MG310_E2B_PORT                                                   (GPIOB)
+#define MG310_E2B_PIN                                           (DL_GPIO_PIN_11)
+#define MG310_E2B_IOMUX                                          (IOMUX_PINCM28)
 /* Port definition for Pin Group OLED */
 #define OLED_PORT                                                        (GPIOB)
 
@@ -239,6 +263,7 @@ void SYSCFG_DL_GPIO_init(void);
 void SYSCFG_DL_SYSCTL_init(void);
 void SYSCFG_DL_BLDC_init(void);
 void SYSCFG_DL_MG310_PWM_init(void);
+void SYSCFG_DL_MOTOR_MG310_init(void);
 void SYSCFG_DL_as5600_init(void);
 void SYSCFG_DL_debug_init(void);
 void SYSCFG_DL_fishpath_init(void);

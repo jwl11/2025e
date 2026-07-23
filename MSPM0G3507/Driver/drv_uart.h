@@ -7,7 +7,9 @@
  * UART0 (debug) — 阻塞发送 / printf 重定向
  * ================================================================ */
 
-void drv_uart_send_string(char *str);
+/** UART0 debug output: debug_INST, TX=PA10, RX=PA11, 115200-8N1. */
+void drv_uart0_init(void);
+void drv_uart_send_string(const char *str);
 void drv_uart_print_num(unsigned long num);
 void drv_uart_print_signed(long num);
 void drv_uart_print_hex(uint8_t num);

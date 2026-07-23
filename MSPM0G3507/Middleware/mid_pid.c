@@ -86,3 +86,18 @@ float pid_update(PID_Controller *pid, float error)
 
     return pid->output;
 }
+
+float pid_update_incremental_pi(PID_Controller *pid, float error)
+{
+    float increment;
+
+    increment = pid->Kp * (error - pid->prev_error) +
+                pid->Ki * error;
+    pid->prev_error = error;
+    pid->output += increment;
+    pid->output = _constrain(pid->output,
+                             -pid->output_limit,
+                              pid->output_limit);
+
+    return pid->output;
+}

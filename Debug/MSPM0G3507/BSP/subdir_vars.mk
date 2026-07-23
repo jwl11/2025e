@@ -14,7 +14,8 @@ C_SRCS += \
 ../MSPM0G3507/BSP/bsp_f32c_gimbal.c \
 ../MSPM0G3507/BSP/bsp_fishpath.c \
 ../MSPM0G3507/BSP/bsp_led.c \
-../MSPM0G3507/BSP/bsp_motor.c 
+../MSPM0G3507/BSP/bsp_motor.c \
+../MSPM0G3507/BSP/bsp_motor_ctrl.c 
 
 C_DEPS += \
 ./MSPM0G3507/BSP/bsp_AS5600.d \
@@ -25,7 +26,8 @@ C_DEPS += \
 ./MSPM0G3507/BSP/bsp_f32c_gimbal.d \
 ./MSPM0G3507/BSP/bsp_fishpath.d \
 ./MSPM0G3507/BSP/bsp_led.d \
-./MSPM0G3507/BSP/bsp_motor.d 
+./MSPM0G3507/BSP/bsp_motor.d \
+./MSPM0G3507/BSP/bsp_motor_ctrl.d 
 
 OBJS += \
 ./MSPM0G3507/BSP/bsp_AS5600.o \
@@ -36,7 +38,8 @@ OBJS += \
 ./MSPM0G3507/BSP/bsp_f32c_gimbal.o \
 ./MSPM0G3507/BSP/bsp_fishpath.o \
 ./MSPM0G3507/BSP/bsp_led.o \
-./MSPM0G3507/BSP/bsp_motor.o 
+./MSPM0G3507/BSP/bsp_motor.o \
+./MSPM0G3507/BSP/bsp_motor_ctrl.o 
 
 OBJS__QUOTED += \
 "MSPM0G3507\BSP\bsp_AS5600.o" \
@@ -47,7 +50,8 @@ OBJS__QUOTED += \
 "MSPM0G3507\BSP\bsp_f32c_gimbal.o" \
 "MSPM0G3507\BSP\bsp_fishpath.o" \
 "MSPM0G3507\BSP\bsp_led.o" \
-"MSPM0G3507\BSP\bsp_motor.o" 
+"MSPM0G3507\BSP\bsp_motor.o" \
+"MSPM0G3507\BSP\bsp_motor_ctrl.o" 
 
 C_DEPS__QUOTED += \
 "MSPM0G3507\BSP\bsp_AS5600.d" \
@@ -58,7 +62,8 @@ C_DEPS__QUOTED += \
 "MSPM0G3507\BSP\bsp_f32c_gimbal.d" \
 "MSPM0G3507\BSP\bsp_fishpath.d" \
 "MSPM0G3507\BSP\bsp_led.d" \
-"MSPM0G3507\BSP\bsp_motor.d" 
+"MSPM0G3507\BSP\bsp_motor.d" \
+"MSPM0G3507\BSP\bsp_motor_ctrl.d" 
 
 C_SRCS__QUOTED += \
 "../MSPM0G3507/BSP/bsp_AS5600.c" \
@@ -69,6 +74,7 @@ C_SRCS__QUOTED += \
 "../MSPM0G3507/BSP/bsp_f32c_gimbal.c" \
 "../MSPM0G3507/BSP/bsp_fishpath.c" \
 "../MSPM0G3507/BSP/bsp_led.c" \
-"../MSPM0G3507/BSP/bsp_motor.c" 
+"../MSPM0G3507/BSP/bsp_motor.c" \
+"../MSPM0G3507/BSP/bsp_motor_ctrl.c" 
 
 
