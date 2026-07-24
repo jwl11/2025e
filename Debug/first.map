@@ -1,7 +1,7 @@
 ******************************************************************************
             TI ARM Clang Linker PC v4.0.4                      
 ******************************************************************************
->> Linked Thu Jul 23 18:54:20 2026
+>> Linked Fri Jul 24 19:25:26 2026
 
 OUTPUT FILE NAME:   <first.out>
 ENTRY POINT SYMBOL: "_c_int00_noargs"  address: 00002149
@@ -350,7 +350,7 @@ MODULE SUMMARY
     +--+------------------------------+-------+---------+---------+
        Total:                         774     0         0      
                                                                
-    D:\TI2.0\CCS\ccs\tools\compiler\ti-cgt-armllvm_4.0.4.LTS\lib\armv6m-ti-none-eabi/c/libc.a
+    E:\ccs\ccs\tools\compiler\ti-cgt-armllvm_4.0.4.LTS\lib\armv6m-ti-none-eabi/c/libc.a
        copy_decompress_lzss.c.obj     124     0         0      
        autoinit.c.obj                 60      0         0      
        boot_cortex_m.c.obj            56      0         0      
@@ -363,12 +363,12 @@ MODULE SUMMARY
     +--+------------------------------+-------+---------+---------+
        Total:                         316     0         0      
                                                                
-    D:\TI2.0\CCS\ccs\tools\compiler\ti-cgt-armllvm_4.0.4.LTS\lib\armv6m-ti-none-eabi/c/libsysbm.a
+    E:\ccs\ccs\tools\compiler\ti-cgt-armllvm_4.0.4.LTS\lib\armv6m-ti-none-eabi/c/libsysbm.a
        hostexit.c.obj                 4       0         0      
     +--+------------------------------+-------+---------+---------+
        Total:                         4       0         0      
                                                                
-    D:\TI2.0\CCS\ccs\tools\compiler\ti-cgt-armllvm_4.0.4.LTS\lib\armv6m-ti-none-eabi/libclang_rt.builtins.a
+    E:\ccs\ccs\tools\compiler\ti-cgt-armllvm_4.0.4.LTS\lib\armv6m-ti-none-eabi/libclang_rt.builtins.a
        addsf3.S.obj                   216     0         0      
        mulsf3.S.obj                   140     0         0      
        divsf3.S.obj                   130     0         0      

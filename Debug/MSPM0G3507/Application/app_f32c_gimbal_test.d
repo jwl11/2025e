@@ -86,9 +86,9 @@ MSPM0G3507/Application/app_f32c_gimbal_test.o: \
  C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_wwdt.h \
  C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_interrupt.h \
  C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_systick.h \
- D:/2025e/2025e/MSPM0G3507/BSP/bsp_f32c_gimbal.h \
- D:/2025e/2025e/MSPM0G3507/Driver/drv_uart.h \
- D:/2025e/2025e/MSPM0G3507/Middleware/mid_delay.h
+ E:/ccs/project/MSPM0G3507/BSP/bsp_f32c_gimbal.h \
+ E:/ccs/project/MSPM0G3507/Driver/drv_uart.h \
+ E:/ccs/project/MSPM0G3507/Middleware/mid_delay.h
 ../MSPM0G3507/Application/app.h:
 ti_msp_dl_config.h:
 C:/TI/mspm0_sdk_2_10_00_04/source/ti/devices/msp/msp.h:
@@ -173,6 +173,6 @@ C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_vref.h:
 C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_wwdt.h:
 C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_interrupt.h:
 C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_systick.h:
-D:/2025e/2025e/MSPM0G3507/BSP/bsp_f32c_gimbal.h:
-D:/2025e/2025e/MSPM0G3507/Driver/drv_uart.h:
-D:/2025e/2025e/MSPM0G3507/Middleware/mid_delay.h:
+E:/ccs/project/MSPM0G3507/BSP/bsp_f32c_gimbal.h:
+E:/ccs/project/MSPM0G3507/Driver/drv_uart.h:
+E:/ccs/project/MSPM0G3507/Middleware/mid_delay.h:
