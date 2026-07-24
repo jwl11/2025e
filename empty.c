@@ -49,7 +49,8 @@ int main(void)
     //app_button_test();
     //app_f32c_gimbal_test();
     //app_motor_ctrl_test();
-    app_motor_position_test();
+    //app_motor_position_test();
+    app_wit_test();
 
     while (1) {
         

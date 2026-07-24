@@ -193,9 +193,26 @@ extern "C" {
 #define f32c_BAUD_RATE                                                  (115200)
 #define f32c_IBRD_32_MHZ_115200_BAUD                                        (17)
 #define f32c_FBRD_32_MHZ_115200_BAUD                                        (23)
+/* Defines for UART_WIT */
+#define UART_WIT_INST                                                      UART2
+#define UART_WIT_INST_FREQUENCY                                         32000000
+#define UART_WIT_INST_IRQHandler                                UART2_IRQHandler
+#define UART_WIT_INST_INT_IRQN                                    UART2_INT_IRQn
+#define GPIO_UART_WIT_RX_PORT                                              GPIOB
+#define GPIO_UART_WIT_RX_PIN                                      DL_GPIO_PIN_18
+#define GPIO_UART_WIT_IOMUX_RX                                   (IOMUX_PINCM44)
+#define GPIO_UART_WIT_IOMUX_RX_FUNC                    IOMUX_PINCM44_PF_UART2_RX
+#define UART_WIT_BAUD_RATE                                              (115200)
+#define UART_WIT_IBRD_32_MHZ_115200_BAUD                                    (17)
+#define UART_WIT_FBRD_32_MHZ_115200_BAUD                                    (23)
 
 
 
+
+
+/* Defines for DMA_WIT */
+#define DMA_WIT_CHAN_ID                                                      (0)
+#define UART_WIT_INST_DMA_TRIGGER                            (DMA_UART2_RX_TRIG)
 
 
 /* Port definition for Pin Group use_led */
@@ -268,6 +285,8 @@ void SYSCFG_DL_as5600_init(void);
 void SYSCFG_DL_debug_init(void);
 void SYSCFG_DL_fishpath_init(void);
 void SYSCFG_DL_f32c_init(void);
+void SYSCFG_DL_UART_WIT_init(void);
+void SYSCFG_DL_DMA_init(void);
 
 void SYSCFG_DL_SYSTICK_init(void);
 
