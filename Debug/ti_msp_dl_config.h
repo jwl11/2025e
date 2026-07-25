@@ -198,10 +198,10 @@ extern "C" {
 #define UART_WIT_INST_FREQUENCY                                         32000000
 #define UART_WIT_INST_IRQHandler                                UART2_IRQHandler
 #define UART_WIT_INST_INT_IRQN                                    UART2_INT_IRQn
-#define GPIO_UART_WIT_RX_PORT                                              GPIOB
-#define GPIO_UART_WIT_RX_PIN                                      DL_GPIO_PIN_18
-#define GPIO_UART_WIT_IOMUX_RX                                   (IOMUX_PINCM44)
-#define GPIO_UART_WIT_IOMUX_RX_FUNC                    IOMUX_PINCM44_PF_UART2_RX
+#define GPIO_UART_WIT_RX_PORT                                              GPIOA
+#define GPIO_UART_WIT_RX_PIN                                      DL_GPIO_PIN_24
+#define GPIO_UART_WIT_IOMUX_RX                                   (IOMUX_PINCM54)
+#define GPIO_UART_WIT_IOMUX_RX_FUNC                    IOMUX_PINCM54_PF_UART2_RX
 #define UART_WIT_BAUD_RATE                                              (115200)
 #define UART_WIT_IBRD_32_MHZ_115200_BAUD                                    (17)
 #define UART_WIT_FBRD_32_MHZ_115200_BAUD                                    (23)
