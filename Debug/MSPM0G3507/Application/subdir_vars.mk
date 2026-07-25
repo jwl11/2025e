@@ -17,6 +17,7 @@ C_SRCS += \
 ../MSPM0G3507/Application/app_fishpath_test.c \
 ../MSPM0G3507/Application/app_motor.c \
 ../MSPM0G3507/Application/app_motor_ctrl_test.c \
+../MSPM0G3507/Application/app_wit_straight_test.c \
 ../MSPM0G3507/Application/app_wit_test.c 
 
 C_DEPS += \
@@ -31,6 +32,7 @@ C_DEPS += \
 ./MSPM0G3507/Application/app_fishpath_test.d \
 ./MSPM0G3507/Application/app_motor.d \
 ./MSPM0G3507/Application/app_motor_ctrl_test.d \
+./MSPM0G3507/Application/app_wit_straight_test.d \
 ./MSPM0G3507/Application/app_wit_test.d 
 
 OBJS += \
@@ -45,6 +47,7 @@ OBJS += \
 ./MSPM0G3507/Application/app_fishpath_test.o \
 ./MSPM0G3507/Application/app_motor.o \
 ./MSPM0G3507/Application/app_motor_ctrl_test.o \
+./MSPM0G3507/Application/app_wit_straight_test.o \
 ./MSPM0G3507/Application/app_wit_test.o 
 
 OBJS__QUOTED += \
@@ -59,6 +62,7 @@ OBJS__QUOTED += \
 "MSPM0G3507\Application\app_fishpath_test.o" \
 "MSPM0G3507\Application\app_motor.o" \
 "MSPM0G3507\Application\app_motor_ctrl_test.o" \
+"MSPM0G3507\Application\app_wit_straight_test.o" \
 "MSPM0G3507\Application\app_wit_test.o" 
 
 C_DEPS__QUOTED += \
@@ -73,6 +77,7 @@ C_DEPS__QUOTED += \
 "MSPM0G3507\Application\app_fishpath_test.d" \
 "MSPM0G3507\Application\app_motor.d" \
 "MSPM0G3507\Application\app_motor_ctrl_test.d" \
+"MSPM0G3507\Application\app_wit_straight_test.d" \
 "MSPM0G3507\Application\app_wit_test.d" 
 
 C_SRCS__QUOTED += \
@@ -87,6 +92,7 @@ C_SRCS__QUOTED += \
 "../MSPM0G3507/Application/app_fishpath_test.c" \
 "../MSPM0G3507/Application/app_motor.c" \
 "../MSPM0G3507/Application/app_motor_ctrl_test.c" \
+"../MSPM0G3507/Application/app_wit_straight_test.c" \
 "../MSPM0G3507/Application/app_wit_test.c" 
 
 

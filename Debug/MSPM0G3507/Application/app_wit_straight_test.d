@@ -1,7 +1,7 @@
 # FIXED
 
-MSPM0G3507/Application/app_PWM_test.o: \
- ../MSPM0G3507/Application/app_PWM_test.c \
+MSPM0G3507/Application/app_wit_straight_test.o: \
+ ../MSPM0G3507/Application/app_wit_straight_test.c \
  ti_msp_dl_config.h \
  C:/TI/mspm0_sdk_2_10_00_04/source/ti/devices/msp/msp.h \
  C:/TI/mspm0_sdk_2_10_00_04/source/ti/devices/DeviceFamily.h \
@@ -85,7 +85,14 @@ MSPM0G3507/Application/app_PWM_test.o: \
  C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_wwdt.h \
  C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_interrupt.h \
  C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_systick.h \
- D:/2025e/2025e/MSPM0G3507/Driver/drv_tim.h
+ D:/2025e/2025e/MSPM0G3507/BSP/bsp_wit.h \
+ D:/2025e/2025e/MSPM0G3507/BSP/bsp_encoder.h \
+ D:/2025e/2025e/MSPM0G3507/BSP/bsp_led.h \
+ D:/2025e/2025e/MSPM0G3507/BSP/bsp_button.h \
+ D:/2025e/2025e/MSPM0G3507/BSP/bsp_OLED.h \
+ D:/2025e/2025e/MSPM0G3507/Driver/drv_uart.h \
+ D:/2025e/2025e/MSPM0G3507/Middleware/mid_delay.h \
+ D:/2025e/2025e/MSPM0G3507/Middleware/mid_pid.h
 ti_msp_dl_config.h:
 C:/TI/mspm0_sdk_2_10_00_04/source/ti/devices/msp/msp.h:
 C:/TI/mspm0_sdk_2_10_00_04/source/ti/devices/DeviceFamily.h:
@@ -169,4 +176,11 @@ C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_vref.h:
 C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_wwdt.h:
 C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_interrupt.h:
 C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_systick.h:
-D:/2025e/2025e/MSPM0G3507/Driver/drv_tim.h:
+D:/2025e/2025e/MSPM0G3507/BSP/bsp_wit.h:
+D:/2025e/2025e/MSPM0G3507/BSP/bsp_encoder.h:
+D:/2025e/2025e/MSPM0G3507/BSP/bsp_led.h:
+D:/2025e/2025e/MSPM0G3507/BSP/bsp_button.h:
+D:/2025e/2025e/MSPM0G3507/BSP/bsp_OLED.h:
+D:/2025e/2025e/MSPM0G3507/Driver/drv_uart.h:
+D:/2025e/2025e/MSPM0G3507/Middleware/mid_delay.h:
+D:/2025e/2025e/MSPM0G3507/Middleware/mid_pid.h:

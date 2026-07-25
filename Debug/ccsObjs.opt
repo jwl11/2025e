@@ -12,6 +12,7 @@
 "./MSPM0G3507/Application/app_fishpath_test.o"
 "./MSPM0G3507/Application/app_motor.o"
 "./MSPM0G3507/Application/app_motor_ctrl_test.o"
+"./MSPM0G3507/Application/app_wit_straight_test.o"
 "./MSPM0G3507/Application/app_wit_test.o"
 "./MSPM0G3507/BSP/MPU6050.o"
 "./MSPM0G3507/BSP/bsp_OLED.o"
