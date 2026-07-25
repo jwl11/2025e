@@ -85,9 +85,9 @@ MSPM0G3507/BSP/bsp_motor_ctrl.o: ../MSPM0G3507/BSP/bsp_motor_ctrl.c \
  C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_wwdt.h \
  C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_interrupt.h \
  C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_systick.h \
- D:/2025e/2025e/MSPM0G3507/Driver/drv_encoder.h \
+ E:/ccs/project/MSPM0G3507/Driver/drv_encoder.h \
  ../MSPM0G3507/BSP/bsp_encoder.h \
- D:/2025e/2025e/MSPM0G3507/Middleware/mid_pid.h
+ E:/ccs/project/MSPM0G3507/Middleware/mid_pid.h
 ../MSPM0G3507/BSP/bsp_motor_ctrl.h:
 ti_msp_dl_config.h:
 C:/TI/mspm0_sdk_2_10_00_04/source/ti/devices/msp/msp.h:
@@ -172,6 +172,6 @@ C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_vref.h:
 C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_wwdt.h:
 C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_interrupt.h:
 C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_systick.h:
-D:/2025e/2025e/MSPM0G3507/Driver/drv_encoder.h:
+E:/ccs/project/MSPM0G3507/Driver/drv_encoder.h:
 ../MSPM0G3507/BSP/bsp_encoder.h:
-D:/2025e/2025e/MSPM0G3507/Middleware/mid_pid.h:
+E:/ccs/project/MSPM0G3507/Middleware/mid_pid.h:
