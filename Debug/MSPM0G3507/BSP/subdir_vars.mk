@@ -6,6 +6,7 @@ SHELL = cmd.exe
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
+../MSPM0G3507/BSP/MPU6050.c \
 ../MSPM0G3507/BSP/bsp_OLED.c \
 ../MSPM0G3507/BSP/bsp_button.c \
 ../MSPM0G3507/BSP/bsp_encoder.c \
@@ -17,6 +18,7 @@ C_SRCS += \
 ../MSPM0G3507/BSP/bsp_wit.c 
 
 C_DEPS += \
+./MSPM0G3507/BSP/MPU6050.d \
 ./MSPM0G3507/BSP/bsp_OLED.d \
 ./MSPM0G3507/BSP/bsp_button.d \
 ./MSPM0G3507/BSP/bsp_encoder.d \
@@ -28,6 +30,7 @@ C_DEPS += \
 ./MSPM0G3507/BSP/bsp_wit.d 
 
 OBJS += \
+./MSPM0G3507/BSP/MPU6050.o \
 ./MSPM0G3507/BSP/bsp_OLED.o \
 ./MSPM0G3507/BSP/bsp_button.o \
 ./MSPM0G3507/BSP/bsp_encoder.o \
@@ -39,6 +42,7 @@ OBJS += \
 ./MSPM0G3507/BSP/bsp_wit.o 
 
 OBJS__QUOTED += \
+"MSPM0G3507\BSP\MPU6050.o" \
 "MSPM0G3507\BSP\bsp_OLED.o" \
 "MSPM0G3507\BSP\bsp_button.o" \
 "MSPM0G3507\BSP\bsp_encoder.o" \
@@ -50,6 +54,7 @@ OBJS__QUOTED += \
 "MSPM0G3507\BSP\bsp_wit.o" 
 
 C_DEPS__QUOTED += \
+"MSPM0G3507\BSP\MPU6050.d" \
 "MSPM0G3507\BSP\bsp_OLED.d" \
 "MSPM0G3507\BSP\bsp_button.d" \
 "MSPM0G3507\BSP\bsp_encoder.d" \
@@ -61,6 +66,7 @@ C_DEPS__QUOTED += \
 "MSPM0G3507\BSP\bsp_wit.d" 
 
 C_SRCS__QUOTED += \
+"../MSPM0G3507/BSP/MPU6050.c" \
 "../MSPM0G3507/BSP/bsp_OLED.c" \
 "../MSPM0G3507/BSP/bsp_button.c" \
 "../MSPM0G3507/BSP/bsp_encoder.c" \

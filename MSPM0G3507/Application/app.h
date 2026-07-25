@@ -17,6 +17,6 @@ void app_f32c_gimbal_test(void);
 void app_motor_ctrl_test(void);
 void app_motor_position_test(void);
 void app_wit_test(void);
-
+void MPU6050_test(void);
 
 #endif // __APP_H

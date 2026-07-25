@@ -18,4 +18,7 @@ void pwm_setAllDuty(uint32_t duty0, uint32_t duty1, uint32_t duty2);
 void pwm_start(void);
 void pwm_stop(void);
 
+/* MPU6050 periodic timer (TIMG6, 5ms) */
+void drv_mpu6050_timer_start(void);
+
 #endif /* __DRV_TIM_H */

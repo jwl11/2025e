@@ -126,6 +126,11 @@ extern "C" {
 #define MOTOR_MG310_INST_IRQHandler                             TIMA1_IRQHandler
 #define MOTOR_MG310_INST_INT_IRQN                               (TIMA1_INT_IRQn)
 #define MOTOR_MG310_INST_LOAD_VALUE                                     (15999U)
+/* Defines for GET_MPU6050 */
+#define GET_MPU6050_INST                                                 (TIMG6)
+#define GET_MPU6050_INST_IRQHandler                             TIMG6_IRQHandler
+#define GET_MPU6050_INST_INT_IRQN                               (TIMG6_INT_IRQn)
+#define GET_MPU6050_INST_LOAD_VALUE                                      (4999U)
 
 
 
@@ -218,9 +223,9 @@ extern "C" {
 /* Port definition for Pin Group use_led */
 #define use_led_PORT                                                     (GPIOB)
 
-/* Defines for PIN_22: GPIOB.22 with pinCMx 50 on package pin 21 */
-#define use_led_PIN_22_PIN                                      (DL_GPIO_PIN_22)
-#define use_led_PIN_22_IOMUX                                     (IOMUX_PINCM50)
+/* Defines for PIN_22: GPIOB.0 with pinCMx 12 on package pin 47 */
+#define use_led_PIN_22_PIN                                       (DL_GPIO_PIN_0)
+#define use_led_PIN_22_IOMUX                                     (IOMUX_PINCM12)
 /* Port definition for Pin Group KEY */
 #define KEY_PORT                                                         (GPIOB)
 
@@ -268,6 +273,14 @@ extern "C" {
 /* Defines for OLED_SDA: GPIOB.8 with pinCMx 25 on package pin 60 */
 #define OLED_OLED_SDA_PIN                                        (DL_GPIO_PIN_8)
 #define OLED_OLED_SDA_IOMUX                                      (IOMUX_PINCM25)
+/* Defines for SDA: GPIOB.22 with pinCMx 50 on package pin 21 */
+#define MPU6050_SDA_PORT                                                 (GPIOB)
+#define MPU6050_SDA_PIN                                         (DL_GPIO_PIN_22)
+#define MPU6050_SDA_IOMUX                                        (IOMUX_PINCM50)
+/* Defines for SCL: GPIOA.30 with pinCMx 5 on package pin 37 */
+#define MPU6050_SCL_PORT                                                 (GPIOA)
+#define MPU6050_SCL_PIN                                         (DL_GPIO_PIN_30)
+#define MPU6050_SCL_IOMUX                                         (IOMUX_PINCM5)
 
 
 
@@ -281,6 +294,7 @@ void SYSCFG_DL_SYSCTL_init(void);
 void SYSCFG_DL_BLDC_init(void);
 void SYSCFG_DL_MG310_PWM_init(void);
 void SYSCFG_DL_MOTOR_MG310_init(void);
+void SYSCFG_DL_GET_MPU6050_init(void);
 void SYSCFG_DL_as5600_init(void);
 void SYSCFG_DL_debug_init(void);
 void SYSCFG_DL_fishpath_init(void);

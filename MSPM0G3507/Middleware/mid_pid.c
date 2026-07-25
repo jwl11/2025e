@@ -1,5 +1,4 @@
 #include "mid_pid.h"
-#include "mid_math_constants.h"
 
 /* ================================================================
  *  Default PID instances

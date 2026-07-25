@@ -1,4 +1,7 @@
 #include "drv_tim.h"
+#include "MPU6050.h"
+
+extern MPU6050 MM;
 
 /**
  * @brief  PWM初始化
@@ -72,4 +75,30 @@ void pwm_start(void)
 void pwm_stop(void)
 {
     DL_Timer_stopCounter(BLDC_INST);
+}
+
+/**
+ * @brief  启动MPU6050定时器中断 (TIMG6, 5ms周期)
+ *         采集频率200hz
+ *
+ *         SYSCFG_DL_GET_MPU6050_init() 已将 TIMG6 配为 1MHz / 5ms / PERIODIC_UP,
+ *         此函数直接启动计数器即可.
+ */
+void drv_mpu6050_timer_start(void)
+{
+    NVIC_EnableIRQ(GET_MPU6050_INST_INT_IRQN);
+    DL_Timer_startCounter(GET_MPU6050_INST);
+}
+
+void TIMG6_IRQHandler(void)
+{
+    switch (DL_TimerG_getPendingInterrupt(GET_MPU6050_INST)) {
+        case DL_TIMERG_IIDX_LOAD:
+            DL_TimerG_clearInterruptStatus(GET_MPU6050_INST, DL_TIMERG_INTERRUPT_LOAD_EVENT);
+            // MPU6050_Get_Angle_Plus(&MM);  // 方法1 (Madgwick, 无万向锁)
+            MPU6050_Get_Angle_Plus(&MM);  // Madgwick+自适应, yaw漂移更小
+            break;
+        default:
+            break;
+    }
 }

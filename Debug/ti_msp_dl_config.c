@@ -42,6 +42,7 @@
 
 DL_TimerA_backupConfig gBLDCBackup;
 DL_TimerA_backupConfig gMOTOR_MG310Backup;
+DL_TimerG_backupConfig gGET_MPU6050Backup;
 DL_UART_Main_backupConfig gf32cBackup;
 
 /*
@@ -57,6 +58,7 @@ SYSCONFIG_WEAK void SYSCFG_DL_init(void)
     SYSCFG_DL_BLDC_init();
     SYSCFG_DL_MG310_PWM_init();
     SYSCFG_DL_MOTOR_MG310_init();
+    SYSCFG_DL_GET_MPU6050_init();
     SYSCFG_DL_as5600_init();
     SYSCFG_DL_debug_init();
     SYSCFG_DL_fishpath_init();
@@ -67,6 +69,7 @@ SYSCONFIG_WEAK void SYSCFG_DL_init(void)
     /* Ensure backup structures have no valid state */
 	gBLDCBackup.backupRdy 	= false;
 	gMOTOR_MG310Backup.backupRdy 	= false;
+	gGET_MPU6050Backup.backupRdy 	= false;
 	gf32cBackup.backupRdy 	= false;
 
 }
@@ -80,6 +83,7 @@ SYSCONFIG_WEAK bool SYSCFG_DL_saveConfiguration(void)
 
 	retStatus &= DL_TimerA_saveConfiguration(BLDC_INST, &gBLDCBackup);
 	retStatus &= DL_TimerA_saveConfiguration(MOTOR_MG310_INST, &gMOTOR_MG310Backup);
+	retStatus &= DL_TimerG_saveConfiguration(GET_MPU6050_INST, &gGET_MPU6050Backup);
 	retStatus &= DL_UART_Main_saveConfiguration(f32c_INST, &gf32cBackup);
 
     return retStatus;
@@ -92,6 +96,7 @@ SYSCONFIG_WEAK bool SYSCFG_DL_restoreConfiguration(void)
 
 	retStatus &= DL_TimerA_restoreConfiguration(BLDC_INST, &gBLDCBackup, false);
 	retStatus &= DL_TimerA_restoreConfiguration(MOTOR_MG310_INST, &gMOTOR_MG310Backup, false);
+	retStatus &= DL_TimerG_restoreConfiguration(GET_MPU6050_INST, &gGET_MPU6050Backup, false);
 	retStatus &= DL_UART_Main_restoreConfiguration(f32c_INST, &gf32cBackup);
 
     return retStatus;
@@ -104,6 +109,7 @@ SYSCONFIG_WEAK void SYSCFG_DL_initPower(void)
     DL_TimerA_reset(BLDC_INST);
     DL_TimerG_reset(MG310_PWM_INST);
     DL_TimerA_reset(MOTOR_MG310_INST);
+    DL_TimerG_reset(GET_MPU6050_INST);
     DL_I2C_reset(as5600_INST);
     DL_UART_Main_reset(debug_INST);
     DL_UART_Main_reset(fishpath_INST);
@@ -117,6 +123,7 @@ SYSCONFIG_WEAK void SYSCFG_DL_initPower(void)
     DL_TimerA_enablePower(BLDC_INST);
     DL_TimerG_enablePower(MG310_PWM_INST);
     DL_TimerA_enablePower(MOTOR_MG310_INST);
+    DL_TimerG_enablePower(GET_MPU6050_INST);
     DL_I2C_enablePower(as5600_INST);
     DL_UART_Main_enablePower(debug_INST);
     DL_UART_Main_enablePower(fishpath_INST);
@@ -201,12 +208,19 @@ SYSCONFIG_WEAK void SYSCFG_DL_GPIO_init(void)
 
     DL_GPIO_initDigitalOutput(OLED_OLED_SDA_IOMUX);
 
-    DL_GPIO_clearPins(GPIOA, MG310_BIN1_PIN);
-    DL_GPIO_enableOutput(GPIOA, MG310_BIN1_PIN);
+    DL_GPIO_initDigitalOutput(MPU6050_SDA_IOMUX);
+
+    DL_GPIO_initDigitalOutput(MPU6050_SCL_IOMUX);
+
+    DL_GPIO_clearPins(GPIOA, MG310_BIN1_PIN |
+		MPU6050_SCL_PIN);
+    DL_GPIO_enableOutput(GPIOA, MG310_BIN1_PIN |
+		MPU6050_SCL_PIN);
     DL_GPIO_clearPins(GPIOB, use_led_PIN_22_PIN |
 		MG310_AIN1_PIN |
 		MG310_AIN2_PIN |
-		MG310_BIN2_PIN);
+		MG310_BIN2_PIN |
+		MPU6050_SDA_PIN);
     DL_GPIO_setPins(GPIOB, OLED_OLED_SCL_PIN |
 		OLED_OLED_SDA_PIN);
     DL_GPIO_enableOutput(GPIOB, use_led_PIN_22_PIN |
@@ -214,7 +228,8 @@ SYSCONFIG_WEAK void SYSCFG_DL_GPIO_init(void)
 		MG310_AIN2_PIN |
 		MG310_BIN2_PIN |
 		OLED_OLED_SCL_PIN |
-		OLED_OLED_SDA_PIN);
+		OLED_OLED_SDA_PIN |
+		MPU6050_SDA_PIN);
 
 }
 
@@ -377,6 +392,43 @@ SYSCONFIG_WEAK void SYSCFG_DL_MOTOR_MG310_init(void) {
         (DL_TimerA_TimerConfig *) &gMOTOR_MG310TimerConfig);
     DL_TimerA_enableInterrupt(MOTOR_MG310_INST , DL_TIMERA_INTERRUPT_LOAD_EVENT);
     DL_TimerA_enableClock(MOTOR_MG310_INST);
+
+
+
+
+
+}
+
+/*
+ * Timer clock configuration to be sourced by BUSCLK /  (32000000 Hz)
+ * timerClkFreq = (timerClkSrc / (timerClkDivRatio * (timerClkPrescale + 1)))
+ *   1000000 Hz = 32000000 Hz / (1 * (31 + 1))
+ */
+static const DL_TimerG_ClockConfig gGET_MPU6050ClockConfig = {
+    .clockSel    = DL_TIMER_CLOCK_BUSCLK,
+    .divideRatio = DL_TIMER_CLOCK_DIVIDE_1,
+    .prescale    = 31U,
+};
+
+/*
+ * Timer load value (where the counter starts from) is calculated as (timerPeriod * timerClockFreq) - 1
+ * GET_MPU6050_INST_LOAD_VALUE = (5 ms * 1000000 Hz) - 1
+ */
+static const DL_TimerG_TimerConfig gGET_MPU6050TimerConfig = {
+    .period     = GET_MPU6050_INST_LOAD_VALUE,
+    .timerMode  = DL_TIMER_TIMER_MODE_PERIODIC_UP,
+    .startTimer = DL_TIMER_STOP,
+};
+
+SYSCONFIG_WEAK void SYSCFG_DL_GET_MPU6050_init(void) {
+
+    DL_TimerG_setClockConfig(GET_MPU6050_INST,
+        (DL_TimerG_ClockConfig *) &gGET_MPU6050ClockConfig);
+
+    DL_TimerG_initTimerMode(GET_MPU6050_INST,
+        (DL_TimerG_TimerConfig *) &gGET_MPU6050TimerConfig);
+    DL_TimerG_enableInterrupt(GET_MPU6050_INST , DL_TIMERG_INTERRUPT_LOAD_EVENT);
+    DL_TimerG_enableClock(GET_MPU6050_INST);
 
 
 

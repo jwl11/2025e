@@ -14,6 +14,7 @@ const GPIO1   = GPIO.addInstance();
 const GPIO2   = GPIO.addInstance();
 const GPIO3   = GPIO.addInstance();
 const GPIO4   = GPIO.addInstance();
+const GPIO5   = GPIO.addInstance();
 const I2C     = scripting.addModule("/ti/driverlib/I2C", {}, false);
 const I2C1    = I2C.addInstance();
 const PWM     = scripting.addModule("/ti/driverlib/PWM", {}, false);
@@ -23,6 +24,7 @@ const SYSCTL  = scripting.addModule("/ti/driverlib/SYSCTL");
 const SYSTICK = scripting.addModule("/ti/driverlib/SYSTICK");
 const TIMER   = scripting.addModule("/ti/driverlib/TIMER", {}, false);
 const TIMER1  = TIMER.addInstance();
+const TIMER2  = TIMER.addInstance();
 const UART    = scripting.addModule("/ti/driverlib/UART", {}, false);
 const UART1   = UART.addInstance();
 const UART2   = UART.addInstance();
@@ -54,7 +56,7 @@ pinFunction4.inputFreq = 40;
 GPIO1.$name                         = "use_led";
 GPIO1.port                          = "PORTB";
 GPIO1.associatedPins[0].$name       = "PIN_22";
-GPIO1.associatedPins[0].pin.$assign = "PB22";
+GPIO1.associatedPins[0].pin.$assign = "PB0";
 
 const Board = scripting.addModule("/ti/driverlib/Board", {}, false);
 
@@ -101,6 +103,13 @@ GPIO4.$name                         = "KEY";
 GPIO4.associatedPins[0].$name       = "KEY1";
 GPIO4.associatedPins[0].direction   = "INPUT";
 GPIO4.associatedPins[0].pin.$assign = "PB15";
+
+GPIO5.$name                         = "MPU6050";
+GPIO5.associatedPins.create(2);
+GPIO5.associatedPins[0].$name       = "SDA";
+GPIO5.associatedPins[0].pin.$assign = "PB22";
+GPIO5.associatedPins[1].$name       = "SCL";
+GPIO5.associatedPins[1].pin.$assign = "PA30";
 
 I2C1.$name                             = "as5600";
 I2C1.basicEnableController             = true;
@@ -169,6 +178,13 @@ TIMER1.timerPeriod        = "50 ms";
 TIMER1.timerClkPrescale   = 100;
 TIMER1.interrupts         = ["LOAD"];
 TIMER1.peripheral.$assign = "TIMA1";
+
+TIMER2.$name              = "GET_MPU6050";
+TIMER2.timerClkPrescale   = 32;
+TIMER2.interrupts         = ["LOAD"];
+TIMER2.timerPeriod        = "5 ms";
+TIMER2.timerMode          = "PERIODIC_UP";
+TIMER2.peripheral.$assign = "TIMG6";
 
 UART1.targetBaudRate                   = 115200;
 UART1.$name                            = "debug";
