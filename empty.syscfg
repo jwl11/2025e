@@ -100,9 +100,13 @@ GPIO3.associatedPins[1].assignedPin  = "8";
 GPIO3.associatedPins[1].pin.$assign  = "PB8";
 
 GPIO4.$name                         = "KEY";
+GPIO4.associatedPins.create(2);
 GPIO4.associatedPins[0].$name       = "KEY1";
 GPIO4.associatedPins[0].direction   = "INPUT";
 GPIO4.associatedPins[0].pin.$assign = "PB15";
+GPIO4.associatedPins[1].$name       = "KEY2";
+GPIO4.associatedPins[1].direction   = "INPUT";
+GPIO4.associatedPins[1].pin.$assign = "PB18";
 
 GPIO5.$name                         = "MPU6050";
 GPIO5.associatedPins.create(2);
@@ -190,13 +194,17 @@ UART1.targetBaudRate                   = 115200;
 UART1.$name                            = "debug";
 UART1.enabledInterrupts                = ["RX"];
 UART1.interruptPriority                = "2";
+UART1.peripheral.$assign               = "UART0";
+UART1.peripheral.rxPin.$assign         = "PA11";
+UART1.txPinConfig.direction            = scripting.forceWrite("OUTPUT");
+UART1.txPinConfig.hideOutputInversion  = scripting.forceWrite(false);
+UART1.txPinConfig.onlyInternalResistor = scripting.forceWrite(false);
+UART1.txPinConfig.passedPeripheralType = scripting.forceWrite("Digital");
+UART1.txPinConfig.$name                = "ti_driverlib_gpio_GPIOPinGeneric2";
 UART1.rxPinConfig.hideOutputInversion  = scripting.forceWrite(false);
 UART1.rxPinConfig.onlyInternalResistor = scripting.forceWrite(false);
 UART1.rxPinConfig.passedPeripheralType = scripting.forceWrite("Digital");
 UART1.rxPinConfig.$name                = "ti_driverlib_gpio_GPIOPinGeneric3";
-UART1.peripheral.$assign               = "UART0";
-UART1.peripheral.rxPin.$assign         = "PA11";
-UART1.txPinConfig.$name                = "ti_driverlib_gpio_GPIOPinGeneric2";
 
 UART2.$name                            = "fishpath";
 UART2.targetBaudRate                   = 115200;

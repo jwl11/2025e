@@ -21,6 +21,7 @@
 "./MSPM0G3507/BSP/bsp_f32c_gimbal.o"
 "./MSPM0G3507/BSP/bsp_fishpath.o"
 "./MSPM0G3507/BSP/bsp_led.o"
+"./MSPM0G3507/BSP/bsp_menu.o"
 "./MSPM0G3507/BSP/bsp_motor.o"
 "./MSPM0G3507/BSP/bsp_motor_ctrl.o"
 "./MSPM0G3507/BSP/bsp_wit.o"

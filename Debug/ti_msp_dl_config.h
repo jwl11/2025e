@@ -226,12 +226,6 @@ extern "C" {
 /* Defines for PIN_22: GPIOB.0 with pinCMx 12 on package pin 47 */
 #define use_led_PIN_22_PIN                                       (DL_GPIO_PIN_0)
 #define use_led_PIN_22_IOMUX                                     (IOMUX_PINCM12)
-/* Port definition for Pin Group KEY */
-#define KEY_PORT                                                         (GPIOB)
-
-/* Defines for KEY1: GPIOB.15 with pinCMx 32 on package pin 3 */
-#define KEY_KEY1_PIN                                            (DL_GPIO_PIN_15)
-#define KEY_KEY1_IOMUX                                           (IOMUX_PINCM32)
 /* Defines for AIN1: GPIOB.17 with pinCMx 43 on package pin 14 */
 #define MG310_AIN1_PORT                                                  (GPIOB)
 #define MG310_AIN1_PIN                                          (DL_GPIO_PIN_17)
@@ -273,6 +267,15 @@ extern "C" {
 /* Defines for OLED_SDA: GPIOB.8 with pinCMx 25 on package pin 60 */
 #define OLED_OLED_SDA_PIN                                        (DL_GPIO_PIN_8)
 #define OLED_OLED_SDA_IOMUX                                      (IOMUX_PINCM25)
+/* Port definition for Pin Group KEY */
+#define KEY_PORT                                                         (GPIOB)
+
+/* Defines for KEY1: GPIOB.15 with pinCMx 32 on package pin 3 */
+#define KEY_KEY1_PIN                                            (DL_GPIO_PIN_15)
+#define KEY_KEY1_IOMUX                                           (IOMUX_PINCM32)
+/* Defines for KEY2: GPIOB.18 with pinCMx 44 on package pin 15 */
+#define KEY_KEY2_PIN                                            (DL_GPIO_PIN_18)
+#define KEY_KEY2_IOMUX                                           (IOMUX_PINCM44)
 /* Defines for SDA: GPIOB.22 with pinCMx 50 on package pin 21 */
 #define MPU6050_SDA_PORT                                                 (GPIOB)
 #define MPU6050_SDA_PIN                                         (DL_GPIO_PIN_22)

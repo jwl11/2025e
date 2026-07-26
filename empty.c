@@ -33,12 +33,17 @@
 #include "ti_msp_dl_config.h"
 #include "mid_delay.h"
 #include "bsp_led.h"
+#include "bsp_OLED.h"
+#include "bsp_menu.h"
 #include "app.h"
 
 int main(void)
 {
     SYSCFG_DL_init();
     __enable_irq(); //打开所有中断
+
+    OLED_Init();
+    menu0();
 
     //app_pwm_test();
 
@@ -52,7 +57,7 @@ int main(void)
     //app_motor_position_test();
     //app_wit_test();
     //app_wit_straight_test();
-    MPU6050_straight_test();
+    // MPU6050_straight_test();
 
     while (1) {
         
