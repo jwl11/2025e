@@ -16,6 +16,7 @@ C_SRCS += \
 ../MSPM0G3507/BSP/bsp_menu.c \
 ../MSPM0G3507/BSP/bsp_motor.c \
 ../MSPM0G3507/BSP/bsp_motor_ctrl.c \
+../MSPM0G3507/BSP/bsp_servo.c \
 ../MSPM0G3507/BSP/bsp_wit.c 
 
 C_DEPS += \
@@ -29,6 +30,7 @@ C_DEPS += \
 ./MSPM0G3507/BSP/bsp_menu.d \
 ./MSPM0G3507/BSP/bsp_motor.d \
 ./MSPM0G3507/BSP/bsp_motor_ctrl.d \
+./MSPM0G3507/BSP/bsp_servo.d \
 ./MSPM0G3507/BSP/bsp_wit.d 
 
 OBJS += \
@@ -42,6 +44,7 @@ OBJS += \
 ./MSPM0G3507/BSP/bsp_menu.o \
 ./MSPM0G3507/BSP/bsp_motor.o \
 ./MSPM0G3507/BSP/bsp_motor_ctrl.o \
+./MSPM0G3507/BSP/bsp_servo.o \
 ./MSPM0G3507/BSP/bsp_wit.o 
 
 OBJS__QUOTED += \
@@ -55,6 +58,7 @@ OBJS__QUOTED += \
 "MSPM0G3507\BSP\bsp_menu.o" \
 "MSPM0G3507\BSP\bsp_motor.o" \
 "MSPM0G3507\BSP\bsp_motor_ctrl.o" \
+"MSPM0G3507\BSP\bsp_servo.o" \
 "MSPM0G3507\BSP\bsp_wit.o" 
 
 C_DEPS__QUOTED += \
@@ -68,6 +72,7 @@ C_DEPS__QUOTED += \
 "MSPM0G3507\BSP\bsp_menu.d" \
 "MSPM0G3507\BSP\bsp_motor.d" \
 "MSPM0G3507\BSP\bsp_motor_ctrl.d" \
+"MSPM0G3507\BSP\bsp_servo.d" \
 "MSPM0G3507\BSP\bsp_wit.d" 
 
 C_SRCS__QUOTED += \
@@ -81,6 +86,7 @@ C_SRCS__QUOTED += \
 "../MSPM0G3507/BSP/bsp_menu.c" \
 "../MSPM0G3507/BSP/bsp_motor.c" \
 "../MSPM0G3507/BSP/bsp_motor_ctrl.c" \
+"../MSPM0G3507/BSP/bsp_servo.c" \
 "../MSPM0G3507/BSP/bsp_wit.c" 
 
 

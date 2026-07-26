@@ -42,8 +42,8 @@ int main(void)
     SYSCFG_DL_init();
     __enable_irq(); //打开所有中断
 
-    OLED_Init();
-    menu0();
+    // OLED_Init();
+    // menu0();
 
     //app_pwm_test();
 
@@ -58,6 +58,7 @@ int main(void)
     //app_wit_test();
     //app_wit_straight_test();
     // MPU6050_straight_test();
+    app_servo_test();
 
     while (1) {
         

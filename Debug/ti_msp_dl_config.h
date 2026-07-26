@@ -119,6 +119,18 @@ extern "C" {
 #define GPIO_MG310_PWM_C1_IOMUX_FUNC                 IOMUX_PINCM35_PF_TIMG0_CCP1
 #define GPIO_MG310_PWM_C1_IDX                                DL_TIMER_CC_1_INDEX
 
+/* Defines for servo */
+#define servo_INST                                                         TIMG8
+#define servo_INST_IRQHandler                                   TIMG8_IRQHandler
+#define servo_INST_INT_IRQN                                     (TIMG8_INT_IRQn)
+#define servo_INST_CLK_FREQ                                               100000
+/* GPIO defines for channel 0 */
+#define GPIO_servo_C0_PORT                                                 GPIOB
+#define GPIO_servo_C0_PIN                                         DL_GPIO_PIN_21
+#define GPIO_servo_C0_IOMUX                                      (IOMUX_PINCM49)
+#define GPIO_servo_C0_IOMUX_FUNC                     IOMUX_PINCM49_PF_TIMG8_CCP0
+#define GPIO_servo_C0_IDX                                    DL_TIMER_CC_0_INDEX
+
 
 
 /* Defines for MOTOR_MG310 */
@@ -296,6 +308,7 @@ void SYSCFG_DL_GPIO_init(void);
 void SYSCFG_DL_SYSCTL_init(void);
 void SYSCFG_DL_BLDC_init(void);
 void SYSCFG_DL_MG310_PWM_init(void);
+void SYSCFG_DL_servo_init(void);
 void SYSCFG_DL_MOTOR_MG310_init(void);
 void SYSCFG_DL_GET_MPU6050_init(void);
 void SYSCFG_DL_as5600_init(void);
