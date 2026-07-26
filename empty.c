@@ -51,13 +51,8 @@ int main(void)
     //app_motor_ctrl_test();
     //app_motor_position_test();
     //app_wit_test();
-<<<<<<< HEAD
-    MPU6050_test();
-
-
-=======
-    app_wit_straight_test();
->>>>>>> 862a54f77b747745f59efa86ffbf969855f3a463
+    //app_wit_straight_test();
+    MPU6050_straight_test();
 
     while (1) {
         

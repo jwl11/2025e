@@ -84,7 +84,7 @@ MSPM0G3507/Driver/drv_tim.o: ../MSPM0G3507/Driver/drv_tim.c \
  C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_wwdt.h \
  C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_interrupt.h \
  C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_systick.h \
- E:/ccs/project/MSPM0G3507/BSP/MPU6050.h
+ D:/2025e/2025e/MSPM0G3507/BSP/MPU6050.h
 ../MSPM0G3507/Driver/drv_tim.h:
 ti_msp_dl_config.h:
 C:/TI/mspm0_sdk_2_10_00_04/source/ti/devices/msp/msp.h:
@@ -169,4 +169,4 @@ C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_vref.h:
 C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_wwdt.h:
 C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_interrupt.h:
 C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_systick.h:
-E:/ccs/project/MSPM0G3507/BSP/MPU6050.h:
+D:/2025e/2025e/MSPM0G3507/BSP/MPU6050.h:

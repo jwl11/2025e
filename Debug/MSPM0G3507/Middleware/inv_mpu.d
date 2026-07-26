@@ -88,7 +88,7 @@ MSPM0G3507/Middleware/inv_mpu.o: ../MSPM0G3507/Middleware/inv_mpu.c \
  C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_interrupt.h \
  C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_systick.h \
  ../MSPM0G3507/Middleware/mid_delay.h \
- E:/ccs/project/MSPM0G3507/Driver/drv_uart.h
+ D:/2025e/2025e/MSPM0G3507/Driver/drv_uart.h
 ../MSPM0G3507/Middleware/inv_mpu.h:
 ../MSPM0G3507/Middleware/inv_mpu_dmp_motion_driver.h:
 ../MSPM0G3507/Middleware/mpuiic.h:
@@ -176,4 +176,4 @@ C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_wwdt.h:
 C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_interrupt.h:
 C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_systick.h:
 ../MSPM0G3507/Middleware/mid_delay.h:
-E:/ccs/project/MSPM0G3507/Driver/drv_uart.h:
+D:/2025e/2025e/MSPM0G3507/Driver/drv_uart.h:
