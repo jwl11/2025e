@@ -122,10 +122,10 @@ void MPU6050_start(void)
 #define MPUS_OLED_MS              200U
 
 /* ---- 航向 PID ---- */
-#define MPUS_KP                   0.8f
-#define MPUS_KI                   0.01f
-#define MPUS_KD                   0.5f
-#define MPUS_INTEGRAL_LIMIT       20.0f
+#define MPUS_KP                   0.65f
+#define MPUS_KI                   0.005f
+#define MPUS_KD                   0.55f
+#define MPUS_INTEGRAL_LIMIT       15.0f
 #define MPUS_OUTPUT_LIMIT         ((float)MPUS_MAX_CORRECTION)
 
 static Button g_mpus_btn;
@@ -192,7 +192,7 @@ void MPU6050_straight_test(void)
     mg310_motorInitAll();
     button_init(&g_mpus_btn, KEY_PORT, KEY_KEY1_PIN, BUTTON_ACTIVE_HIGH);
 
-    drv_uart_send_string("[INIT] PID: Kp=2.5 Ki=0.08 Kd=0.3, base=20%\r\n");
+    drv_uart_send_string("[INIT] PID: Kp=0.65 Ki=0.005 Kd=0.45, base=15%\r\n");
     drv_uart_send_string("[INIT] Press KEY1 to start.\r\n");
     drv_uart_send_string("[DBG]  Yaw will print every 200ms.\r\n\r\n");
 

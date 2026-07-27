@@ -57,8 +57,8 @@ int main(void)
     //app_motor_position_test();
     //app_wit_test();
     //app_wit_straight_test();
-    // MPU6050_straight_test();
-    app_servo_test();
+    MPU6050_straight_test();
+   //app_servo_test();
 
     while (1) {
         
