@@ -2,6 +2,11 @@
    {
       "directory" : "D:/2026电赛备赛/2025e/Debug",
       "command"   : "clang++ -D__MSPM0G3507__ -D__USE_SYSCONFIG__ -I\"D:/2026电赛备赛/2025e/MSPM0G3507/BSP\" -I\"D:/2026电赛备赛/2025e/MSPM0G3507/Application\" -I\"D:/2026电赛备赛/2025e\" -I\"D:/2026电赛备赛/2025e/Debug\" -I\"C:/ti/mspm0_sdk_2_10_00_04/source/third_party/CMSIS/Core/Include\" -I\"C:/ti/mspm0_sdk_2_10_00_04/source\" -I\"D:/2026电赛备赛/2025e/MSPM0G3507/Middleware\" -I\"D:/2026电赛备赛/2025e/MSPM0G3507/Driver\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/armv7em-ti-none-eabihf/c++/v1\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/c++/v1\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/lib/clang/18/include\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/c\" -xc",
+      "file"      : "D:/2026电赛备赛/2025e/Debug/ti_msp_dl_config.c"
+   },
+   {
+      "directory" : "D:/2026电赛备赛/2025e/Debug",
+      "command"   : "clang++ -D__MSPM0G3507__ -D__USE_SYSCONFIG__ -I\"D:/2026电赛备赛/2025e/MSPM0G3507/BSP\" -I\"D:/2026电赛备赛/2025e/MSPM0G3507/Application\" -I\"D:/2026电赛备赛/2025e\" -I\"D:/2026电赛备赛/2025e/Debug\" -I\"C:/ti/mspm0_sdk_2_10_00_04/source/third_party/CMSIS/Core/Include\" -I\"C:/ti/mspm0_sdk_2_10_00_04/source\" -I\"D:/2026电赛备赛/2025e/MSPM0G3507/Middleware\" -I\"D:/2026电赛备赛/2025e/MSPM0G3507/Driver\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/armv7em-ti-none-eabihf/c++/v1\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/c++/v1\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/lib/clang/18/include\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/c\" -xc",
       "file"      : "D:/2026电赛备赛/2025e/MSPM0G3507/Application/app.c"
    },
    {
@@ -37,11 +42,6 @@
    {
       "directory" : "D:/2026电赛备赛/2025e/Debug",
       "command"   : "clang++ -D__MSPM0G3507__ -D__USE_SYSCONFIG__ -I\"D:/2026电赛备赛/2025e/MSPM0G3507/BSP\" -I\"D:/2026电赛备赛/2025e/MSPM0G3507/Application\" -I\"D:/2026电赛备赛/2025e\" -I\"D:/2026电赛备赛/2025e/Debug\" -I\"C:/ti/mspm0_sdk_2_10_00_04/source/third_party/CMSIS/Core/Include\" -I\"C:/ti/mspm0_sdk_2_10_00_04/source\" -I\"D:/2026电赛备赛/2025e/MSPM0G3507/Middleware\" -I\"D:/2026电赛备赛/2025e/MSPM0G3507/Driver\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/armv7em-ti-none-eabihf/c++/v1\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/c++/v1\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/lib/clang/18/include\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/c\" -xc",
-      "file"      : "D:/2026电赛备赛/2025e/MSPM0G3507/Application/app_f32c_gimbal_test.c"
-   },
-   {
-      "directory" : "D:/2026电赛备赛/2025e/Debug",
-      "command"   : "clang++ -D__MSPM0G3507__ -D__USE_SYSCONFIG__ -I\"D:/2026电赛备赛/2025e/MSPM0G3507/BSP\" -I\"D:/2026电赛备赛/2025e/MSPM0G3507/Application\" -I\"D:/2026电赛备赛/2025e\" -I\"D:/2026电赛备赛/2025e/Debug\" -I\"C:/ti/mspm0_sdk_2_10_00_04/source/third_party/CMSIS/Core/Include\" -I\"C:/ti/mspm0_sdk_2_10_00_04/source\" -I\"D:/2026电赛备赛/2025e/MSPM0G3507/Middleware\" -I\"D:/2026电赛备赛/2025e/MSPM0G3507/Driver\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/armv7em-ti-none-eabihf/c++/v1\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/c++/v1\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/lib/clang/18/include\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/c\" -xc",
       "file"      : "D:/2026电赛备赛/2025e/MSPM0G3507/Application/app_fishpath_test.c"
    },
    {
@@ -58,6 +58,11 @@
       "directory" : "D:/2026电赛备赛/2025e/Debug",
       "command"   : "clang++ -D__MSPM0G3507__ -D__USE_SYSCONFIG__ -I\"D:/2026电赛备赛/2025e/MSPM0G3507/BSP\" -I\"D:/2026电赛备赛/2025e/MSPM0G3507/Application\" -I\"D:/2026电赛备赛/2025e\" -I\"D:/2026电赛备赛/2025e/Debug\" -I\"C:/ti/mspm0_sdk_2_10_00_04/source/third_party/CMSIS/Core/Include\" -I\"C:/ti/mspm0_sdk_2_10_00_04/source\" -I\"D:/2026电赛备赛/2025e/MSPM0G3507/Middleware\" -I\"D:/2026电赛备赛/2025e/MSPM0G3507/Driver\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/armv7em-ti-none-eabihf/c++/v1\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/c++/v1\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/lib/clang/18/include\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/c\" -xc",
       "file"      : "D:/2026电赛备赛/2025e/MSPM0G3507/Application/app_servo_test.c"
+   },
+   {
+      "directory" : "D:/2026电赛备赛/2025e/Debug",
+      "command"   : "clang++ -D__MSPM0G3507__ -D__USE_SYSCONFIG__ -I\"D:/2026电赛备赛/2025e/MSPM0G3507/BSP\" -I\"D:/2026电赛备赛/2025e/MSPM0G3507/Application\" -I\"D:/2026电赛备赛/2025e\" -I\"D:/2026电赛备赛/2025e/Debug\" -I\"C:/ti/mspm0_sdk_2_10_00_04/source/third_party/CMSIS/Core/Include\" -I\"C:/ti/mspm0_sdk_2_10_00_04/source\" -I\"D:/2026电赛备赛/2025e/MSPM0G3507/Middleware\" -I\"D:/2026电赛备赛/2025e/MSPM0G3507/Driver\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/armv7em-ti-none-eabihf/c++/v1\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/c++/v1\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/lib/clang/18/include\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/c\" -xc",
+      "file"      : "D:/2026电赛备赛/2025e/MSPM0G3507/Application/app_vision_line_test.c"
    },
    {
       "directory" : "D:/2026电赛备赛/2025e/Debug",
@@ -88,11 +93,6 @@
       "directory" : "D:/2026电赛备赛/2025e/Debug",
       "command"   : "clang++ -D__MSPM0G3507__ -D__USE_SYSCONFIG__ -I\"D:/2026电赛备赛/2025e/MSPM0G3507/BSP\" -I\"D:/2026电赛备赛/2025e/MSPM0G3507/Application\" -I\"D:/2026电赛备赛/2025e\" -I\"D:/2026电赛备赛/2025e/Debug\" -I\"C:/ti/mspm0_sdk_2_10_00_04/source/third_party/CMSIS/Core/Include\" -I\"C:/ti/mspm0_sdk_2_10_00_04/source\" -I\"D:/2026电赛备赛/2025e/MSPM0G3507/Middleware\" -I\"D:/2026电赛备赛/2025e/MSPM0G3507/Driver\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/armv7em-ti-none-eabihf/c++/v1\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/c++/v1\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/lib/clang/18/include\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/c\" -xc",
       "file"      : "D:/2026电赛备赛/2025e/MSPM0G3507/BSP/bsp_encoder.c"
-   },
-   {
-      "directory" : "D:/2026电赛备赛/2025e/Debug",
-      "command"   : "clang++ -D__MSPM0G3507__ -D__USE_SYSCONFIG__ -I\"D:/2026电赛备赛/2025e/MSPM0G3507/BSP\" -I\"D:/2026电赛备赛/2025e/MSPM0G3507/Application\" -I\"D:/2026电赛备赛/2025e\" -I\"D:/2026电赛备赛/2025e/Debug\" -I\"C:/ti/mspm0_sdk_2_10_00_04/source/third_party/CMSIS/Core/Include\" -I\"C:/ti/mspm0_sdk_2_10_00_04/source\" -I\"D:/2026电赛备赛/2025e/MSPM0G3507/Middleware\" -I\"D:/2026电赛备赛/2025e/MSPM0G3507/Driver\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/armv7em-ti-none-eabihf/c++/v1\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/c++/v1\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/lib/clang/18/include\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/c\" -xc",
-      "file"      : "D:/2026电赛备赛/2025e/MSPM0G3507/BSP/bsp_f32c_gimbal.c"
    },
    {
       "directory" : "D:/2026电赛备赛/2025e/Debug",
@@ -182,6 +182,11 @@
    {
       "directory" : "D:/2026电赛备赛/2025e/Debug",
       "command"   : "clang++ -D__MSPM0G3507__ -D__USE_SYSCONFIG__ -I\"D:/2026电赛备赛/2025e/MSPM0G3507/BSP\" -I\"D:/2026电赛备赛/2025e/MSPM0G3507/Application\" -I\"D:/2026电赛备赛/2025e\" -I\"D:/2026电赛备赛/2025e/Debug\" -I\"C:/ti/mspm0_sdk_2_10_00_04/source/third_party/CMSIS/Core/Include\" -I\"C:/ti/mspm0_sdk_2_10_00_04/source\" -I\"D:/2026电赛备赛/2025e/MSPM0G3507/Middleware\" -I\"D:/2026电赛备赛/2025e/MSPM0G3507/Driver\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/armv7em-ti-none-eabihf/c++/v1\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/c++/v1\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/lib/clang/18/include\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/c\" -xc",
+      "file"      : "D:/2026电赛备赛/2025e/MSPM0G3507/Middleware/mid_vision_line.c"
+   },
+   {
+      "directory" : "D:/2026电赛备赛/2025e/Debug",
+      "command"   : "clang++ -D__MSPM0G3507__ -D__USE_SYSCONFIG__ -I\"D:/2026电赛备赛/2025e/MSPM0G3507/BSP\" -I\"D:/2026电赛备赛/2025e/MSPM0G3507/Application\" -I\"D:/2026电赛备赛/2025e\" -I\"D:/2026电赛备赛/2025e/Debug\" -I\"C:/ti/mspm0_sdk_2_10_00_04/source/third_party/CMSIS/Core/Include\" -I\"C:/ti/mspm0_sdk_2_10_00_04/source\" -I\"D:/2026电赛备赛/2025e/MSPM0G3507/Middleware\" -I\"D:/2026电赛备赛/2025e/MSPM0G3507/Driver\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/armv7em-ti-none-eabihf/c++/v1\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/c++/v1\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/lib/clang/18/include\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/c\" -xc",
       "file"      : "D:/2026电赛备赛/2025e/MSPM0G3507/Middleware/mid_xunji.c"
    },
    {
@@ -193,10 +198,5 @@
       "directory" : "D:/2026电赛备赛/2025e/Debug",
       "command"   : "clang++ -D__MSPM0G3507__ -D__USE_SYSCONFIG__ -I\"D:/2026电赛备赛/2025e/MSPM0G3507/BSP\" -I\"D:/2026电赛备赛/2025e/MSPM0G3507/Application\" -I\"D:/2026电赛备赛/2025e\" -I\"D:/2026电赛备赛/2025e/Debug\" -I\"C:/ti/mspm0_sdk_2_10_00_04/source/third_party/CMSIS/Core/Include\" -I\"C:/ti/mspm0_sdk_2_10_00_04/source\" -I\"D:/2026电赛备赛/2025e/MSPM0G3507/Middleware\" -I\"D:/2026电赛备赛/2025e/MSPM0G3507/Driver\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/armv7em-ti-none-eabihf/c++/v1\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/c++/v1\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/lib/clang/18/include\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/c\" -xc",
       "file"      : "D:/2026电赛备赛/2025e/empty.c"
-   },
-   {
-      "directory" : "D:/2026电赛备赛/2025e/Debug",
-      "command"   : "clang++ -D__MSPM0G3507__ -D__USE_SYSCONFIG__ -I\"D:/2026电赛备赛/2025e/MSPM0G3507/BSP\" -I\"D:/2026电赛备赛/2025e/MSPM0G3507/Application\" -I\"D:/2026电赛备赛/2025e\" -I\"D:/2026电赛备赛/2025e/Debug\" -I\"C:/ti/mspm0_sdk_2_10_00_04/source/third_party/CMSIS/Core/Include\" -I\"C:/ti/mspm0_sdk_2_10_00_04/source\" -I\"D:/2026电赛备赛/2025e/MSPM0G3507/Middleware\" -I\"D:/2026电赛备赛/2025e/MSPM0G3507/Driver\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/armv7em-ti-none-eabihf/c++/v1\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/c++/v1\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/lib/clang/18/include\" -isystem\"D:/TI/ccs2050/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/include/c\" -xc",
-      "file"      : "D:/2026电赛备赛/2025e/Debug/ti_msp_dl_config.c"
    }
 ]
