@@ -18,8 +18,7 @@ C_SRCS += \
 ../MSPM0G3507/Application/app_motor_ctrl_test.c \
 ../MSPM0G3507/Application/app_servo_test.c \
 ../MSPM0G3507/Application/app_vision_line_test.c \
-../MSPM0G3507/Application/app_wit_straight_test.c \
-../MSPM0G3507/Application/app_wit_test.c 
+../MSPM0G3507/Application/app_zdt_x35_probe.c 
 
 C_DEPS += \
 ./MSPM0G3507/Application/app.d \
@@ -34,8 +33,7 @@ C_DEPS += \
 ./MSPM0G3507/Application/app_motor_ctrl_test.d \
 ./MSPM0G3507/Application/app_servo_test.d \
 ./MSPM0G3507/Application/app_vision_line_test.d \
-./MSPM0G3507/Application/app_wit_straight_test.d \
-./MSPM0G3507/Application/app_wit_test.d 
+./MSPM0G3507/Application/app_zdt_x35_probe.d 
 
 OBJS += \
 ./MSPM0G3507/Application/app.o \
@@ -50,8 +48,7 @@ OBJS += \
 ./MSPM0G3507/Application/app_motor_ctrl_test.o \
 ./MSPM0G3507/Application/app_servo_test.o \
 ./MSPM0G3507/Application/app_vision_line_test.o \
-./MSPM0G3507/Application/app_wit_straight_test.o \
-./MSPM0G3507/Application/app_wit_test.o 
+./MSPM0G3507/Application/app_zdt_x35_probe.o 
 
 OBJS__QUOTED += \
 "MSPM0G3507\Application\app.o" \
@@ -66,8 +63,7 @@ OBJS__QUOTED += \
 "MSPM0G3507\Application\app_motor_ctrl_test.o" \
 "MSPM0G3507\Application\app_servo_test.o" \
 "MSPM0G3507\Application\app_vision_line_test.o" \
-"MSPM0G3507\Application\app_wit_straight_test.o" \
-"MSPM0G3507\Application\app_wit_test.o" 
+"MSPM0G3507\Application\app_zdt_x35_probe.o" 
 
 C_DEPS__QUOTED += \
 "MSPM0G3507\Application\app.d" \
@@ -82,8 +78,7 @@ C_DEPS__QUOTED += \
 "MSPM0G3507\Application\app_motor_ctrl_test.d" \
 "MSPM0G3507\Application\app_servo_test.d" \
 "MSPM0G3507\Application\app_vision_line_test.d" \
-"MSPM0G3507\Application\app_wit_straight_test.d" \
-"MSPM0G3507\Application\app_wit_test.d" 
+"MSPM0G3507\Application\app_zdt_x35_probe.d" 
 
 C_SRCS__QUOTED += \
 "../MSPM0G3507/Application/app.c" \
@@ -98,7 +93,6 @@ C_SRCS__QUOTED += \
 "../MSPM0G3507/Application/app_motor_ctrl_test.c" \
 "../MSPM0G3507/Application/app_servo_test.c" \
 "../MSPM0G3507/Application/app_vision_line_test.c" \
-"../MSPM0G3507/Application/app_wit_straight_test.c" \
-"../MSPM0G3507/Application/app_wit_test.c" 
+"../MSPM0G3507/Application/app_zdt_x35_probe.c" 
 
 

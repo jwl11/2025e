@@ -3,7 +3,7 @@
 MSPM0G3507/Middleware/mid_vision_line.o: \
  ../MSPM0G3507/Middleware/mid_vision_line.c \
  ../MSPM0G3507/Middleware/mid_vision_line.h \
- D:/2026电赛备赛/2025e/MSPM0G3507/Driver/drv_uart.h \
+ D:/2026电赛/2026H/MSPM0G3507/Driver/drv_uart.h \
  ti_msp_dl_config.h \
  C:/ti/mspm0_sdk_2_10_00_04/source/ti/devices/msp/msp.h \
  C:/ti/mspm0_sdk_2_10_00_04/source/ti/devices/DeviceFamily.h \
@@ -88,7 +88,7 @@ MSPM0G3507/Middleware/mid_vision_line.o: \
  C:/ti/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_interrupt.h \
  C:/ti/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_systick.h
 ../MSPM0G3507/Middleware/mid_vision_line.h:
-D:/2026电赛备赛/2025e/MSPM0G3507/Driver/drv_uart.h:
+D:/2026电赛/2026H/MSPM0G3507/Driver/drv_uart.h:
 ti_msp_dl_config.h:
 C:/ti/mspm0_sdk_2_10_00_04/source/ti/devices/msp/msp.h:
 C:/ti/mspm0_sdk_2_10_00_04/source/ti/devices/DeviceFamily.h:

@@ -5,7 +5,7 @@ MSPM0G3507/Middleware/inv_mpu_dmp_motion_driver.o: \
  ../MSPM0G3507/Middleware/inv_mpu.h \
  ../MSPM0G3507/Middleware/inv_mpu_dmp_motion_driver.h \
  ../MSPM0G3507/Middleware/dmpKey.h ../MSPM0G3507/Middleware/dmpmap.h \
- D:/2026电赛备赛/2025e/MSPM0G3507/Driver/drv_uart.h \
+ D:/2026电赛/2026H/MSPM0G3507/Driver/drv_uart.h \
  ti_msp_dl_config.h \
  C:/ti/mspm0_sdk_2_10_00_04/source/ti/devices/msp/msp.h \
  C:/ti/mspm0_sdk_2_10_00_04/source/ti/devices/DeviceFamily.h \
@@ -94,7 +94,7 @@ MSPM0G3507/Middleware/inv_mpu_dmp_motion_driver.o: \
 ../MSPM0G3507/Middleware/inv_mpu_dmp_motion_driver.h:
 ../MSPM0G3507/Middleware/dmpKey.h:
 ../MSPM0G3507/Middleware/dmpmap.h:
-D:/2026电赛备赛/2025e/MSPM0G3507/Driver/drv_uart.h:
+D:/2026电赛/2026H/MSPM0G3507/Driver/drv_uart.h:
 ti_msp_dl_config.h:
 C:/ti/mspm0_sdk_2_10_00_04/source/ti/devices/msp/msp.h:
 C:/ti/mspm0_sdk_2_10_00_04/source/ti/devices/DeviceFamily.h:

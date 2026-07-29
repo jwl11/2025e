@@ -249,24 +249,24 @@ UART3.rxPinConfig.onlyInternalResistor = scripting.forceWrite(false);
 UART3.rxPinConfig.passedPeripheralType = scripting.forceWrite("Digital");
 UART3.rxPinConfig.$name                = "ti_driverlib_gpio_GPIOPinGeneric12";
 
-UART4.$name                            = "UART_WIT";
+UART4.$name                            = "ZDT_X35";
 UART4.targetBaudRate                   = 115200;
-UART4.direction                        = "RX";
 UART4.enableFIFO                       = true;
 UART4.rxFifoThreshold                  = "DL_UART_RX_FIFO_LEVEL_ONE_ENTRY";
-UART4.rxTimeoutValue                   = 1;
-UART4.enabledInterrupts                = ["DMA_DONE_RX"];
-UART4.enabledDMARXTriggers             = "DL_UART_DMA_INTERRUPT_RX";
+UART4.enabledInterrupts                = ["RX"];
+UART4.interruptPriority                = "2";
+UART4.peripheral.$assign               = "UART2";
+UART4.peripheral.txPin.$assign         = "PA23";
+UART4.peripheral.rxPin.$assign         = "PA24";
+UART4.txPinConfig.direction            = scripting.forceWrite("OUTPUT");
+UART4.txPinConfig.hideOutputInversion  = scripting.forceWrite(false);
+UART4.txPinConfig.onlyInternalResistor = scripting.forceWrite(false);
+UART4.txPinConfig.passedPeripheralType = scripting.forceWrite("Digital");
+UART4.txPinConfig.$name                = "ti_driverlib_gpio_GPIOPinGeneric14";
 UART4.rxPinConfig.hideOutputInversion  = scripting.forceWrite(false);
 UART4.rxPinConfig.onlyInternalResistor = scripting.forceWrite(false);
 UART4.rxPinConfig.passedPeripheralType = scripting.forceWrite("Digital");
-UART4.rxPinConfig.$name                = "ti_driverlib_gpio_GPIOPinGeneric14";
-UART4.peripheral.$assign               = "UART2";
-UART4.peripheral.rxPin.$assign         = "PA24";
-UART4.DMA_CHANNEL_RX.$name             = "DMA_WIT";
-UART4.DMA_CHANNEL_RX.addressMode       = "f2b";
-UART4.DMA_CHANNEL_RX.srcLength         = "BYTE";
-UART4.DMA_CHANNEL_RX.dstLength         = "BYTE";
+UART4.rxPinConfig.$name                = "ti_driverlib_gpio_GPIOPinGeneric15";
 
 /**
  * Pinmux solution for unlocked pins/peripherals. This ensures that minor changes to the automatic solver in a future
@@ -284,4 +284,3 @@ PWM3.peripheral.$suggestSolution                   = "TIMG8";
 SYSCTL.peripheral.$suggestSolution                 = "SYSCTL";
 UART1.peripheral.txPin.$suggestSolution            = "PA10";
 UART2.peripheral.$suggestSolution                  = "UART1";
-UART4.DMA_CHANNEL_RX.peripheral.$suggestSolution   = "DMA_CH0";

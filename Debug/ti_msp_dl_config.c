@@ -64,8 +64,7 @@ SYSCONFIG_WEAK void SYSCFG_DL_init(void)
     SYSCFG_DL_debug_init();
     SYSCFG_DL_fishpath_init();
     SYSCFG_DL_f32c_init();
-    SYSCFG_DL_UART_WIT_init();
-    SYSCFG_DL_DMA_init();
+    SYSCFG_DL_ZDT_X35_init();
     SYSCFG_DL_SYSTICK_init();
     /* Ensure backup structures have no valid state */
 	gBLDCBackup.backupRdy 	= false;
@@ -116,8 +115,7 @@ SYSCONFIG_WEAK void SYSCFG_DL_initPower(void)
     DL_UART_Main_reset(debug_INST);
     DL_UART_Main_reset(fishpath_INST);
     DL_UART_Main_reset(f32c_INST);
-    DL_UART_Main_reset(UART_WIT_INST);
-
+    DL_UART_Main_reset(ZDT_X35_INST);
 
 
     DL_GPIO_enablePower(GPIOA);
@@ -131,8 +129,7 @@ SYSCONFIG_WEAK void SYSCFG_DL_initPower(void)
     DL_UART_Main_enablePower(debug_INST);
     DL_UART_Main_enablePower(fishpath_INST);
     DL_UART_Main_enablePower(f32c_INST);
-    DL_UART_Main_enablePower(UART_WIT_INST);
-
+    DL_UART_Main_enablePower(ZDT_X35_INST);
 
     delay_cycles(POWER_STARTUP_DELAY);
 }
@@ -176,8 +173,10 @@ SYSCONFIG_WEAK void SYSCFG_DL_GPIO_init(void)
         GPIO_f32c_IOMUX_TX, GPIO_f32c_IOMUX_TX_FUNC);
     DL_GPIO_initPeripheralInputFunction(
         GPIO_f32c_IOMUX_RX, GPIO_f32c_IOMUX_RX_FUNC);
+    DL_GPIO_initPeripheralOutputFunction(
+        GPIO_ZDT_X35_IOMUX_TX, GPIO_ZDT_X35_IOMUX_TX_FUNC);
     DL_GPIO_initPeripheralInputFunction(
-        GPIO_UART_WIT_IOMUX_RX, GPIO_UART_WIT_IOMUX_RX_FUNC);
+        GPIO_ZDT_X35_IOMUX_RX, GPIO_ZDT_X35_IOMUX_RX_FUNC);
 
     DL_GPIO_initDigitalOutput(use_led_PIN_22_IOMUX);
 
@@ -617,68 +616,47 @@ SYSCONFIG_WEAK void SYSCFG_DL_f32c_init(void)
 
     DL_UART_Main_enable(f32c_INST);
 }
-static const DL_UART_Main_ClockConfig gUART_WITClockConfig = {
+static const DL_UART_Main_ClockConfig gZDT_X35ClockConfig = {
     .clockSel    = DL_UART_MAIN_CLOCK_BUSCLK,
     .divideRatio = DL_UART_MAIN_CLOCK_DIVIDE_RATIO_1
 };
 
-static const DL_UART_Main_Config gUART_WITConfig = {
+static const DL_UART_Main_Config gZDT_X35Config = {
     .mode        = DL_UART_MAIN_MODE_NORMAL,
-    .direction   = DL_UART_MAIN_DIRECTION_RX,
+    .direction   = DL_UART_MAIN_DIRECTION_TX_RX,
     .flowControl = DL_UART_MAIN_FLOW_CONTROL_NONE,
     .parity      = DL_UART_MAIN_PARITY_NONE,
     .wordLength  = DL_UART_MAIN_WORD_LENGTH_8_BITS,
     .stopBits    = DL_UART_MAIN_STOP_BITS_ONE
 };
 
-SYSCONFIG_WEAK void SYSCFG_DL_UART_WIT_init(void)
+SYSCONFIG_WEAK void SYSCFG_DL_ZDT_X35_init(void)
 {
-    DL_UART_Main_setClockConfig(UART_WIT_INST, (DL_UART_Main_ClockConfig *) &gUART_WITClockConfig);
+    DL_UART_Main_setClockConfig(ZDT_X35_INST, (DL_UART_Main_ClockConfig *) &gZDT_X35ClockConfig);
 
-    DL_UART_Main_init(UART_WIT_INST, (DL_UART_Main_Config *) &gUART_WITConfig);
+    DL_UART_Main_init(ZDT_X35_INST, (DL_UART_Main_Config *) &gZDT_X35Config);
     /*
      * Configure baud rate by setting oversampling and baud rate divisors.
      *  Target baud rate: 115200
      *  Actual baud rate: 115211.52
      */
-    DL_UART_Main_setOversampling(UART_WIT_INST, DL_UART_OVERSAMPLING_RATE_16X);
-    DL_UART_Main_setBaudRateDivisor(UART_WIT_INST, UART_WIT_IBRD_32_MHZ_115200_BAUD, UART_WIT_FBRD_32_MHZ_115200_BAUD);
+    DL_UART_Main_setOversampling(ZDT_X35_INST, DL_UART_OVERSAMPLING_RATE_16X);
+    DL_UART_Main_setBaudRateDivisor(ZDT_X35_INST, ZDT_X35_IBRD_32_MHZ_115200_BAUD, ZDT_X35_FBRD_32_MHZ_115200_BAUD);
 
 
     /* Configure Interrupts */
-    DL_UART_Main_enableInterrupt(UART_WIT_INST,
-                                 DL_UART_MAIN_INTERRUPT_DMA_DONE_RX);
+    DL_UART_Main_enableInterrupt(ZDT_X35_INST,
+                                 DL_UART_MAIN_INTERRUPT_RX);
+    /* Setting the Interrupt Priority */
+    NVIC_SetPriority(ZDT_X35_INST_INT_IRQN, 2);
 
-    /* Configure DMA Receive Event */
-    DL_UART_Main_enableDMAReceiveEvent(UART_WIT_INST, DL_UART_DMA_INTERRUPT_RX);
     /* Configure FIFOs */
-    DL_UART_Main_enableFIFOs(UART_WIT_INST);
-    DL_UART_Main_setRXFIFOThreshold(UART_WIT_INST, DL_UART_RX_FIFO_LEVEL_ONE_ENTRY);
+    DL_UART_Main_enableFIFOs(ZDT_X35_INST);
+    DL_UART_Main_setRXFIFOThreshold(ZDT_X35_INST, DL_UART_RX_FIFO_LEVEL_ONE_ENTRY);
+    DL_UART_Main_setTXFIFOThreshold(ZDT_X35_INST, DL_UART_TX_FIFO_LEVEL_1_2_EMPTY);
 
-    DL_UART_Main_setRXInterruptTimeout(UART_WIT_INST, 1);
-
-    DL_UART_Main_enable(UART_WIT_INST);
+    DL_UART_Main_enable(ZDT_X35_INST);
 }
-
-static const DL_DMA_Config gDMA_WITConfig = {
-    .transferMode   = DL_DMA_SINGLE_TRANSFER_MODE,
-    .extendedMode   = DL_DMA_NORMAL_MODE,
-    .destIncrement  = DL_DMA_ADDR_INCREMENT,
-    .srcIncrement   = DL_DMA_ADDR_UNCHANGED,
-    .destWidth      = DL_DMA_WIDTH_BYTE,
-    .srcWidth       = DL_DMA_WIDTH_BYTE,
-    .trigger        = UART_WIT_INST_DMA_TRIGGER,
-    .triggerType    = DL_DMA_TRIGGER_TYPE_EXTERNAL,
-};
-
-SYSCONFIG_WEAK void SYSCFG_DL_DMA_WIT_init(void)
-{
-    DL_DMA_initChannel(DMA, DMA_WIT_CHAN_ID , (DL_DMA_Config *) &gDMA_WITConfig);
-}
-SYSCONFIG_WEAK void SYSCFG_DL_DMA_init(void){
-    SYSCFG_DL_DMA_WIT_init();
-}
-
 
 SYSCONFIG_WEAK void SYSCFG_DL_SYSTICK_init(void)
 {

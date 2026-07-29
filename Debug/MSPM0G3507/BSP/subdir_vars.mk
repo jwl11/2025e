@@ -13,10 +13,9 @@ C_SRCS += \
 ../MSPM0G3507/BSP/bsp_fishpath.c \
 ../MSPM0G3507/BSP/bsp_led.c \
 ../MSPM0G3507/BSP/bsp_menu.c \
-../MSPM0G3507/BSP/bsp_motor.c \
 ../MSPM0G3507/BSP/bsp_motor_ctrl.c \
 ../MSPM0G3507/BSP/bsp_servo.c \
-../MSPM0G3507/BSP/bsp_wit.c 
+../MSPM0G3507/BSP/bsp_zdt_x35.c 
 
 C_DEPS += \
 ./MSPM0G3507/BSP/MPU6050.d \
@@ -26,10 +25,9 @@ C_DEPS += \
 ./MSPM0G3507/BSP/bsp_fishpath.d \
 ./MSPM0G3507/BSP/bsp_led.d \
 ./MSPM0G3507/BSP/bsp_menu.d \
-./MSPM0G3507/BSP/bsp_motor.d \
 ./MSPM0G3507/BSP/bsp_motor_ctrl.d \
 ./MSPM0G3507/BSP/bsp_servo.d \
-./MSPM0G3507/BSP/bsp_wit.d 
+./MSPM0G3507/BSP/bsp_zdt_x35.d 
 
 OBJS += \
 ./MSPM0G3507/BSP/MPU6050.o \
@@ -39,10 +37,9 @@ OBJS += \
 ./MSPM0G3507/BSP/bsp_fishpath.o \
 ./MSPM0G3507/BSP/bsp_led.o \
 ./MSPM0G3507/BSP/bsp_menu.o \
-./MSPM0G3507/BSP/bsp_motor.o \
 ./MSPM0G3507/BSP/bsp_motor_ctrl.o \
 ./MSPM0G3507/BSP/bsp_servo.o \
-./MSPM0G3507/BSP/bsp_wit.o 
+./MSPM0G3507/BSP/bsp_zdt_x35.o 
 
 OBJS__QUOTED += \
 "MSPM0G3507\BSP\MPU6050.o" \
@@ -52,10 +49,9 @@ OBJS__QUOTED += \
 "MSPM0G3507\BSP\bsp_fishpath.o" \
 "MSPM0G3507\BSP\bsp_led.o" \
 "MSPM0G3507\BSP\bsp_menu.o" \
-"MSPM0G3507\BSP\bsp_motor.o" \
 "MSPM0G3507\BSP\bsp_motor_ctrl.o" \
 "MSPM0G3507\BSP\bsp_servo.o" \
-"MSPM0G3507\BSP\bsp_wit.o" 
+"MSPM0G3507\BSP\bsp_zdt_x35.o" 
 
 C_DEPS__QUOTED += \
 "MSPM0G3507\BSP\MPU6050.d" \
@@ -65,10 +61,9 @@ C_DEPS__QUOTED += \
 "MSPM0G3507\BSP\bsp_fishpath.d" \
 "MSPM0G3507\BSP\bsp_led.d" \
 "MSPM0G3507\BSP\bsp_menu.d" \
-"MSPM0G3507\BSP\bsp_motor.d" \
 "MSPM0G3507\BSP\bsp_motor_ctrl.d" \
 "MSPM0G3507\BSP\bsp_servo.d" \
-"MSPM0G3507\BSP\bsp_wit.d" 
+"MSPM0G3507\BSP\bsp_zdt_x35.d" 
 
 C_SRCS__QUOTED += \
 "../MSPM0G3507/BSP/MPU6050.c" \
@@ -78,9 +73,8 @@ C_SRCS__QUOTED += \
 "../MSPM0G3507/BSP/bsp_fishpath.c" \
 "../MSPM0G3507/BSP/bsp_led.c" \
 "../MSPM0G3507/BSP/bsp_menu.c" \
-"../MSPM0G3507/BSP/bsp_motor.c" \
 "../MSPM0G3507/BSP/bsp_motor_ctrl.c" \
 "../MSPM0G3507/BSP/bsp_servo.c" \
-"../MSPM0G3507/BSP/bsp_wit.c" 
+"../MSPM0G3507/BSP/bsp_zdt_x35.c" 
 
 
