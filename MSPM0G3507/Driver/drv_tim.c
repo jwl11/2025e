@@ -95,6 +95,15 @@ void drv_timebase_start(void)
     DL_Timer_startCounter(GET_MPU6050_INST);
 }
 
+void drv_timebase_stop(void)
+{
+    DL_Timer_stopCounter(GET_MPU6050_INST);
+    NVIC_DisableIRQ(GET_MPU6050_INST_INT_IRQN);
+    DL_TimerG_clearInterruptStatus(
+        GET_MPU6050_INST, DL_TIMERG_INTERRUPT_LOAD_EVENT);
+    NVIC_ClearPendingIRQ(GET_MPU6050_INST_INT_IRQN);
+}
+
 uint32_t drv_timebase_get_ms(void)
 {
     uint32_t base_ms;

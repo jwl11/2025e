@@ -4,7 +4,7 @@
 
 SHELL = cmd.exe
 
-CG_TOOL_ROOT := E:/ccs/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS
+CG_TOOL_ROOT := D:/TI2.0/CCS/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS
 
 GEN_OPTS__FLAG := @"./device.opt" 
 GEN_CMDS__FLAG := -Wl,-l"./device_linker.cmd" 
@@ -166,20 +166,20 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXE_OUTPUTS += \
-first.out 
+2025e.out 
 
 EXE_OUTPUTS__QUOTED += \
-"first.out" 
+"2025e.out" 
 
 
 # All Target
 all: $(OBJS) $(GEN_CMDS)
-	@$(MAKE) --no-print-directory -Onone "first.out"
+	@$(MAKE) --no-print-directory -Onone "2025e.out"
 
 # Tool invocations
-first.out: $(OBJS) $(GEN_CMDS)
+2025e.out: $(OBJS) $(GEN_CMDS)
 	@echo 'Arm Linker - building target: "$@"'
-	"E:/ccs/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/bin/tiarmclang.exe" @"device.opt"  -march=thumbv6m -mcpu=cortex-m0plus -mfloat-abi=soft -mlittle-endian -mthumb -O0 -gdwarf-3 -Wall -Wl,-m"first.map" -Wl,-i"C:/TI/mspm0_sdk_2_10_00_04/source" -Wl,-i"E:/ccs/project" -Wl,-i"E:/ccs/project/Debug/syscfg" -Wl,-i"E:/ccs/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/lib" -Wl,--diag_wrap=off -Wl,--display_error_number -Wl,--warn_sections -Wl,--xml_link_info="first_linkInfo.xml" -Wl,--rom_model -o "first.out" $(ORDERED_OBJS)
+	"D:/TI2.0/CCS/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/bin/tiarmclang.exe" @"device.opt"  -march=thumbv6m -mcpu=cortex-m0plus -mfloat-abi=soft -mlittle-endian -mthumb -O0 -gdwarf-3 -Wall -Wl,-m"2025e.map" -Wl,-i"C:/TI/mspm0_sdk_2_10_00_04/source" -Wl,-i"D:/2025e/2025e-main" -Wl,-i"D:/2025e/2025e-main/Debug/syscfg" -Wl,-i"D:/TI2.0/CCS/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/lib" -Wl,--diag_wrap=off -Wl,--display_error_number -Wl,--warn_sections -Wl,--xml_link_info="2025e_linkInfo.xml" -Wl,--rom_model -o "2025e.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: "$@"'
 	@echo ' '
 

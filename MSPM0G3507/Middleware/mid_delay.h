@@ -25,4 +25,13 @@ uint32_t get_system_ms(void);
  */
 uint32_t get_system_us(void);
 
+/* Start a new hardware-backed stopwatch measurement from zero. */
+void mid_stopwatch_start(void);
+
+/* Stop the stopwatch and return the frozen elapsed time. */
+uint32_t mid_stopwatch_stop(void);
+
+/* Return the live elapsed time, or the frozen value after stop. */
+uint32_t mid_stopwatch_get_elapsed_ms(void);
+
 #endif

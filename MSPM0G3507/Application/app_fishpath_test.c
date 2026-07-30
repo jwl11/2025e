@@ -22,6 +22,7 @@
  *   - 死区 4/6/10 防止电机堵转
  */
 
+#define TIMER_DISPLAY_UPDATE_MS  500U
 
 
 /* ================================================================
@@ -40,6 +41,8 @@ static uint8_t  g_long_press_handled = 0;
 
 static uint32_t g_last_oled_tick  = 0;
 static uint8_t  g_oled_dirty      = 1;
+
+static uint32_t g_last_time_display_ms = 0U;
 
 static Button   g_btn_user;
 
@@ -154,6 +157,18 @@ static void oled_update(void)
     }
 }
 
+static void oled_show_time(uint32_t elapsed_ms)
+{
+    uint32_t total_seconds = elapsed_ms / 1000U;
+    uint32_t minutes = (total_seconds / 60U) % 100U;
+    uint32_t seconds = total_seconds % 60U;
+    uint32_t tenths = (elapsed_ms / 100U) % 10U;
+
+    OLED_ShowNum(4, 6, minutes, 2);
+    OLED_ShowNum(4, 9, seconds, 2);
+    OLED_ShowNum(4, 12, tenths, 1);
+}
+
 /* ================================================================
  *  UART 调试打印
  * ================================================================ */
@@ -210,7 +225,7 @@ static void print_status(uint32_t tick_ms)
  * ================================================================ */
 void app_fishpath_test(void)
 {
-    uint32_t tick, last_print_ms;
+    uint32_t tick, last_print_ms, elapsed_ms;
 
     /* ---- 欢迎信息 ---- */
     drv_uart_send_string("========================================\r\n");
@@ -245,6 +260,8 @@ void app_fishpath_test(void)
 
     delay_ms(1U);
     oled_update();
+    OLED_ShowString(4, 1, "Time 00:00.0    ");
+    oled_show_time(0U);
     g_last_oled_tick = get_system_ms();
     print_header();
     last_print_ms = get_system_ms();
@@ -294,11 +311,14 @@ void app_fishpath_test(void)
                 g_start_line_release  = 0U;
                 g_run_finished        = 0U;
                 g_run_started         = 1U;
+                g_last_time_display_ms = 0U;
 
                 xunji_reset_tracking();
+                mid_stopwatch_start();
                 fishpath_start();
 
                 oled_update();
+                oled_show_time(0U);
                 g_oled_dirty = 0;
                 g_last_oled_tick = tick;
 
@@ -327,8 +347,23 @@ void app_fishpath_test(void)
             g_run_finished = 1U;
             g_run_started  = 0U;
             g_oled_dirty   = 1;
+            elapsed_ms = mid_stopwatch_stop();
             fishpath_stop();
+            oled_show_time(elapsed_ms);
             drv_uart_send_string("[DONE]\r\n");
+        }
+
+        /*
+         * TIMG6 interrupts only every 500 ms.  Refresh only the time row
+         * at the same low rate to minimize OLED I/O in the 5 ms loop.
+         */
+        if (g_run_started) {
+            elapsed_ms = mid_stopwatch_get_elapsed_ms();
+            if ((elapsed_ms - g_last_time_display_ms) >=
+                TIMER_DISPLAY_UPDATE_MS) {
+                g_last_time_display_ms = elapsed_ms;
+                oled_show_time(elapsed_ms);
+            }
         }
 
         /* ⑤ 调试打印 (200ms) */

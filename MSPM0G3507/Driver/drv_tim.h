@@ -24,6 +24,9 @@ void pwm_stop(void);
 /** Start TIMG6 as a low-overhead stopwatch timebase. */
 void drv_timebase_start(void);
 
+/** Stop TIMG6 and disable its interrupt until the next start. */
+void drv_timebase_stop(void);
+
 /**
  * Return elapsed milliseconds since drv_timebase_start().
  * The current hardware counter is interpolated between 500 ms interrupts.

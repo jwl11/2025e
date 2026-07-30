@@ -1,4 +1,5 @@
 #include "ti_msp_dl_config.h"
+#include "drv_tim.h"
 #include "mid_delay.h"
 
 /* 32 MHz CPU 时钟下，32 个周期 = 1 μs */
@@ -11,6 +12,8 @@
  */
 
 static volatile uint32_t g_system_ms = 0;
+static uint32_t g_stopwatch_elapsed_ms = 0U;
+static uint8_t g_stopwatch_running = 0U;
 
 /**
  * @brief  毫秒级延时
@@ -79,4 +82,31 @@ uint32_t get_system_us(void)
 
     us_in_ms = (32000UL - val) / 32UL;
     return g_system_ms * 1000UL + us_in_ms;
+}
+
+void mid_stopwatch_start(void)
+{
+    g_stopwatch_elapsed_ms = 0U;
+    drv_timebase_start();
+    g_stopwatch_running = 1U;
+}
+
+uint32_t mid_stopwatch_stop(void)
+{
+    if (g_stopwatch_running != 0U) {
+        g_stopwatch_elapsed_ms = drv_timebase_get_ms();
+        drv_timebase_stop();
+        g_stopwatch_running = 0U;
+    }
+
+    return g_stopwatch_elapsed_ms;
+}
+
+uint32_t mid_stopwatch_get_elapsed_ms(void)
+{
+    if (g_stopwatch_running != 0U) {
+        return drv_timebase_get_ms();
+    }
+
+    return g_stopwatch_elapsed_ms;
 }
