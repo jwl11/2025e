@@ -1,7 +1,6 @@
 #include "drv_tim.h"
-#include "MPU6050.h"
 
-extern MPU6050 MM;
+static volatile uint32_t g_timebase_ms = 0U;
 
 /**
  * @brief  PWM初始化
@@ -77,26 +76,83 @@ void pwm_stop(void)
     DL_Timer_stopCounter(BLDC_INST);
 }
 
-/**
- * @brief  启动MPU6050定时器中断 (TIMG6, 5ms周期)
- *         采集频率200hz
- *
- *         SYSCFG_DL_GET_MPU6050_init() 已将 TIMG6 配为 1MHz / 5ms / PERIODIC_UP,
- *         此函数直接启动计数器即可.
- */
-void drv_mpu6050_timer_start(void)
+void drv_timebase_start(void)
 {
+    /*
+     * Reset the complete timebase before enabling the IRQ.  TIMG6 is
+     * configured by SysConfig as PERIODIC_UP with a 500 ms load period.
+     */
+    NVIC_DisableIRQ(GET_MPU6050_INST_INT_IRQN);
+    DL_Timer_stopCounter(GET_MPU6050_INST);
+    DL_TimerG_clearInterruptStatus(
+        GET_MPU6050_INST, DL_TIMERG_INTERRUPT_LOAD_EVENT);
+    NVIC_ClearPendingIRQ(GET_MPU6050_INST_INT_IRQN);
+
+    g_timebase_ms = 0U;
+    DL_TimerG_setTimerCount(GET_MPU6050_INST, 0U);
+
     NVIC_EnableIRQ(GET_MPU6050_INST_INT_IRQN);
     DL_Timer_startCounter(GET_MPU6050_INST);
+}
+
+uint32_t drv_timebase_get_ms(void)
+{
+    uint32_t base_ms;
+    uint32_t count;
+    uint32_t pending_before;
+    uint32_t primask;
+
+    /*
+     * Only two interrupts per second are required.  Between interrupts,
+     * convert the current PERIODIC_UP counter position into milliseconds.
+     * Briefly masking interrupts gives a coherent base/count snapshot.
+     */
+    primask = __get_PRIMASK();
+    __disable_irq();
+
+    base_ms = g_timebase_ms;
+    pending_before = DL_TimerG_getRawInterruptStatus(
+        GET_MPU6050_INST, DL_TIMERG_INTERRUPT_LOAD_EVENT);
+    count = DL_TimerG_getTimerCount(GET_MPU6050_INST);
+
+    /*
+     * If the timer wrapped between the first status read and the counter
+     * read, take a fresh post-wrap count and include the pending period.
+     */
+    if ((pending_before == 0U) &&
+        (DL_TimerG_getRawInterruptStatus(
+             GET_MPU6050_INST, DL_TIMERG_INTERRUPT_LOAD_EVENT) != 0U)) {
+        pending_before = DL_TIMERG_INTERRUPT_LOAD_EVENT;
+        count = DL_TimerG_getTimerCount(GET_MPU6050_INST);
+    }
+
+    if (pending_before != 0U) {
+        base_ms += DRV_TIMEBASE_PERIOD_MS;
+    }
+
+    if (primask == 0U) {
+        __enable_irq();
+    }
+
+    return base_ms +
+           ((count * DRV_TIMEBASE_PERIOD_MS) /
+            (GET_MPU6050_INST_LOAD_VALUE + 1U));
+}
+
+void drv_mpu6050_timer_start(void)
+{
+    drv_timebase_start();
 }
 
 void TIMG6_IRQHandler(void)
 {
     switch (DL_TimerG_getPendingInterrupt(GET_MPU6050_INST)) {
         case DL_TIMERG_IIDX_LOAD:
-            DL_TimerG_clearInterruptStatus(GET_MPU6050_INST, DL_TIMERG_INTERRUPT_LOAD_EVENT);
-            // MPU6050_Get_Angle_Plus(&MM);  // 方法1 (Madgwick, 无万向锁)
-            MPU6050_Get_Angle_Plus(&MM);  // Madgwick+自适应, yaw漂移更小
+            DL_TimerG_clearInterruptStatus(
+                GET_MPU6050_INST, DL_TIMERG_INTERRUPT_LOAD_EVENT);
+
+            /* Two interrupts per second; ISR work is one integer addition. */
+            g_timebase_ms += DRV_TIMEBASE_PERIOD_MS;
             break;
         default:
             break;

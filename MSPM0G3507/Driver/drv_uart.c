@@ -107,8 +107,8 @@ void drv_uart_print_hex(uint8_t num)
 /* ================================================================
  * UART1 (fishpath) 中断接收 — 12路循迹模块数据采集
  *
- * 循迹模块通过 UART1 (PA9 RX / PA8 TX, 115200-8N1) 连续发送
- * '0' / '1' 字符表示各路传感器状态。
+ * 循迹模块通过 UART1 (PB7 RX / PB6 TX, 115200-8N1) 周期发送
+ * "#xxxxxxxxxxxx!" 固定帧，x 为各路传感器的 ASCII '0' / '1'。
  *
  * 使用环形缓冲区, ISR 写入 → 主循环读取, 无需关中断保护
  * (Cortex-M0+ aligned 8-bit 访问为原子操作)。
@@ -177,7 +177,7 @@ void UART1_IRQHandler(void)
 {
     uint32_t status = DL_UART_Main_getPendingInterrupt(fishpath_INST);
 
-    if (status & DL_UART_MAIN_IIDX_RX) {
+    if (status == DL_UART_MAIN_IIDX_RX) {
         uint8_t data = DL_UART_Main_receiveData(fishpath_INST);
         uint16_t next = (uart1_rx_head + 1U) & (UART1_RX_BUF_SIZE - 1U);
 
@@ -190,109 +190,31 @@ void UART1_IRQHandler(void)
 }
 
 /* ================================================================
- * UART3 (vision) — MaixCAM2 双向通信
+ * UART3 (F32C) - 二自由度云台阻塞发送
+ *
+ * UART3 已由 SYSCFG_DL_f32c_init() 按 115200-8N1 初始化并使能，
+ * 此处只封装使用 f32c_INST 的底层发送操作。
  * ================================================================ */
 
-#define UART3_RX_BUF_SIZE       256U
-#define UART3_TX_RETRY_LIMIT 100000U
-
-static volatile uint8_t  uart3_rx_buf[UART3_RX_BUF_SIZE];
-static volatile uint16_t uart3_rx_head = 0U;
-static volatile uint16_t uart3_rx_tail = 0U;
-static volatile uint32_t uart3_rx_overflow_count = 0U;
-
-void drv_vision_uart3_init(void)
+void drv_f32c_uart_init(void)
 {
-    uart3_rx_head = 0U;
-    uart3_rx_tail = 0U;
-    uart3_rx_overflow_count = 0U;
-
-    /*
-     * 不修改 SysConfig：复用它已生成的 UART3/f32c 硬件实例，
-     * 在函数层手动打开 RX 中断和 NVIC。
-     */
-    DL_UART_Main_enableInterrupt(f32c_INST, DL_UART_MAIN_INTERRUPT_RX);
-    NVIC_ClearPendingIRQ(f32c_INST_INT_IRQN);
-    NVIC_EnableIRQ(f32c_INST_INT_IRQN);
+    /* UART3 已在 SYSCFG_DL_init() 中完成初始化，无需再次等待或复位。 */
 }
 
-bool drv_vision_uart3_write(const uint8_t *data, uint16_t length)
+void drv_f32c_uart_write(const uint8_t *data, uint8_t length)
 {
-    uint16_t i;
+    uint8_t i;
 
-    if ((data == 0) || (length == 0U)) {
-        return false;
+    if (data == 0) {
+        return;
     }
 
     for (i = 0U; i < length; i++) {
-        uint32_t retry;
-
-        for (retry = 0U; retry < UART3_TX_RETRY_LIMIT; retry++) {
-            if (DL_UART_Main_transmitDataCheck(f32c_INST, data[i])) {
-                break;
-            }
-        }
-        if (retry >= UART3_TX_RETRY_LIMIT) {
-            return false;
-        }
-    }
-    return true;
-}
-
-uint16_t drv_vision_uart3_available(void)
-{
-    return (uart3_rx_head - uart3_rx_tail) & (UART3_RX_BUF_SIZE - 1U);
-}
-
-int16_t drv_vision_uart3_read(void)
-{
-    uint8_t data;
-
-    if (uart3_rx_head == uart3_rx_tail) {
-        return -1;
+        DL_UART_Main_transmitDataBlocking(f32c_INST, data[i]);
     }
 
-    data = uart3_rx_buf[uart3_rx_tail];
-    uart3_rx_tail = (uart3_rx_tail + 1U) & (UART3_RX_BUF_SIZE - 1U);
-    return (int16_t)data;
-}
-
-void drv_vision_uart3_flush(void)
-{
-    uint32_t primask = __get_PRIMASK();
-
-    __disable_irq();
-    uart3_rx_head = 0U;
-    uart3_rx_tail = 0U;
-    if (primask == 0U) {
-        __enable_irq();
-    }
-}
-
-uint32_t drv_vision_uart3_get_overflow_count(void)
-{
-    return uart3_rx_overflow_count;
-}
-
-void UART3_IRQHandler(void)
-{
-    switch (DL_UART_Main_getPendingInterrupt(f32c_INST)) {
-    case DL_UART_MAIN_IIDX_RX:
-        while (!DL_UART_Main_isRXFIFOEmpty(f32c_INST)) {
-            uint8_t data = DL_UART_Main_receiveData(f32c_INST);
-            uint16_t next =
-                (uart3_rx_head + 1U) & (UART3_RX_BUF_SIZE - 1U);
-
-            if (next != uart3_rx_tail) {
-                uart3_rx_buf[uart3_rx_head] = data;
-                uart3_rx_head = next;
-            } else {
-                uart3_rx_overflow_count++;
-            }
-        }
-        break;
-
-    default:
-        break;
-    }
+    /*
+     * 不在此处无限等待 UART BUSY 清零。阻塞发送已经保证所有字节
+     * 写入 FIFO，上层的帧间隔会等待最后一个字节发送完成。
+     */
 }

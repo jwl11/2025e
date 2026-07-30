@@ -142,7 +142,7 @@ extern "C" {
 #define GET_MPU6050_INST                                                 (TIMG6)
 #define GET_MPU6050_INST_IRQHandler                             TIMG6_IRQHandler
 #define GET_MPU6050_INST_INT_IRQN                               (TIMG6_INT_IRQn)
-#define GET_MPU6050_INST_LOAD_VALUE                                      (4999U)
+#define GET_MPU6050_INST_LOAD_VALUE                                     (62499U)
 
 
 

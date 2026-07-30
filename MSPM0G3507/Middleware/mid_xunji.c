@@ -10,28 +10,29 @@
  * 中心:     传感器 5 和 6 之间 (权值=0)
  *
  * 数据协议 (UART1):
- *   循迹模块连续发送 ASCII '0' (0x30) / '1' (0x31),
- *   每帧 12 字节对应 12 路传感器状态。
- *   自动兼容连续 12 位数据流和以 CR/LF 结束的分帧数据。
+ *   官方帧格式为 "#xxxxxxxxxxxx!"，x 为 ASCII '0' 或 '1'。
+ *   A1~A12 按模块上从左到右排列；UART 0=黑线，1=白底。
+ *   内部统一转换为 1=黑线有效，0=白底。
  *
  * 差速公式:
- *   left  = base_speed + pid_output
- *   right = base_speed - pid_output
+ *   left  = base_speed - pid_output
+ *   right = base_speed + pid_output
  *   两端均 clamp 到 [0, 100]
  * ================================================================ */
 
 /* 循迹专用 PID 实例 */
 PID_Controller g_pid_xunji = {0};
 
-/* Adaptive cornering speeds (PWM duty percent). */
+/* Tracking thresholds and minimum usable steering for the heavy chassis. */
 #define XUNJI_CENTER_ERROR_MAX       500
 #define XUNJI_SMALL_CURVE_ERROR_MAX  1500
-#define XUNJI_SMALL_CURVE_SPEED      20U
-#define XUNJI_SHARP_CURVE_SPEED      15U
+#define XUNJI_MIN_DIFF_SMALL          4
+#define XUNJI_MIN_DIFF_MEDIUM         6
+#define XUNJI_MIN_DIFF_LARGE         10
 #define XUNJI_CORNER_LEFT_DUTY       30
 #define XUNJI_CORNER_SEARCH_DUTY     18
 #define XUNJI_CORNER_CENTER_MAX      1000
-#define XUNJI_CORNER_ACTIVE_MIN      4U   /* 约 4 路同时有效视为弯角宽线 */
+#define XUNJI_CORNER_ACTIVE_MIN      8U   /* 8 路以上才算直角弯 (圆弧不会触发) */
 #define XUNJI_CORNER_MARK_CYCLES     3U   /* 连续确认 15ms */
 #define XUNJI_CORNER_MIN_TURN_CYCLES 12U  /* 至少左转 60ms 后才允许退出 */
 #define XUNJI_LOST_CONFIRM_CYCLES    3U
@@ -55,8 +56,7 @@ static int32_t  position_raw;                      /* 加权位置 (0~11000) */
 static uint8_t  sensor_online;                     /* 是否有线 */
 static uint8_t  active_sensor_count;               /* 当前帧有效传感器数量 */
 static uint8_t  frame_index;                       /* 临时帧内有效数据数 */
-static uint8_t  frame_invalid;                     /* 超长帧或格式错误标志 */
-static uint8_t  delimiter_seen;                    /* 1=发送端使用 CR/LF 分帧 */
+static uint8_t  frame_receiving;                   /* 已收到官方帧头 '#' */
 
 typedef enum {
     XUNJI_TRACK_FOLLOW = 0,
@@ -90,7 +90,7 @@ void xunji_init(float Kp, float Ki, float Kd, uint32_t speed)
     /* PID 初始化 */
     pid_init(&g_pid_xunji,
              Kp, Ki, Kd,
-             3000.0f,     /* integral_limit: 防止积分过深 */
+             20.0f,       /* integral_limit: Ki=0.3时最多贡献6差速，防饱和 */
              50.0f);      /* output_limit: 最大差速调整量 */
 
     /* 状态初始化 */
@@ -101,8 +101,7 @@ void xunji_init(float Kp, float Ki, float Kd, uint32_t speed)
     position_raw = 0;
     sensor_online = 0;
     frame_index  = 0;
-    frame_invalid = 0;
-    delimiter_seen = 0;
+    frame_receiving = 0;
     xunji_reset_tracking();
 
     /* 清空传感器数组 */
@@ -119,8 +118,8 @@ void xunji_init(float Kp, float Ki, float Kd, uint32_t speed)
 /**
  * @brief  从 UART1 环形缓冲区解析传感器数据
  *
- *         '0'/'1' 先写入临时帧。收到 '\r' 或 '\n' 时，
- *         只有恰好 12 个数据且未超长才提交到 sensor_raw。
+ *         严格按照官方 "# + 12位0/1 + !" 协议解析。
+ *         只有收到完整帧头、恰好 12 路数据和帧尾才提交。
  *         PID 始终使用上一个完整帧，不会读到新旧混合的半帧。
  */
 static void xunji_parse_uart(void)
@@ -132,62 +131,45 @@ static void xunji_parse_uart(void)
         byte = drv_uart1_read();
         if (byte < 0) break;
 
-        switch (byte) {
-        case '0':                         /* 白线 (或反射率低) */
-            if ((frame_index < XUNJI_SENSOR_COUNT) &&
-                (frame_invalid == 0U)) {
-                sensor_pending[frame_index++] = 0U;
-            } else {
-                frame_invalid = 1U;
-            }
-
-            /* 无分隔符模式：收满 12 位后立即原子提交。 */
-            if ((delimiter_seen == 0U) &&
-                (frame_index == XUNJI_SENSOR_COUNT) &&
-                (frame_invalid == 0U)) {
-                for (i = 0U; i < XUNJI_SENSOR_COUNT; i++) {
-                    sensor_raw[i] = sensor_pending[i];
-                }
-                frame_index = 0U;
-            }
-            break;
-
-        case '1':                         /* 黑线 (或反射率高) */
-            if ((frame_index < XUNJI_SENSOR_COUNT) &&
-                (frame_invalid == 0U)) {
-                sensor_pending[frame_index++] = 1U;
-            } else {
-                frame_invalid = 1U;
-            }
-
-            /* 无分隔符模式：收满 12 位后立即原子提交。 */
-            if ((delimiter_seen == 0U) &&
-                (frame_index == XUNJI_SENSOR_COUNT) &&
-                (frame_invalid == 0U)) {
-                for (i = 0U; i < XUNJI_SENSOR_COUNT; i++) {
-                    sensor_raw[i] = sensor_pending[i];
-                }
-                frame_index = 0U;
-            }
-            break;
-
-        case '\r':                        /* 帧分隔 — 回车 */
-        case '\n':                        /* 帧分隔 — 换行 */
-            delimiter_seen = 1U;
-            if ((frame_index == XUNJI_SENSOR_COUNT) &&
-                (frame_invalid == 0U)) {
-                for (i = 0U; i < XUNJI_SENSOR_COUNT; i++) {
-                    sensor_raw[i] = sensor_pending[i];
-                }
-            }
-
-            /* 无论本帧是否有效，分隔符都是下一帧的同步点。 */
+        /* 帧头始终重新同步，即使上一帧因丢字节尚未结束。 */
+        if (byte == '#') {
+            frame_receiving = 1U;
             frame_index = 0U;
-            frame_invalid = 0U;
-            break;
+            continue;
+        }
 
-        default:                          /* 无效字节, 忽略 */
-            break;
+        if (frame_receiving == 0U) {
+            continue;
+        }
+
+        if (byte == '!') {
+            if (frame_index == XUNJI_SENSOR_COUNT) {
+                for (i = 0U; i < XUNJI_SENSOR_COUNT; i++) {
+                    sensor_raw[i] = sensor_pending[i];
+                }
+            }
+            frame_receiving = 0U;
+            frame_index = 0U;
+            continue;
+        }
+
+        if ((byte == '0') || (byte == '1')) {
+            if (frame_index < XUNJI_SENSOR_COUNT) {
+                /*
+                 * 模块协议：0=黑线、1=白底。
+                 * 算法内部：1=黑线有效、0=白底。
+                 */
+                sensor_pending[frame_index++] =
+                    (byte == '0') ? 1U : 0U;
+            } else {
+                /* 超过 12 路仍未遇到帧尾，本帧作废并等待下个 '#'. */
+                frame_receiving = 0U;
+                frame_index = 0U;
+            }
+        } else {
+            /* 官方帧内部不允许出现其他字符。 */
+            frame_receiving = 0U;
+            frame_index = 0U;
         }
     }
 }
@@ -239,7 +221,6 @@ void xunji_update(void)
     float pid_out;
     int32_t diff;
     int32_t abs_error;
-    uint32_t adaptive_speed;
 
     /* ---- 第1步: 解析 UART1 数据, 更新传感器数组 ---- */
     xunji_parse_uart();
@@ -299,30 +280,10 @@ void xunji_update(void)
         lost_line_count = 0U;
 
         /*
-         * 正常直线通常只有 2~3 路有效；弯角处约 4 路或更多同时有效。
-         * 只有连续 3 个控制周期满足宽线条件才确认，避免单帧噪声计数。
+         * 椭圆赛道没有直角。宽黑线是唯一启停线，由应用层负责识别，
+         * 此处不能再触发旧的强制左转逻辑。
          */
-        if (active_sensor_count >= XUNJI_CORNER_ACTIVE_MIN) {
-            if (corner_mark_count < XUNJI_CORNER_MARK_CYCLES) {
-                corner_mark_count++;
-            }
-
-            if (corner_mark_count >= XUNJI_CORNER_MARK_CYCLES) {
-                tracking_state = XUNJI_TRACK_CORNER_LEFT;
-                corner_mark_count = 0U;
-                corner_center_count = 0U;
-                corner_turn_cycles = 1U;
-                corner_event = 1U;
-                left_duty  = 0;
-                right_duty = XUNJI_CORNER_LEFT_DUTY;
-            }
-        } else {
-            corner_mark_count = 0U;
-        }
-
-        if (tracking_state == XUNJI_TRACK_CORNER_LEFT) {
-            /* 已由宽线判定接管输出，本周期不再执行 PID。 */
-        } else {
+        corner_mark_count = 0U;
 
         /* ---- 第3步: PID 控制 (误差归一化到 [-1, 1]) ---- */
         /* 归一化: error_raw ∈ [-5500, +5500] → [-1.0, +1.0] */
@@ -331,31 +292,42 @@ void xunji_update(void)
 
         /*
          * 差速混合:
-         *   pid_out > 0 → 线偏右 → 右轮减速, 左轮加速
-         *   pid_out < 0 → 线偏左 → 左轮减速, 右轮加速
+         *   A1 在左、A12 在右，电机 A 为左轮、B 为右轮：
+         *   pid_out > 0 → 线偏右 → 左轮加速, 右轮减速
+         *   pid_out < 0 → 线偏左 → 右轮加速, 左轮减速
         */
-        diff = (int32_t)pid_out;
+        /* Round instead of truncating small PID outputs toward zero. */
+        diff = (pid_out >= 0.0f) ?
+               (int32_t)(pid_out + 0.5f) :
+               (int32_t)(pid_out - 0.5f);
 
         /*
-         * Keep the configured base speed on straights and reduce it as
-         * the line moves farther from the sensor center.  Each curve
-         * speed is capped by base_speed, so this logic never accelerates.
+         * A heavy car has a sizeable motor/static-friction dead zone.
+         * Preserve the PID direction, but guarantee a usable differential
+         * once the line has moved away from the sensor center.
          */
-        adaptive_speed = base_speed;
-
         if (abs_error > XUNJI_SMALL_CURVE_ERROR_MAX) {
-            if (adaptive_speed > XUNJI_SHARP_CURVE_SPEED) {
-                adaptive_speed = XUNJI_SHARP_CURVE_SPEED;
+            if ((diff > -XUNJI_MIN_DIFF_LARGE) &&
+                (diff < XUNJI_MIN_DIFF_LARGE)) {
+                diff = (error_raw > 0) ?
+                       XUNJI_MIN_DIFF_LARGE : -XUNJI_MIN_DIFF_LARGE;
             }
         } else if (abs_error > XUNJI_CENTER_ERROR_MAX) {
-            if (adaptive_speed > XUNJI_SMALL_CURVE_SPEED) {
-                adaptive_speed = XUNJI_SMALL_CURVE_SPEED;
+            if ((diff > -XUNJI_MIN_DIFF_MEDIUM) &&
+                (diff < XUNJI_MIN_DIFF_MEDIUM)) {
+                diff = (error_raw > 0) ?
+                       XUNJI_MIN_DIFF_MEDIUM : -XUNJI_MIN_DIFF_MEDIUM;
+            }
+        } else if (abs_error > 0) {
+            if ((diff > -XUNJI_MIN_DIFF_SMALL) &&
+                (diff < XUNJI_MIN_DIFF_SMALL)) {
+                diff = (error_raw > 0) ?
+                       XUNJI_MIN_DIFF_SMALL : -XUNJI_MIN_DIFF_SMALL;
             }
         }
 
-        left_duty  = (int32_t)adaptive_speed + diff;
-        right_duty = (int32_t)adaptive_speed - diff;
-        }
+        left_duty  = (int32_t)base_speed - diff;
+        right_duty = (int32_t)base_speed + diff;
     }
 
     /* ---- 第4步: 限幅 0~100 ---- */
@@ -385,6 +357,14 @@ void xunji_reset_tracking(void)
     corner_event = 0U;
     left_duty = 0;
     right_duty = 0;
+
+    /*
+     * 清除启停线或重新捕线期间留下的 PID 历史状态。
+     * 用当前误差初始化 prev_error，可避免恢复 PID 时产生微分冲击。
+     */
+    g_pid_xunji.integral = 0.0f;
+    g_pid_xunji.prev_error = (float)error_raw / 5500.0f;
+    g_pid_xunji.output = 0.0f;
 }
 
 uint8_t xunji_take_corner_event(void)

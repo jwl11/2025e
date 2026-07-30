@@ -454,17 +454,17 @@ SYSCONFIG_WEAK void SYSCFG_DL_MOTOR_MG310_init(void) {
 /*
  * Timer clock configuration to be sourced by BUSCLK /  (32000000 Hz)
  * timerClkFreq = (timerClkSrc / (timerClkDivRatio * (timerClkPrescale + 1)))
- *   1000000 Hz = 32000000 Hz / (1 * (31 + 1))
+ *   125000 Hz = 32000000 Hz / (1 * (255 + 1))
  */
 static const DL_TimerG_ClockConfig gGET_MPU6050ClockConfig = {
     .clockSel    = DL_TIMER_CLOCK_BUSCLK,
     .divideRatio = DL_TIMER_CLOCK_DIVIDE_1,
-    .prescale    = 31U,
+    .prescale    = 255U,
 };
 
 /*
  * Timer load value (where the counter starts from) is calculated as (timerPeriod * timerClockFreq) - 1
- * GET_MPU6050_INST_LOAD_VALUE = (5 ms * 1000000 Hz) - 1
+ * GET_MPU6050_INST_LOAD_VALUE = (500 ms * 125000 Hz) - 1
  */
 static const DL_TimerG_TimerConfig gGET_MPU6050TimerConfig = {
     .period     = GET_MPU6050_INST_LOAD_VALUE,

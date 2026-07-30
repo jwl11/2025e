@@ -24,6 +24,7 @@ bool app_zdt_x35_move_up(uint16_t speed_rpm, uint32_t pulse_count);
 void MPU6050_test(void);
 void MPU6050_straight_test(void);
 void app_servo_test(void);
+void app_oled_timer(void);
 
 
 /***

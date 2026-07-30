@@ -18,7 +18,19 @@ void pwm_setAllDuty(uint32_t duty0, uint32_t duty1, uint32_t duty2);
 void pwm_start(void);
 void pwm_stop(void);
 
-/* MPU6050 periodic timer (TIMG6, 5ms) */
+/* TIMG6 hardware timebase: 500 ms per interrupt. */
+#define DRV_TIMEBASE_PERIOD_MS    500U
+
+/** Start TIMG6 as a low-overhead stopwatch timebase. */
+void drv_timebase_start(void);
+
+/**
+ * Return elapsed milliseconds since drv_timebase_start().
+ * The current hardware counter is interpolated between 500 ms interrupts.
+ */
+uint32_t drv_timebase_get_ms(void);
+
+/* Compatibility entry point retained for existing callers; IMU is not updated. */
 void drv_mpu6050_timer_start(void);
 
 #endif /* __DRV_TIM_H */

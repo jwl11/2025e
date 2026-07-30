@@ -52,7 +52,7 @@ void xunji_update(void);
  */
 void xunji_set_base_speed(uint32_t speed);
 
-/** 重置直角转弯状态，应在每次小车启动前调用。 */
+/** 重置循迹状态和 PID 历史量，应在启动或重新接管循迹前调用。 */
 void xunji_reset_tracking(void);
 
 /**
@@ -68,6 +68,6 @@ int32_t xunji_get_right_duty(void);
 int32_t xunji_get_error(void);
 int32_t xunji_get_position(void);
 uint8_t xunji_is_online(void);          /* 是否有传感器检测到黑线 */
-void    xunji_get_sensors(uint8_t *dst); /* 复制传感器数组 (12 字节) */
+void    xunji_get_sensors(uint8_t *dst); /* 内部数组：1=黑线，0=白底 */
 
 #endif /* __MID_XUNJI_H */
