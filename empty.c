@@ -50,7 +50,7 @@ int main(void)
     //app_BLCD_test();
     //app_as5600_test();
     //app_MG310_test();
-    app_fishpath_test();
+    //app_fishpath_test();
     //app_vision_line_test();
     //app_button_test();
     //app_motor_ctrl_test();
@@ -60,6 +60,11 @@ int main(void)
     //app_servo_test();
     //app_zdt_x35_position_test();
     // topic3();
+   // app_zdt_x35_motion_test();
+    //app_RX_maixcam_test();
+    topic();
+    //topic4();
+
     while (1) {
         
         //app_delay_test();

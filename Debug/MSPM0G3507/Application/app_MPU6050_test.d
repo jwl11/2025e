@@ -85,15 +85,15 @@ MSPM0G3507/Application/app_MPU6050_test.o: \
  C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_wwdt.h \
  C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_interrupt.h \
  C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_systick.h \
- D:/2025e/2025e-main/MSPM0G3507/BSP/MPU6050.h \
- D:/2025e/2025e-main/MSPM0G3507/Driver/drv_tim.h \
- D:/2025e/2025e-main/MSPM0G3507/Driver/drv_uart.h \
- D:/2025e/2025e-main/MSPM0G3507/Middleware/mid_delay.h \
- D:/2025e/2025e-main/MSPM0G3507/BSP/bsp_OLED.h \
- D:/2025e/2025e-main/MSPM0G3507/BSP/bsp_encoder.h \
- D:/2025e/2025e-main/MSPM0G3507/BSP/bsp_button.h \
- D:/2025e/2025e-main/MSPM0G3507/BSP/bsp_led.h \
- D:/2025e/2025e-main/MSPM0G3507/Middleware/mid_pid.h
+ E:/ccs/project/MSPM0G3507/BSP/MPU6050.h \
+ E:/ccs/project/MSPM0G3507/Driver/drv_tim.h \
+ E:/ccs/project/MSPM0G3507/Driver/drv_uart.h \
+ E:/ccs/project/MSPM0G3507/Middleware/mid_delay.h \
+ E:/ccs/project/MSPM0G3507/BSP/bsp_OLED.h \
+ E:/ccs/project/MSPM0G3507/BSP/bsp_encoder.h \
+ E:/ccs/project/MSPM0G3507/BSP/bsp_button.h \
+ E:/ccs/project/MSPM0G3507/BSP/bsp_led.h \
+ E:/ccs/project/MSPM0G3507/Middleware/mid_pid.h
 ti_msp_dl_config.h:
 C:/TI/mspm0_sdk_2_10_00_04/source/ti/devices/msp/msp.h:
 C:/TI/mspm0_sdk_2_10_00_04/source/ti/devices/DeviceFamily.h:
@@ -177,12 +177,12 @@ C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_vref.h:
 C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_wwdt.h:
 C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_interrupt.h:
 C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_systick.h:
-D:/2025e/2025e-main/MSPM0G3507/BSP/MPU6050.h:
-D:/2025e/2025e-main/MSPM0G3507/Driver/drv_tim.h:
-D:/2025e/2025e-main/MSPM0G3507/Driver/drv_uart.h:
-D:/2025e/2025e-main/MSPM0G3507/Middleware/mid_delay.h:
-D:/2025e/2025e-main/MSPM0G3507/BSP/bsp_OLED.h:
-D:/2025e/2025e-main/MSPM0G3507/BSP/bsp_encoder.h:
-D:/2025e/2025e-main/MSPM0G3507/BSP/bsp_button.h:
-D:/2025e/2025e-main/MSPM0G3507/BSP/bsp_led.h:
-D:/2025e/2025e-main/MSPM0G3507/Middleware/mid_pid.h:
+E:/ccs/project/MSPM0G3507/BSP/MPU6050.h:
+E:/ccs/project/MSPM0G3507/Driver/drv_tim.h:
+E:/ccs/project/MSPM0G3507/Driver/drv_uart.h:
+E:/ccs/project/MSPM0G3507/Middleware/mid_delay.h:
+E:/ccs/project/MSPM0G3507/BSP/bsp_OLED.h:
+E:/ccs/project/MSPM0G3507/BSP/bsp_encoder.h:
+E:/ccs/project/MSPM0G3507/BSP/bsp_button.h:
+E:/ccs/project/MSPM0G3507/BSP/bsp_led.h:
+E:/ccs/project/MSPM0G3507/Middleware/mid_pid.h:

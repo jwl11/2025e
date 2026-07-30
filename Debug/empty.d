@@ -83,11 +83,11 @@ empty.o: ../empty.c ti_msp_dl_config.h \
  C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_wwdt.h \
  C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_interrupt.h \
  C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_systick.h \
- D:/2025e/2025e-main/MSPM0G3507/Middleware/mid_delay.h \
- D:/2025e/2025e-main/MSPM0G3507/BSP/bsp_led.h \
- D:/2025e/2025e-main/MSPM0G3507/BSP/bsp_OLED.h \
- D:/2025e/2025e-main/MSPM0G3507/BSP/bsp_menu.h \
- D:/2025e/2025e-main/MSPM0G3507/Application/app.h
+ E:/ccs/project/MSPM0G3507/Middleware/mid_delay.h \
+ E:/ccs/project/MSPM0G3507/BSP/bsp_led.h \
+ E:/ccs/project/MSPM0G3507/BSP/bsp_OLED.h \
+ E:/ccs/project/MSPM0G3507/BSP/bsp_menu.h \
+ E:/ccs/project/MSPM0G3507/Application/app.h
 ti_msp_dl_config.h:
 C:/TI/mspm0_sdk_2_10_00_04/source/ti/devices/msp/msp.h:
 C:/TI/mspm0_sdk_2_10_00_04/source/ti/devices/DeviceFamily.h:
@@ -171,8 +171,8 @@ C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_vref.h:
 C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_wwdt.h:
 C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_interrupt.h:
 C:/TI/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_systick.h:
-D:/2025e/2025e-main/MSPM0G3507/Middleware/mid_delay.h:
-D:/2025e/2025e-main/MSPM0G3507/BSP/bsp_led.h:
-D:/2025e/2025e-main/MSPM0G3507/BSP/bsp_OLED.h:
-D:/2025e/2025e-main/MSPM0G3507/BSP/bsp_menu.h:
-D:/2025e/2025e-main/MSPM0G3507/Application/app.h:
+E:/ccs/project/MSPM0G3507/Middleware/mid_delay.h:
+E:/ccs/project/MSPM0G3507/BSP/bsp_led.h:
+E:/ccs/project/MSPM0G3507/BSP/bsp_OLED.h:
+E:/ccs/project/MSPM0G3507/BSP/bsp_menu.h:
+E:/ccs/project/MSPM0G3507/Application/app.h:

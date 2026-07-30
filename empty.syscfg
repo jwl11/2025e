@@ -238,8 +238,9 @@ UART2.rxPinConfig.onlyInternalResistor = scripting.forceWrite(false);
 UART2.rxPinConfig.passedPeripheralType = scripting.forceWrite("Digital");
 UART2.rxPinConfig.$name                = "ti_driverlib_gpio_GPIOPinGeneric10";
 
-UART3.$name                            = "f32c";
 UART3.targetBaudRate                   = 115200;
+UART3.$name                            = "maixcam";
+UART3.enabledInterrupts                = ["RX"];
 UART3.peripheral.$assign               = "UART3";
 UART3.peripheral.rxPin.$assign         = "PB3";
 UART3.peripheral.txPin.$assign         = "PB2";

@@ -12,13 +12,11 @@ void topic3(void)
     drv_uart0_init();
     drv_vision_uart3_init();
     zdt_x35_init();
-   
+
 
     // /*使能*/
     // zdt_x35_set_enable(true, false);
     // delay_ms(500);
-
-    // /*开始计时*/
 
     // /*开始运动*/
     // app_zdt_x35_move_down(2999, 17000);

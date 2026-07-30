@@ -7,6 +7,7 @@
 #include "drv_uart.h"
 #include "mid_delay.h"
 #include "mid_xunji.h"
+#include "app.h"
 
 /*
  * 2026 电子设计大赛 第(2)题 — 差速循迹
@@ -21,28 +22,7 @@
  *   - 死区 4/6/10 防止电机堵转
  */
 
-/* ================================================================
- *  参数
- * ================================================================ */
-#define XUNJI_DEFAULT_KP         250.0f
-#define XUNJI_DEFAULT_KI           0.0f
-#define XUNJI_DEFAULT_KD          12.0f
-#define XUNJI_DEFAULT_SPEED       30U
 
-#define XUNJI_CONTROL_PERIOD_MS    5U
-#define DEBUG_PRINT_MS           200U
-#define OLED_UPDATE_MS           200U
-
-/*
- * 启停线: 宽黑线连续覆盖 ≥3 路相邻传感器。
- * 当前调试输出中 '.'=黑线、'#'=白底，因此检测连续内部值 0 的数量。
- */
-#define START_LINE_SENSOR_MIN       3U
-#define START_LINE_CONFIRM_CYCLES   1U   /* 高速过线单帧确认 */
-#define START_LINE_RELEASE_CYCLES   3U   /* 驶离确认，防止同一条线重复触发 */
-
-#define BUTTON_START_HOLD_MS     1000U   /* 长按 1s 确认启动 */
-#define TARGET_LAPS_MAX             5U
 
 /* ================================================================
  *  状态
