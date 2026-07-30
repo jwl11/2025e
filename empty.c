@@ -55,10 +55,11 @@ int main(void)
     //app_button_test();
     //app_motor_ctrl_test();
     //app_motor_position_test();
-    app_zdt_x35_motion_test();
+    //app_zdt_x35_motion_test();
     //MPU6050_straight_test();
-   //app_servo_test();
-
+    //app_servo_test();
+    //app_zdt_x35_position_test();
+    topic3();
     while (1) {
         
         //app_delay_test();

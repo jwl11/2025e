@@ -1,5 +1,4 @@
 #include "app.h"
-
 #include "bsp_zdt_x35.h"
 #include "drv_uart.h"
 #include "drv_zdt_x35_uart.h"
@@ -117,6 +116,39 @@ static bool zdt_x35_test_send(
 {
     zdt_x35_print_send_result(action, result);
     return result == ZDT_X35_RESULT_OK;
+}
+
+/*
+ * 向下运动封装：相对位置模式，顺时针旋转指定脉冲数。
+ * 调用方只需关心速度和脉冲数，acc/模式/sync 使用默认值。
+ */
+bool app_zdt_x35_move_down(uint16_t speed_rpm, uint32_t pulse_count)
+{
+    return zdt_x35_test_send(
+        "move down (CW)",
+        zdt_x35_move_position(
+            ZDT_X35_DIRECTION_CW,
+            speed_rpm,
+            ZDT_X35_TEST_ACC,
+            pulse_count,
+            ZDT_X35_POSITION_RELATIVE,
+            false));
+}
+
+/*
+ * 向上运动封装：相对位置模式，逆时针旋转指定脉冲数。
+ */
+bool app_zdt_x35_move_up(uint16_t speed_rpm, uint32_t pulse_count)
+{
+    return zdt_x35_test_send(
+        "move up (CCW)",
+        zdt_x35_move_position(
+            ZDT_X35_DIRECTION_CCW,
+            speed_rpm,
+            ZDT_X35_TEST_ACC,
+            pulse_count,
+            ZDT_X35_POSITION_RELATIVE,
+            false));
 }
 
 void app_zdt_x35_motion_test(void)
@@ -287,6 +319,27 @@ void app_zdt_x35_motion_test(void)
 }
 
 /*
+ * 正反转位置控制测试。
+ * 初始化 -> 使能 -> 正转5圈 -> 反转5圈 -> 失能。
+ */
+void app_zdt_x35_position_test(void)
+{
+    drv_uart0_init();
+    zdt_x35_init();
+
+    zdt_x35_set_enable(true, false);
+    delay_ms(500);
+
+    app_zdt_x35_move_down(550, 5000);
+    delay_ms(3000);
+
+    app_zdt_x35_move_up(550, 5000);
+    delay_ms(3000);
+
+    zdt_x35_set_enable(false, false);
+}
+
+/*
  * 保留旧函数名，避免其他测试入口引用失效。
  * 当前会进入上面的自动运动测试，不再是纯只读探测。
  */
@@ -294,3 +347,4 @@ void app_zdt_x35_probe(void)
 {
     app_zdt_x35_motion_test();
 }
+
