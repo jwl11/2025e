@@ -219,6 +219,12 @@ void drv_vision_uart3_init(void)
     vision_y    = 0U;
     vision_frame_count = 0U;
 
+    /* 重开 UART3 清 FIFO 和错误标志，保留 SysConfig 的波特率配置 */
+    DL_UART_Main_disable(maixcam_INST);
+    while (!DL_UART_Main_isRXFIFOEmpty(maixcam_INST)) {
+        (void)DL_UART_Main_receiveData(maixcam_INST);
+    }
+    DL_UART_Main_enable(maixcam_INST);
     DL_UART_Main_enableInterrupt(maixcam_INST, DL_UART_MAIN_INTERRUPT_RX);
     NVIC_ClearPendingIRQ(maixcam_INST_INT_IRQN);
     NVIC_EnableIRQ(maixcam_INST_INT_IRQN);

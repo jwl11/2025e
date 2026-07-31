@@ -62,8 +62,10 @@ int main(void)
     // topic3();
    // app_zdt_x35_motion_test();
     //app_RX_maixcam_test();
-    topic();
-    //topic4();
+   // topic();
+    topic4();
+    //app_42step_test();
+
 
     while (1) {
         

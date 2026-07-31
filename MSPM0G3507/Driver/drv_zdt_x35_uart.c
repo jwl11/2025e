@@ -16,7 +16,7 @@ void drv_zdt_x35_uart_init(void)
 {
     uint32_t primask = __get_PRIMASK();
 
-    __disable_irq();
+   
     g_zdt_x35_rx_head = 0U;
     g_zdt_x35_rx_tail = 0U;
     g_zdt_x35_rx_overflow_count = 0U;

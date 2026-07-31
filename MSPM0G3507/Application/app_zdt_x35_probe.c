@@ -17,7 +17,7 @@
 
 #define ZDT_X35_QUERY_INTERVAL_MS 1000U
 #define ZDT_X35_TEST_SPEED_RPM    60U
-#define ZDT_X35_TEST_ACC          200U
+#define ZDT_X35_TEST_ACC          230U
 #define ZDT_X35_TEST_RUN_MS       1000U
 #define ZDT_X35_TEST_PULSES       100U
 #define ZDT_X35_TEST_GAP_MS        500U
