@@ -508,3 +508,15 @@ uint8_t MPU6050_ID()
 {
     return MPU6050READ_REG(MPU6050_WHO_AM_I);
 }
+
+/**
+ * @brief  读取加速度计三轴数据 (单位: g, 带 PT1 滤波)
+ */
+void MPU6050_Get_Accel(float *ax, float *ay, float *az)
+{
+    MPU6050 mpu;
+    MPU6050_Get_Raw(&mpu);
+    *ax = (float)mpu.AccX * accelScale;
+    *ay = (float)mpu.AccY * accelScale;
+    *az = (float)mpu.AccZ * accelScale;
+}

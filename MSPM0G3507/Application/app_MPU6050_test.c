@@ -299,3 +299,28 @@ void MPU6050_straight_test(void)
 }
 
 
+void app_mpu6050_accel_test(void)
+{
+    float ax, ay, az;
+
+    /* ---- UART 调试串口 ---- */
+    drv_uart0_init();
+    MPU6050_init();
+    delay_ms(300);
+
+    drv_uart_send_string("\r\n========================================\r\n");
+    drv_uart_send_string(" MPU6050 Accel Test\r\n");
+    drv_uart_send_string("========================================\r\n");
+
+    while (1) {
+        MPU6050_Get_Accel(&ax, &ay, &az);
+        drv_uart_send_string("Accel: X=");
+        drv_uart_print_signed((long)(ax * 1000));
+        drv_uart_send_string(" Y=");
+        drv_uart_print_signed((long)(ay * 1000));
+        drv_uart_send_string(" Z=");
+        drv_uart_print_signed((long)(az * 1000));
+        drv_uart_send_string(" (mg)\r\n");
+        delay_ms(200U);
+    }
+}

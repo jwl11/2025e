@@ -20,11 +20,13 @@ typedef enum {
     STEP42_OK = 0,
     STEP42_ERR_ARG,
     STEP42_ERR_UART,
+    STEP42_ERR_ACK,       /* 驱动器回应错误 (E2/EE) */
+    STEP42_ERR_TIMEOUT,   /* 等待 ACK 超时 */
 } Step42Result;
 
 typedef enum {
-    STEP42_DIR_CW  = 0x00,   /* 顺时针 / 下降 */
-    STEP42_DIR_CCW = 0x01,   /* 逆时针 / 上升 */
+    STEP42_DIR_CW  = 0x00,
+    STEP42_DIR_CCW = 0x01,
 } Step42Dir;
 
 typedef enum {
@@ -32,27 +34,64 @@ typedef enum {
     STEP42_POS_ABSOLUTE = 0x01,
 } Step42PosMode;
 
+/* 电机状态 */
+typedef struct {
+    bool  enabled;            /* 使能中 */
+    bool  position_reached;   /* 到位 */
+    bool  stalled;            /* 堵转 */
+    bool  homing_done;        /* 回零完成 */
+    int32_t position;         /* 实时位置 (脉冲) */
+    int32_t position_error;   /* 位置误差 (脉冲) */
+} Step42Status;
+
 /* ================================================================
- * API
+ * 基础驱动 API
  * ================================================================ */
 
-/** 初始化串口 (复用 ZDT_X35 UART2) */
 void Step42_Init(void);
-
-/** 查询固件版本: 01 1F 6B */
 Step42Result Step42_QueryVersion(void);
-
-/** 使能/失能电机 */
 Step42Result Step42_Enable(bool enable);
-
-/** 速度模式：以指定 RPM 持续运行, acc 0~255 */
 Step42Result Step42_RunVelocity(Step42Dir dir, uint16_t rpm, uint8_t acc);
-
-/** 位置模式：走指定脉冲数后停止 */
 Step42Result Step42_MovePosition(Step42Dir dir, uint16_t rpm, uint8_t acc,
                                   uint32_t pulses, Step42PosMode mode);
-
-/** 立即停止 */
 Step42Result Step42_Stop(void);
+
+/* ================================================================
+ * 闭环 & 状态 API
+ * ================================================================ */
+
+/** 切闭环模式 */
+Step42Result Step42_SetClosedLoop(void);
+
+/** 清当前位置为0 */
+Step42Result Step42_ClearPosition(void);
+
+/** 设当前位置为零点 */
+Step42Result Step42_SetZero(void);
+
+/** 触发回零 */
+Step42Result Step42_GoHome(void);
+
+/** 读取实时状态 (使能/到位/堵转/回零) */
+Step42Result Step42_ReadStatus(Step42Status *st);
+
+/** 读取实时位置 (脉冲) */
+Step42Result Step42_ReadPosition(int32_t *pos);
+
+/** 读取位置误差 (脉冲) */
+Step42Result Step42_ReadPositionError(int32_t *err);
+
+/** 堵转检测 (快捷函数) */
+bool Step42_IsStalled(void);
+
+/* ================================================================
+ * 角度控制 API
+ * ================================================================ */
+
+/** 设脉冲/圈 (默认 3200→16细分) */
+void Step42_SetPulsesPerRev(uint32_t ppr);
+
+/** 角度→脉冲换算，绝对定位到指定角度 */
+Step42Result Step42_MoveToAngle(float degrees, uint16_t rpm, uint8_t acc);
 
 #endif
