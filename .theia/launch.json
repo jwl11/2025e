@@ -51,6 +51,15 @@
                     ]
                 }
             ]
+        },
+        {
+            "name": "2025e",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "2025e",
+                "resourceId": "/2025e"
+            }
         }
     ]
 }

@@ -20,6 +20,7 @@ C_SRCS += \
 ../MSPM0G3507/Application/app_motor_ctrl_test.c \
 ../MSPM0G3507/Application/app_servo_test.c \
 ../MSPM0G3507/Application/app_topic.c \
+../MSPM0G3507/Application/app_topic2.c \
 ../MSPM0G3507/Application/app_topic3.c \
 ../MSPM0G3507/Application/app_topic4.c \
 ../MSPM0G3507/Application/app_vision_line_test.c \
@@ -40,6 +41,7 @@ C_DEPS += \
 ./MSPM0G3507/Application/app_motor_ctrl_test.d \
 ./MSPM0G3507/Application/app_servo_test.d \
 ./MSPM0G3507/Application/app_topic.d \
+./MSPM0G3507/Application/app_topic2.d \
 ./MSPM0G3507/Application/app_topic3.d \
 ./MSPM0G3507/Application/app_topic4.d \
 ./MSPM0G3507/Application/app_vision_line_test.d \
@@ -60,6 +62,7 @@ OBJS += \
 ./MSPM0G3507/Application/app_motor_ctrl_test.o \
 ./MSPM0G3507/Application/app_servo_test.o \
 ./MSPM0G3507/Application/app_topic.o \
+./MSPM0G3507/Application/app_topic2.o \
 ./MSPM0G3507/Application/app_topic3.o \
 ./MSPM0G3507/Application/app_topic4.o \
 ./MSPM0G3507/Application/app_vision_line_test.o \
@@ -80,6 +83,7 @@ OBJS__QUOTED += \
 "MSPM0G3507\Application\app_motor_ctrl_test.o" \
 "MSPM0G3507\Application\app_servo_test.o" \
 "MSPM0G3507\Application\app_topic.o" \
+"MSPM0G3507\Application\app_topic2.o" \
 "MSPM0G3507\Application\app_topic3.o" \
 "MSPM0G3507\Application\app_topic4.o" \
 "MSPM0G3507\Application\app_vision_line_test.o" \
@@ -100,6 +104,7 @@ C_DEPS__QUOTED += \
 "MSPM0G3507\Application\app_motor_ctrl_test.d" \
 "MSPM0G3507\Application\app_servo_test.d" \
 "MSPM0G3507\Application\app_topic.d" \
+"MSPM0G3507\Application\app_topic2.d" \
 "MSPM0G3507\Application\app_topic3.d" \
 "MSPM0G3507\Application\app_topic4.d" \
 "MSPM0G3507\Application\app_vision_line_test.d" \
@@ -120,6 +125,7 @@ C_SRCS__QUOTED += \
 "../MSPM0G3507/Application/app_motor_ctrl_test.c" \
 "../MSPM0G3507/Application/app_servo_test.c" \
 "../MSPM0G3507/Application/app_topic.c" \
+"../MSPM0G3507/Application/app_topic2.c" \
 "../MSPM0G3507/Application/app_topic3.c" \
 "../MSPM0G3507/Application/app_topic4.c" \
 "../MSPM0G3507/Application/app_vision_line_test.c" \

@@ -10,6 +10,7 @@ C_SRCS += \
 ../MSPM0G3507/Middleware/inv_mpu.c \
 ../MSPM0G3507/Middleware/inv_mpu_dmp_motion_driver.c \
 ../MSPM0G3507/Middleware/mid_delay.c \
+../MSPM0G3507/Middleware/mid_motor_trapezoid.c \
 ../MSPM0G3507/Middleware/mid_pid.c \
 ../MSPM0G3507/Middleware/mid_vision_line.c \
 ../MSPM0G3507/Middleware/mid_xunji.c \
@@ -20,6 +21,7 @@ C_DEPS += \
 ./MSPM0G3507/Middleware/inv_mpu.d \
 ./MSPM0G3507/Middleware/inv_mpu_dmp_motion_driver.d \
 ./MSPM0G3507/Middleware/mid_delay.d \
+./MSPM0G3507/Middleware/mid_motor_trapezoid.d \
 ./MSPM0G3507/Middleware/mid_pid.d \
 ./MSPM0G3507/Middleware/mid_vision_line.d \
 ./MSPM0G3507/Middleware/mid_xunji.d \
@@ -30,6 +32,7 @@ OBJS += \
 ./MSPM0G3507/Middleware/inv_mpu.o \
 ./MSPM0G3507/Middleware/inv_mpu_dmp_motion_driver.o \
 ./MSPM0G3507/Middleware/mid_delay.o \
+./MSPM0G3507/Middleware/mid_motor_trapezoid.o \
 ./MSPM0G3507/Middleware/mid_pid.o \
 ./MSPM0G3507/Middleware/mid_vision_line.o \
 ./MSPM0G3507/Middleware/mid_xunji.o \
@@ -40,6 +43,7 @@ OBJS__QUOTED += \
 "MSPM0G3507\Middleware\inv_mpu.o" \
 "MSPM0G3507\Middleware\inv_mpu_dmp_motion_driver.o" \
 "MSPM0G3507\Middleware\mid_delay.o" \
+"MSPM0G3507\Middleware\mid_motor_trapezoid.o" \
 "MSPM0G3507\Middleware\mid_pid.o" \
 "MSPM0G3507\Middleware\mid_vision_line.o" \
 "MSPM0G3507\Middleware\mid_xunji.o" \
@@ -50,6 +54,7 @@ C_DEPS__QUOTED += \
 "MSPM0G3507\Middleware\inv_mpu.d" \
 "MSPM0G3507\Middleware\inv_mpu_dmp_motion_driver.d" \
 "MSPM0G3507\Middleware\mid_delay.d" \
+"MSPM0G3507\Middleware\mid_motor_trapezoid.d" \
 "MSPM0G3507\Middleware\mid_pid.d" \
 "MSPM0G3507\Middleware\mid_vision_line.d" \
 "MSPM0G3507\Middleware\mid_xunji.d" \
@@ -60,6 +65,7 @@ C_SRCS__QUOTED += \
 "../MSPM0G3507/Middleware/inv_mpu.c" \
 "../MSPM0G3507/Middleware/inv_mpu_dmp_motion_driver.c" \
 "../MSPM0G3507/Middleware/mid_delay.c" \
+"../MSPM0G3507/Middleware/mid_motor_trapezoid.c" \
 "../MSPM0G3507/Middleware/mid_pid.c" \
 "../MSPM0G3507/Middleware/mid_vision_line.c" \
 "../MSPM0G3507/Middleware/mid_xunji.c" \
