@@ -90,6 +90,7 @@ MSPM0G3507/Application/app_topic4.o: \
  E:/ccs/project/MSPM0G3507/Middleware/mid_xunji.h \
  E:/ccs/project/MSPM0G3507/Middleware/mid_pid.h \
  E:/ccs/project/MSPM0G3507/BSP/bsp_OLED.h \
+ E:/ccs/project/MSPM0G3507/BSP/MPU6050.h \
  E:/ccs/project/MSPM0G3507/Driver/drv_uart.h \
  E:/ccs/project/MSPM0G3507/Middleware/mid_delay.h
 ../MSPM0G3507/Application/app.h:
@@ -181,5 +182,6 @@ E:/ccs/project/MSPM0G3507/BSP/bsp_fishpath.h:
 E:/ccs/project/MSPM0G3507/Middleware/mid_xunji.h:
 E:/ccs/project/MSPM0G3507/Middleware/mid_pid.h:
 E:/ccs/project/MSPM0G3507/BSP/bsp_OLED.h:
+E:/ccs/project/MSPM0G3507/BSP/MPU6050.h:
 E:/ccs/project/MSPM0G3507/Driver/drv_uart.h:
 E:/ccs/project/MSPM0G3507/Middleware/mid_delay.h:

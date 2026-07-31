@@ -2,54 +2,107 @@
 #include "bsp_42step.h"
 #include "bsp_fishpath.h"
 #include "bsp_OLED.h"
+#include "MPU6050.h"
 #include "drv_uart.h"
 #include "mid_delay.h"
 #include "mid_pid.h"
+#include <stdlib.h>   /* atoi */
 
 /* ================================================================
- * 小球平衡 — 位置 PID + 前馈 + 速度阻尼 (ABSOLUTE 模式)
+ * 小球平衡 — 双环 PID + 串口实时调参
  *
- *   pos = PID(误差) + FF(误差) + damp(速度)
- *   死区内 pos=0 回中, 积分冻结
- *   Ki=0 绕过积分问题, 前馈已够消静差
+ *   串口命令: vkp=N vkd=N pkp=N pkd=N pki=N db=N ff=N mp=N ?
  * ================================================================ */
 
-#define BALL_KP        25.0f   /* P */
-#define BALL_KI         0.0f    /* I (动态) */
-#define BALL_KD         2.0f    /* D */
-#define BALL_KI_NEAR    0.1f    /* 近处慢慢攒 */
-#define KI_NEAR_THRESH  48
-#define BALL_KI_LIMIT 150.0f
-#define GRAVITY_FF      1.0f    /* 前馈 */
-#define DAMP_GAIN_FAR   6.0f    /* 远: 猛刹 */
-#define DAMP_GAIN_NEAR  2.0f    /* 近: 轻刹 */
-#define DAMP_LIMIT       110     /* 反向最大速度收一收 */
-#define DAMP_FAR_THRESH  48     /* 4cm 分界线 */
+/* ---- 运行时参数 (串口可改) ---- */
+static float   g_vel_kp = 100.0f;
+static float   g_vel_ki = 0.0f;
+static float   g_vel_kd = 200.0f;
+static float   g_pos_kp = 0.0f;
+static float   g_pos_ki = 0.0f;
+static float   g_pos_kd = 0.0f;
+static int16_t g_deadband = 2;
+static int16_t g_max_pos = 300;
+static float   g_imu_ff = 0.0f;
 
-#define DEADBAND          2     /* ±0.5cm */
-#define PERIOD_MS         5
-#define MAX_POS         500     /* 绝对位置限幅 */
+#define VEL_I_LIMIT    50.0f
+#define VEL_OUT_LIMIT 500.0f
+#define POS_I_LIMIT    50.0f
+#define POS_OUT_LIMIT 200.0f
 
-#define POS_SPEED      1500
-#define POS_ACC         255
-#define TRACK_SPEED      30
+#define PERIOD_MS        5
+#define POS_SPEED     2000
+#define POS_ACC        255
+#define TRACK_SPEED     30
 
-static PID_Controller g_pid;
+static PID_Controller g_pid_vel, g_pid_pos;
 static int16_t prev_err;
+
+/* ---- 串口命令解析 ---- */
+static void cmd_parse(void)
+{
+    char buf[32];
+    uint8_t i = 0;
+    int16_t ch;
+    while ((ch = drv_uart0_getchar()) >= 0 && i < 31) {
+        char c = (char)ch;
+        if (c == '\r' || c == '\n') break;
+        buf[i++] = c;
+    }
+    if (i == 0) return;
+    buf[i] = '\0';
+
+    float val = 0;
+    char *eq = 0;
+    for (uint8_t j = 0; j < i; j++) { if (buf[j] == '=') { eq = &buf[j]; break; } }
+    if (eq) { *eq = '\0'; val = (float)atof(eq + 1); }
+
+    if      (eq && !strcmp(buf, "vkp"))  { g_vel_kp = val; drv_uart_send_string("VEL_KP="); }
+    else if (eq && !strcmp(buf, "vki"))  { g_vel_ki = val; drv_uart_send_string("VEL_KI="); }
+    else if (eq && !strcmp(buf, "vkd"))  { g_vel_kd = val; drv_uart_send_string("VEL_KD="); }
+    else if (eq && !strcmp(buf, "pkp"))  { g_pos_kp = val; drv_uart_send_string("POS_KP="); }
+    else if (eq && !strcmp(buf, "pki"))  { g_pos_ki = val; drv_uart_send_string("POS_KI="); }
+    else if (eq && !strcmp(buf, "pkd"))  { g_pos_kd = val; drv_uart_send_string("POS_KD="); }
+    else if (eq && !strcmp(buf, "db"))   { g_deadband = (int16_t)val; drv_uart_send_string("DEADBAND="); }
+    else if (eq && !strcmp(buf, "mp"))   { g_max_pos = (int16_t)val; drv_uart_send_string("MAX_POS="); }
+    else if (eq && !strcmp(buf, "ff"))   { g_imu_ff = val; drv_uart_send_string("IMU_FF="); }
+    else if (!strcmp(buf, "?")) {
+        drv_uart_send_string("vkp=");  drv_uart_print_num((unsigned long)g_vel_kp);
+        drv_uart_send_string(" vkd="); drv_uart_print_num((unsigned long)g_vel_kd);
+        drv_uart_send_string("\r\npkp="); drv_uart_print_num((unsigned long)g_pos_kp);
+        drv_uart_send_string(" pkd="); drv_uart_print_num((unsigned long)g_pos_kd);
+        drv_uart_send_string("\r\ndb=");  drv_uart_print_num((unsigned long)g_deadband);
+        drv_uart_send_string(" mp=");  drv_uart_print_num((unsigned long)g_max_pos);
+        drv_uart_send_string(" ff=");  drv_uart_print_num((unsigned long)g_imu_ff);
+        drv_uart_send_string("\r\n");
+        return;
+    } else { drv_uart_send_string("? "); return; }
+    drv_uart_print_num((unsigned long)(long)val);
+    drv_uart_send_string("\r\n");
+}
+
+/* ---- 重新初始化 PID 参数 ---- */
+static void pid_reload(void)
+{
+    g_pid_vel.Kp = g_vel_kp; g_pid_vel.Ki = g_vel_ki; g_pid_vel.Kd = g_vel_kd;
+    g_pid_pos.Kp = g_pos_kp; g_pid_pos.Ki = g_pos_ki; g_pid_pos.Kd = g_pos_kd;
+}
 
 void topic4(void)
 {
-    OLED_Init();
-    OLED_Clear();
-    OLED_ShowString(1, 1, "topic4: PID+Damp ABS");
+    OLED_Init(); OLED_Clear();
+    OLED_ShowString(1, 1, "topic4: Tune");
 
     drv_uart0_init();
     drv_vision_uart3_init();
     while (drv_vision_get_x() == 0) { delay_ms(10); }
-    drv_uart_send_string("CAM OK\r\n");
+    drv_uart_send_string("CAM OK\r\nCommands: vkp= vkd= pkp= pkd= db= mp= ff= ?\r\n");
 
-    pid_init(&g_pid, BALL_KP, BALL_KI, BALL_KD,
-             BALL_KI_LIMIT, 1000.0f);
+    pid_init(&g_pid_vel, g_vel_kp, g_vel_ki, g_vel_kd, VEL_I_LIMIT, VEL_OUT_LIMIT);
+    pid_init(&g_pid_pos, g_pos_kp, g_pos_ki, g_pos_kd, POS_I_LIMIT, POS_OUT_LIMIT);
+
+    MPU6050_init();
+    delay_ms(300);
 
     Step42_Init();
     fishpath_init(XUNJI_DEFAULT_KP, XUNJI_DEFAULT_KI,
@@ -61,51 +114,47 @@ void topic4(void)
     fishpath_start();
 
     while (1) {
-        int16_t err      = app_ball_error_cm_x10();
-        int16_t err_rate = err - prev_err;
-        prev_err = err;
+        /* 串口调参 */
+        cmd_parse();
+        pid_reload();
+
+        int16_t err_pos = app_ball_error_cm_x10();
+        int16_t vel_raw = err_pos - prev_err;
+        prev_err = err_pos;
+        float actual_vel = (float)vel_raw;
+
+        float err_cm     = (float)err_pos / 10.0f;
+        float target_vel = pid_update(&g_pid_pos, err_cm);
+
+        float vel_err   = target_vel - actual_vel;
+        float motor_out = pid_update(&g_pid_vel, vel_err);
+
+        float ax, ay, az;
+        MPU6050_Get_Accel(&ax, &ay, &az);
+        motor_out += ay * g_imu_ff;
 
         int32_t pos;
-
-        if (err > -DEADBAND && err < DEADBAND) {
-            /* 死区: pos=0 回中, 不调 pid_update (积分自然冻结) */
+        if (err_pos > -g_deadband && err_pos < g_deadband)
             pos = 0;
-        } else {
-            /* 正常: PID + 前馈 + 速度阻尼 (近处开积分) */
-            float err_cm  = (float)err / 10.0f;
-            g_pid.Ki = (err > -KI_NEAR_THRESH && err < KI_NEAR_THRESH)
-                     ? BALL_KI_NEAR : 0.0f;
-            float pid_out = pid_update(&g_pid, err_cm);
-            float offset  = pid_out + err_cm * GRAVITY_FF;
+        else
+            pos = (int32_t)motor_out;
 
-            /* 阻尼: 仅在跑偏时反向刹 */
-            float damp = 0.0f;
-            if (err * err_rate > 0) {
-                float gain = (err > -DAMP_FAR_THRESH && err < DAMP_FAR_THRESH)
-                           ? DAMP_GAIN_NEAR : DAMP_GAIN_FAR;
-                damp = -gain * (float)err_rate;
-                if (damp >  DAMP_LIMIT) damp =  DAMP_LIMIT;
-                if (damp < -DAMP_LIMIT) damp = -DAMP_LIMIT;
-            }
-            offset += damp;
-            pos = (int32_t)offset;
-        }
-
-        if (pos >  MAX_POS) pos =  MAX_POS;
-        if (pos < -MAX_POS) pos = -MAX_POS;
+        if (pos >  g_max_pos) pos =  g_max_pos;
+        if (pos < -g_max_pos) pos = -g_max_pos;
 
         static uint8_t dbg;
         if (++dbg >= 40) { dbg = 0;
-            drv_uart_send_string("e=");  drv_uart_print_signed(err);
-            drv_uart_send_string(" v="); drv_uart_print_signed(err_rate);
+            drv_uart_send_string("e=");  drv_uart_print_signed(err_pos);
+            drv_uart_send_string(" v="); drv_uart_print_signed(vel_raw);
             drv_uart_send_string(" p="); drv_uart_print_signed(pos);
             drv_uart_send_string("\r\n");
         }
 
-        Step42Dir dir = (pos >= 0) ? STEP42_DIR_CW : STEP42_DIR_CCW;
+        Step42Dir dir = (pos >= 0) ? STEP42_DIR_CCW : STEP42_DIR_CW;
         uint32_t pulses = (uint32_t)(pos >= 0 ? pos : -pos);
-        Step42_MovePosition(dir, POS_SPEED, POS_ACC,
-                            pulses, STEP42_POS_ABSOLUTE);
+        if (pulses > 0)
+            Step42_MovePosition(dir, POS_SPEED, POS_ACC,
+                                pulses, STEP42_POS_RELATIVE);
 
         delay_ms(PERIOD_MS);
     }

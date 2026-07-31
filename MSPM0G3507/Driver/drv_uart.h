@@ -9,6 +9,7 @@
 
 /** UART0 debug output: debug_INST, TX=PA10, RX=PA11, 115200-8N1. */
 void drv_uart0_init(void);
+int16_t drv_uart0_getchar(void);  /* 读取调试串口接收字节, 无数据返回-1 */
 void drv_uart_send_string(const char *str);
 void drv_uart_print_num(unsigned long num);
 void drv_uart_print_signed(long num);

@@ -19,6 +19,36 @@ static bool uart0_write_byte(uint8_t data)
 void drv_uart0_init(void)
 {
     DL_UART_Main_enable(debug_INST);
+    DL_UART_Main_enableInterrupt(debug_INST, DL_UART_MAIN_INTERRUPT_RX);
+    NVIC_EnableIRQ(debug_INST_INT_IRQN);
+}
+
+/* ---- UART0 RX (调试命令接收) ---- */
+#define UART0_RX_BUF_SIZE 64U
+static volatile uint8_t  uart0_rx_buf[UART0_RX_BUF_SIZE];
+static volatile uint16_t uart0_rx_head = 0U;
+static volatile uint16_t uart0_rx_tail = 0U;
+
+int16_t drv_uart0_getchar(void)
+{
+    if (uart0_rx_head == uart0_rx_tail) return -1;
+    uint8_t ch = uart0_rx_buf[uart0_rx_tail];
+    uart0_rx_tail = (uart0_rx_tail + 1U) & (UART0_RX_BUF_SIZE - 1U);
+    return (int16_t)ch;
+}
+
+void UART0_IRQHandler(void)
+{
+    if (DL_UART_Main_getPendingInterrupt(debug_INST) & DL_UART_MAIN_IIDX_RX) {
+        while (!DL_UART_Main_isRXFIFOEmpty(debug_INST)) {
+            uint8_t ch = DL_UART_Main_receiveData(debug_INST);
+            uint16_t next = (uart0_rx_head + 1U) & (UART0_RX_BUF_SIZE - 1U);
+            if (next != uart0_rx_tail) {
+                uart0_rx_buf[uart0_rx_head] = ch;
+                uart0_rx_head = next;
+            }
+        }
+    }
 }
 
 /**

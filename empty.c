@@ -59,13 +59,13 @@ int main(void)
     //MPU6050_straight_test();
     //app_servo_test();
     //app_zdt_x35_position_test();
-    // topic3();
+     //topic3();
    // app_zdt_x35_motion_test();
     //app_RX_maixcam_test();
    // topic();
-    //topic4();
+    topic4();
     //app_42step_test();
-    app_mpu6050_accel_test();
+    //app_mpu6050_accel_test();
 
     while (1) {
         
