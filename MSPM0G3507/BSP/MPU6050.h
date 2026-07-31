@@ -56,5 +56,6 @@ void MPU6050_Set_Angle0(MPU6050 *this);                             // 把角度
 /////////////////////////扩展函数//////////////////////////
 uint8_t MPU6050_ID(void);             //读出ID(用于检测设备连接,返回255错误)
 float MPU6050_GetTemp(MPU6050 *this); // 读取温度(返回值是读到的实际温度)
+void  MPU6050_Get_Accel(float *ax, float *ay, float *az); // 读取加速度(g)
 
 #endif
