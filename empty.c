@@ -59,11 +59,12 @@ int main(void)
     //MPU6050_straight_test();
     //app_servo_test();
     //app_zdt_x35_position_test();
-    // topic3();
+    // 进入1~6题选择菜单：KEY1切换，KEY2执行。
+    topic();
    // app_zdt_x35_motion_test();
     //app_RX_maixcam_test();
-   // topic();
-    topic4();
+   // topic3();
+    // topic4();
     //app_42step_test();
 
 

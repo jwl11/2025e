@@ -60,5 +60,4 @@ void topic(void)
 
 
 void topic1(void) {}
-void topic5(void) {}
 void topic6(void) {}

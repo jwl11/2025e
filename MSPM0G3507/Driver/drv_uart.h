@@ -14,6 +14,12 @@ void drv_uart_print_num(unsigned long num);
 void drv_uart_print_signed(long num);
 void drv_uart_print_hex(uint8_t num);
 
+/* UART0 调参接收环形缓冲区。ISR 只收字节，命令在主循环解析。 */
+uint16_t drv_uart0_available(void);
+int16_t  drv_uart0_read(void);       /* 返回 0~255，空时返回 -1 */
+void     drv_uart0_flush(void);
+uint32_t drv_uart0_get_overflow_count(void);
+
 /* ================================================================
  * UART1 (fishpath) — 12路循迹模块 中断接收
  * ================================================================ */

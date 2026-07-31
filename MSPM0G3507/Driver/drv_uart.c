@@ -2,6 +2,16 @@
 #include <stdio.h>
 
 #define UART0_TX_RETRY_LIMIT  100000U
+#define UART0_RX_BUF_SIZE         128U
+
+/*
+ * UART0 同时用作调试输出和 PC 串口调参输入。
+ * 环形缓冲区由 ISR 写、主循环读，大小为 2 的整数次方。
+ */
+static volatile uint8_t  uart0_rx_buf[UART0_RX_BUF_SIZE];
+static volatile uint16_t uart0_rx_head;
+static volatile uint16_t uart0_rx_tail;
+static volatile uint32_t uart0_rx_overflow_count;
 
 static bool uart0_write_byte(uint8_t data)
 {
@@ -18,7 +28,68 @@ static bool uart0_write_byte(uint8_t data)
 
 void drv_uart0_init(void)
 {
+    uart0_rx_head = 0U;
+    uart0_rx_tail = 0U;
+    uart0_rx_overflow_count = 0U;
+
+    /* 清掉上次运行残留的接收数据，再开启 RX 中断。 */
+    while (!DL_UART_Main_isRXFIFOEmpty(debug_INST)) {
+        (void)DL_UART_Main_receiveData(debug_INST);
+    }
     DL_UART_Main_enable(debug_INST);
+    DL_UART_Main_enableInterrupt(debug_INST, DL_UART_MAIN_INTERRUPT_RX);
+    NVIC_ClearPendingIRQ(debug_INST_INT_IRQN);
+    NVIC_EnableIRQ(debug_INST_INT_IRQN);
+}
+
+uint16_t drv_uart0_available(void)
+{
+    return (uart0_rx_head - uart0_rx_tail) & (UART0_RX_BUF_SIZE - 1U);
+}
+
+int16_t drv_uart0_read(void)
+{
+    uint8_t data;
+
+    if (uart0_rx_head == uart0_rx_tail) {
+        return -1;
+    }
+
+    data = uart0_rx_buf[uart0_rx_tail];
+    uart0_rx_tail = (uart0_rx_tail + 1U) & (UART0_RX_BUF_SIZE - 1U);
+    return (int16_t)data;
+}
+
+void drv_uart0_flush(void)
+{
+    uart0_rx_head = 0U;
+    uart0_rx_tail = 0U;
+}
+
+uint32_t drv_uart0_get_overflow_count(void)
+{
+    return uart0_rx_overflow_count;
+}
+
+void UART0_IRQHandler(void)
+{
+    uint32_t status = DL_UART_Main_getPendingInterrupt(debug_INST);
+
+    if (status == DL_UART_MAIN_IIDX_RX) {
+        while (!DL_UART_Main_isRXFIFOEmpty(debug_INST)) {
+            uint8_t data = DL_UART_Main_receiveData(debug_INST);
+            uint16_t next =
+                (uart0_rx_head + 1U) & (UART0_RX_BUF_SIZE - 1U);
+
+            if (next != uart0_rx_tail) {
+                uart0_rx_buf[uart0_rx_head] = data;
+                uart0_rx_head = next;
+            } else {
+                /* 缓冲区满时丢新字节，不在 ISR 里阻塞或打印。 */
+                uart0_rx_overflow_count++;
+            }
+        }
+    }
 }
 
 /**
