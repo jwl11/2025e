@@ -1,0 +1,40 @@
+# CCS / compiler build outputs
+Debug/
+Release/
+*.o
+*.d
+*.d_raw
+*.map
+*.out
+*.hex
+*.bin
+
+# IDE and language-server caches
+.idea/
+.vscode/
+.clangd/
+**/.clangd/
+compile_commands.json
+
+# Python caches and local environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Local tuning logs, datasets and packaged models
+*.csv
+*.zip
+balance_logs/
+topic3_logs/
+datasets/
+videos/
+models/
+maix-steel_ball_detector-*/
+steel_ball_maixcam2_app_*/
+
+# OS/editor temporary files
+Thumbs.db
+.DS_Store
+*.tmp
+*.bak

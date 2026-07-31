@@ -60,10 +60,11 @@ int main(void)
     //app_servo_test();
     //app_zdt_x35_position_test();
     // 进入1~6题选择菜单：KEY1切换，KEY2执行。
-    //topic();
+    // 进入1~6题选择菜单：KEY1切换，KEY2执行。
+    topic();
    // app_zdt_x35_motion_test();
     //app_RX_maixcam_test();
-    topic3();
+    //topic3();
     // topic4();
     //app_42step_test();
 
