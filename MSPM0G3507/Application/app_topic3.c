@@ -13,7 +13,7 @@
  * 本文件移植自电脑端 pc_serial_topic3.py 的最终参数：
  *   1. 直接使用 MaixCAM2 原始 x 坐标，避免 0.1 cm 换算损失速度信息；
  *   2. +5 cm 到达合格区后立即反向，不在中途停留；
- *   3. -5 cm 的判题中心仍为 x=705，内部瞄准延后到 x=734；
+ *   3. -5 cm 的判题中心仍为 x=705，轨迹瞄准和终点保持均为 x=734；
  *   4. 到 x=705 后关闭位置增力，只用低通速度进行刹车；
  *   5. 连续稳定 500 ms 后回水平并停止闭环。
  *
@@ -25,7 +25,9 @@
 #define BALL_POSITIVE_TARGET_X           415
 #define BALL_NEGATIVE_SCORE_X            705
 #define BALL_NEGATIVE_CONTROL_X          734
+#define BALL_FINAL_HOLD_X                734
 #define BALL_SCORE_TOLERANCE_PX            29U
+#define BALL_FINAL_TOLERANCE_PX              6U
 
 #define START_HOLD_MS                     300U
 #define TERMINAL_HOLD_MS                  500U
@@ -34,7 +36,7 @@
 #define TOPIC_TIME_LIMIT_MS              5000U
 
 /* 当前实机固定水平原点。驱动器重新清零或机械结构改变后需要重新标定。 */
-#define LEVEL_MOTOR_POSITION             (-20L)
+#define LEVEL_MOTOR_POSITION               (0L)
 #define POSITION_SPEED                   1500U
 #define POSITION_ACC                      255U
 #define CONTROL_MAX_OFFSET                500L
@@ -75,6 +77,15 @@
 #define TERMINAL_BRAKE_LIMIT                45L
 #define SETTLE_SAMPLE_CAPACITY               32U
 
+#define FINAL_CONTROL_ENTRY_X               690
+#define FINAL_HOLD_KP                       1.1f
+#define FINAL_HOLD_KD                      12.0f
+#define FINAL_HOLD_BIAS                     5.0f
+#define FINAL_HOLD_INTEGRAL_STEP            0.03f
+#define FINAL_HOLD_INTEGRAL_LIMIT          22.0f
+#define FINAL_HOLD_LIMIT                   52.0f
+#define FINAL_HOLD_SLEW_PER_FRAME           2.0f
+
 typedef enum {
     TOPIC3_WAIT_O = 0,
     TOPIC3_TO_POSITIVE,
@@ -103,6 +114,14 @@ typedef struct {
     uint8_t count;
 } Topic3SettleWindow;
 
+typedef struct {
+    int16_t previous_x;
+    float filtered_pixel_delta;
+    float integral;
+    float command;
+    bool active;
+} Topic3FinalHold;
+
 static int32_t g_last_motor_position;
 static uint32_t g_last_motor_send_ms;
 static bool g_last_motor_position_valid;
@@ -129,6 +148,52 @@ static uint32_t abs_i32(int32_t value)
 static float abs_f32(float value)
 {
     return (value < 0.0f) ? -value : value;
+}
+
+static void final_hold_reset(Topic3FinalHold *hold, int16_t x,
+                             float command, float filtered_pixel_delta)
+{
+    hold->previous_x = x;
+    hold->filtered_pixel_delta = filtered_pixel_delta;
+    hold->integral = 0.0f;
+    hold->command = command;
+    hold->active = true;
+}
+
+static int32_t final_hold_update(Topic3FinalHold *hold, int16_t x)
+{
+    int16_t pixel_delta = (int16_t)(x - hold->previous_x);
+    int16_t position_error = (int16_t)(BALL_FINAL_HOLD_X - x);
+    bool moving_to_target;
+    float desired;
+
+    hold->previous_x = x;
+    hold->filtered_pixel_delta += VELOCITY_ALPHA *
+        ((float)pixel_delta - hold->filtered_pixel_delta);
+    moving_to_target = ((float)position_error *
+                        hold->filtered_pixel_delta > 0.0f);
+    if ((abs_i32(position_error) <= BALL_FINAL_TOLERANCE_PX) ||
+        moving_to_target) {
+        hold->integral = 0.0f;
+    } else {
+        hold->integral += FINAL_HOLD_INTEGRAL_STEP *
+                          (float)position_error;
+        hold->integral = clamp_f32(hold->integral,
+                                    -FINAL_HOLD_INTEGRAL_LIMIT,
+                                    FINAL_HOLD_INTEGRAL_LIMIT);
+    }
+    desired = FINAL_HOLD_BIAS +
+              FINAL_HOLD_KP * (float)position_error +
+              hold->integral -
+              FINAL_HOLD_KD * hold->filtered_pixel_delta;
+    desired = clamp_f32(desired, -FINAL_HOLD_LIMIT, FINAL_HOLD_LIMIT);
+    hold->command = clamp_f32(desired,
+                              hold->command - FINAL_HOLD_SLEW_PER_FRAME,
+                              hold->command + FINAL_HOLD_SLEW_PER_FRAME);
+    hold->command = clamp_f32(hold->command,
+                              -FINAL_HOLD_LIMIT, FINAL_HOLD_LIMIT);
+    return (int32_t)(hold->command +
+                     ((hold->command >= 0.0f) ? 0.5f : -0.5f));
 }
 
 static bool time_reached(uint32_t now_ms, uint32_t deadline_ms)
@@ -443,6 +508,7 @@ void topic3(void)
     Topic3Stage stage = TOPIC3_WAIT_O;
     Topic3Controller controller;
     Topic3SettleWindow settle_window;
+    Topic3FinalHold final_hold = {0};
     uint32_t last_frame_count = 0U;
     uint32_t last_frame_ms;
     uint32_t sequence_start_ms = 0U;
@@ -469,7 +535,7 @@ void topic3(void)
     drv_uart_send_string(
         "TOPIC3 FINAL: O560 -> +5(415) -> -5 score(705), aim(734)\r\n");
     drv_uart_send_string(
-        "LEVEL=-20, terminal velocity brake starts at x=705\r\n");
+        "LEVEL=0, final PID starts at x=690, output <=52\r\n");
 
     while (1) {
         uint32_t now_ms = get_system_ms();
@@ -510,6 +576,7 @@ void topic3(void)
                     leg_start_ms = now_ms;
                     controller_prime(&controller, x,
                                      BALL_NEGATIVE_CONTROL_X, now_ms);
+                    final_hold.active = false;
                     settle_reset(&settle_window);
                 }
             } else if (stage == TOPIC3_TO_NEGATIVE) {
@@ -519,23 +586,16 @@ void topic3(void)
                                                    BALL_NEGATIVE_CONTROL_X,
                                                    now_ms);
 
-                /* 到达判题中心后切换成纯速度环刹车。
-                 * x<705 时继续瞄准734，避免再次停在-4cm；
-                 * x>734 时恢复位置环，把球拉回合格区。 */
-                if ((x >= BALL_NEGATIVE_SCORE_X) &&
-                    (x <= BALL_NEGATIVE_SCORE_X +
-                          (int16_t)BALL_SCORE_TOLERANCE_PX)) {
-                    if (abs_f32(controller.filtered_pixel_delta) <=
-                        TERMINAL_SPEED_THRESHOLD_PX) {
-                        control_offset = 0L;
-                    } else {
-                        float brake = CONTROL_DAMP_NEAR_NEGATIVE *
-                                      controller.filtered_pixel_delta *
-                                      10.0f / 29.0f;
-                        control_offset = clamp_i32((int32_t)brake,
-                                                   -TERMINAL_BRAKE_LIMIT,
-                                                   TERMINAL_BRAKE_LIMIT);
+                /* 接近-5cm后改用小输出位置-速度PD，避免轨迹阶段的
+                 * 60~120脉冲最小驱动在终点附近反复切换。 */
+                if (final_hold.active || (x >= FINAL_CONTROL_ENTRY_X)) {
+                    int32_t hold_offset;
+                    if (!final_hold.active) {
+                        final_hold_reset(&final_hold, x, -control_offset,
+                                         controller.filtered_pixel_delta);
                     }
+                    hold_offset = final_hold_update(&final_hold, x);
+                    control_offset = -hold_offset;
                     controller.motion_boost = 0L;
                     controller.motion_anchor_x = x;
                     controller.motion_anchor_valid = true;
@@ -546,10 +606,13 @@ void topic3(void)
                                     now_ms, false);
 
                 terminal_position_stable = settle_update(
-                    &settle_window, now_ms, x, BALL_NEGATIVE_SCORE_X,
-                    BALL_SCORE_TOLERANCE_PX, TERMINAL_HOLD_MS, 4U, 2U);
+                    &settle_window, now_ms, x, BALL_FINAL_HOLD_X,
+                    BALL_FINAL_TOLERANCE_PX, TERMINAL_HOLD_MS, 4U, 2U);
                 if (terminal_position_stable &&
-                    (abs_f32(controller.filtered_pixel_delta) <=
+                    (abs_i32((int32_t)x - BALL_NEGATIVE_SCORE_X) <=
+                     BALL_SCORE_TOLERANCE_PX) &&
+                    final_hold.active &&
+                    (abs_f32(final_hold.filtered_pixel_delta) <=
                      TERMINAL_SPEED_THRESHOLD_PX)) {
                     uint32_t total_ms = now_ms - sequence_start_ms;
                     print_stage("REACHED -5cm", now_ms - leg_start_ms);
@@ -561,11 +624,15 @@ void topic3(void)
                     stage = TOPIC3_DONE;
                     time_result_printed = true;
                     settle_reset(&settle_window);
-                    motor_send_absolute(LEVEL_MOTOR_POSITION, now_ms, true);
                 }
             } else {
-                /* 完成后保持水平，只观察，不再用位置误差反复纠偏。 */
-                motor_send_absolute(LEVEL_MOTOR_POSITION, now_ms, false);
+                int32_t hold_offset;
+                if (!final_hold.active) {
+                    final_hold_reset(&final_hold, x, 0.0f, 0.0f);
+                }
+                hold_offset = final_hold_update(&final_hold, x);
+                motor_send_absolute(LEVEL_MOTOR_POSITION + hold_offset,
+                                    now_ms, false);
             }
 
             if (time_reached(now_ms, last_oled_ms + 100U)) {
@@ -579,6 +646,7 @@ void topic3(void)
             /* 视觉断流后禁止使用旧坐标，立即回水平。 */
             motor_send_absolute(LEVEL_MOTOR_POSITION, now_ms, true);
             controller_prime(&controller, BALL_O_X, BALL_O_X, now_ms);
+            final_hold.active = false;
             settle_reset(&settle_window);
             OLED_ShowString(2, 1, "CAM LOST        ");
             if (!time_result_printed) {
