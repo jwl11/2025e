@@ -14,6 +14,8 @@
  */
 
 #define TOPIC2_TIMER_DISPLAY_UPDATE_MS  500U
+#define TOPIC2_SPEED_REDUCE_TIME_MS    11000U
+#define TOPIC2_REDUCED_SPEED              15U
 
 /* ================================================================
  * 状态
@@ -141,6 +143,7 @@ void topic2(void)
 {
     uint32_t tick;
     uint32_t elapsed_ms;
+    uint8_t speed_reduced = 0U;
 
     /* 初始化状态，保证每次进入题目 2 都从待设置状态开始。 */
     topic2_target_laps          = 0U;
@@ -210,8 +213,10 @@ void topic2(void)
                 topic2_run_finished         = 0U;
                 topic2_run_started          = 1U;
                 topic2_last_time_display_ms = 0U;
+                speed_reduced               = 0U;
 
                 xunji_reset_tracking();
+                fishpath_set_speed(XUNJI_DEFAULT_SPEED);
                 mid_stopwatch_start();
                 fishpath_start();
 
@@ -248,6 +253,11 @@ void topic2(void)
         /******************** 计时显示 ********************/
         if (topic2_run_started != 0U) {
             elapsed_ms = mid_stopwatch_get_elapsed_ms();
+            if ((speed_reduced == 0U) &&
+                (elapsed_ms >= TOPIC2_SPEED_REDUCE_TIME_MS)) {
+                fishpath_set_speed(TOPIC2_REDUCED_SPEED);
+                speed_reduced = 1U;
+            }
             if ((elapsed_ms - topic2_last_time_display_ms) >=
                 TOPIC2_TIMER_DISPLAY_UPDATE_MS) {
                 topic2_last_time_display_ms = elapsed_ms;
